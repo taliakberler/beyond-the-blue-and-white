@@ -1,16 +1,48 @@
 # Beyond the White and Blue
 
-**A free, self-guided walking tour of Black history at the University of North Carolina at Chapel Hill.**
+### Every stop has a story.
+
+An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.
 
 🔗 Live site: **https://taliakberler.github.io/beyond-the-white-and-blue/**
+
+> *Project framing is a work in progress.*
 
 ---
 
 ## Purpose
 
-*Beyond the White and Blue* is an interactive way for students, visitors, alumni, and neighbors to learn about Black history at UNC Chapel Hill, right where it happened. The tour connects sites around campus to the events that took place there and to the people whose lives, labor, and leadership shaped the University.
+### The problem
 
-The goal is to make this history:
+Black history is embedded throughout UNC’s campus, but its significance is not always visible or accessible to the people who walk through it.
+
+### The insight
+
+People are more likely to connect with history when they can discover it in the places where it happened, explore it at their own pace, and understand how it relates to the present.
+
+### The solution
+
+A connected physical and digital campus experience using QR-coded signage, a mobile-first story map, printed materials, and motion-led promotion.
+
+### The desired impact
+
+Help students and visitors see familiar spaces differently, recognize Black contributions, and engage more thoughtfully with Carolina’s history.
+
+---
+
+## Storytelling structure ideas
+
+So the experience feels cohesive, even when the histories vary.
+
+| Layer | Focus | What it does |
+|---|---|---|
+| **01. Discover** | The surface story | A concise introduction identifies the location and explains why it matters. A compelling question, image, or fact invites the user to keep exploring. |
+| **02. Dig deeper** | The historical context | Users uncover the people, events, archival evidence, and related histories behind the place. Additional material remains optional, so the experience does not overwhelm people who want a quick introduction. |
+| **03. Reflect** | The present-day connection | A thoughtful question, contemporary connection, or link to further resources encourages users to consider how this history shapes their understanding of Carolina today. |
+
+---
+
+## Design principles for the story map
 
 - **Place-based.** Each stop is tied to a real location, so visitors stand where the history happened.
 - **Easy to reach.** It's free, works on any smartphone with no app to install, and is reached by scanning a QR code at each site.

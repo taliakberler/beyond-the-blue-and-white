@@ -175,6 +175,7 @@ Tested in a browser on a local server at 375px phone width and at 1280px desktop
 ## 2026-10-13 — Project documentation and statement of purpose
 
 **Directed by:** project team. Drafted by Claude Code.
+**Commit:** `1baf34a`
 
 ### What changed
 - **README rewritten** around the tour's purpose: an interactive experience for learning about **Black history at UNC Chapel Hill** and the sites, events, and people significant to that history around campus. The step-by-step editing instructions moved out of the README into their own guide.
@@ -192,3 +193,21 @@ Tested in a browser on a local server at 375px phone width and at 1280px desktop
 - **Decision:** add content guidelines covering sourcing, language (e.g. "enslaved people" rather than "slaves"), image rights, uncertainty in the archival record, review by historians and community members, and a corrections process. **Why:** a public tour of Black history carries a particular responsibility for accuracy and care. These are marked as a draft because editorial policy belongs to the project team.
 - **Decision:** measure color contrast with the WCAG formula and publish the results, rather than only describing the palette as "high contrast." **Why:** these are verifiable claims, and they'll need re-checking when brand colors are applied. All pairs passed AA (the lowest is 5.0:1).
 - **Decision:** state openly in the README, credits, and this log that the code was developed with an AI assistant, and that historical content is not AI-generated. **Why:** transparency about process, which is the purpose of this log.
+
+---
+
+## 2026-10-13 — Project framing added to the README
+
+**Directed by:** project team (wording supplied by the team, marked as a work in progress)
+
+### What changed
+- **README:** replaced the purpose section with the team's own framing:
+  - the tagline *"Every stop has a story."*
+  - a one-sentence project description
+  - **The problem**, **The insight**, **The solution**, and **The desired impact**
+  - **Storytelling structure ideas**: **01. Discover** (the surface story), **02. Dig deeper** (the historical context), and **03. Reflect** (the present-day connection)
+  - the earlier bullet points kept under a new heading, "Design principles for the story map"
+
+### Decisions and reasons
+- **Decision:** use the team's wording as supplied, changing only typography. **Why:** the framing belongs to the team. The pasted text used modifier-letter apostrophes (ʼ), which were changed to standard apostrophes (’) so the words display, search, and read aloud correctly.
+- **Decision:** don't restructure the stop panel or the stop data around Discover / Dig deeper / Reflect for now. **Why:** the team considers the storytelling structure an idea at this stage, not a requirement. A mapping of the layers into the content guidelines was drafted and then withdrawn for the same reason.
