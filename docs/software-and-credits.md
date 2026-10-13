@@ -1,0 +1,122 @@
+# Software, services, and credits
+
+This page lists every piece of outside software, map service, and data source the tour uses, what it does, its license, and what credit it requires. The project uses only **free and open-source** tools and **free public services**. It requires no API keys, accounts, or payments.
+
+---
+
+## Running on the live site
+
+These are the things a visitor's phone loads or contacts while using the tour.
+
+### Leaflet: interactive map library
+
+| | |
+|---|---|
+| **What it does** | Draws the map, numbered markers, route line, and building outlines, and handles panning and zooming |
+| **Version** | 1.9.4 |
+| **License** | BSD 2-Clause (© 2010–2023 Volodymyr Agafonkin, © 2010–2011 CloudMade) |
+| **Where it lives** | `js/vendor/leaflet/` (copied into the repository, with its `LICENSE` file) |
+| **Website** | <https://leafletjs.com> |
+| **Required credit** | Keep the license file. The "Leaflet" link in the map's corner credits it. |
+
+**Why it's bundled rather than loaded from a CDN:** the site keeps working if a third-party CDN is slow or blocked (as on some campus or conference networks), visitors' browsers make no extra requests to outside servers, and the version can't change without anyone noticing.
+
+### OpenStreetMap: base map tiles
+
+| | |
+|---|---|
+| **What it does** | Provides the street-map background images (tiles) |
+| **Address** | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` |
+| **Data license** | Open Database License (ODbL). Map data © OpenStreetMap contributors. |
+| **Usage policy** | <https://operations.osmfoundation.org/policies/tiles/>. Free for light use, with attribution, no bulk downloading, and a valid referrer (browsers send one automatically). |
+| **Required credit** | "© OpenStreetMap contributors" with a link to <https://www.openstreetmap.org/copyright>. This is shown in the bottom-right of the map at all times and stays visible above the bottom sheet on phones. |
+
+A campus walking tour is well within normal use. If traffic ever grows very large (for example, a major campaign), switch to another free tile provider by changing the tile address in `js/app.js` (search for `tile.openstreetmap.org`) and updating the credit text.
+
+### UNC Chapel Hill GIS: campus building outlines (optional)
+
+| | |
+|---|---|
+| **What it does** | Supplies the outlines of campus buildings, drawn as a light gray layer beneath the tour, with a toggle button |
+| **Service** | `https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0` (ArcGIS REST FeatureServer) |
+| **Request used** | `…/query?where=1%3D1&outFields=*&outSR=4326&f=geojson`, which asks for all buildings as GeoJSON in standard latitude/longitude |
+| **Data observed (2026-10-13)** | 577 building polygons. The server returns up to 1,000 per request, so one request covers the whole layer (the app pages through larger layers automatically). The building name comes from the `BUILDINGNAME` field. |
+| **Cross-origin access** | Checked 2026-10-13: the server allows requests from other websites (it returns an `Access-Control-Allow-Origin` header), which is what lets a GitHub Pages site load it |
+| **Terms** | Published by UNC Chapel Hill as a public map service. Check with UNC Facilities/GIS about attribution preferences before the public launch. |
+| **If it's unavailable** | The toggle button hides itself and the rest of the tour works normally (tested) |
+
+The building layer is set in `data/stops.json` under `tour.buildingLayer`. Remove that block to turn the layer off.
+
+### Phone map apps: walking directions
+
+The "Get walking directions" link opens the visitor's own map app. It uses only public link formats, with no API keys:
+
+| Device | Link format |
+|---|---|
+| iPhone / iPad | Apple Maps: `https://maps.apple.com/?daddr=<lat>,<lng>&dirflg=w` |
+| Everything else | Google Maps: `https://www.google.com/maps/dir/?api=1&destination=<lat>,<lng>&travelmode=walking` |
+
+The link sends the next stop's coordinates to Apple or Google only when the visitor taps it. The tour itself never shares the visitor's location with anyone.
+
+### Browser features (no outside service)
+
+| Feature | Used for | Privacy |
+|---|---|---|
+| Geolocation | "You are here" dot | Only runs when the visitor taps the button, and the browser asks permission first. The location stays on the device and is never sent or stored. |
+| `localStorage` | Remembers the light/dark theme choice | Stores one word on the visitor's device |
+
+The site uses **no analytics, cookies, trackers, ads, or web fonts.**
+
+---
+
+## Used only by the project team (not loaded by visitors)
+
+These tools run on a team member's computer to prepare files. They aren't part of the published site.
+
+### `qrcode` (npm package): QR code generator
+
+| | |
+|---|---|
+| **What it does** | `scripts/generate-qr.js` uses it to create one PNG QR code per stop, plus the printable `qr/sheet.html` |
+| **Version** | 1.5.4 |
+| **License** | MIT |
+| **Source** | <https://github.com/soldair/node-qrcode> |
+| **Settings** | Error correction level Q (about 25% of the code can be damaged and still scan), 4-module quiet zone, 1200×1200px, black on white |
+
+The codes are **static**: each stop's web address is encoded directly in the image. No QR-code service, redirect, or tracking is involved, so the codes keep working as long as the website address does.
+
+### Node.js and npm
+
+Node.js runs the helper scripts (`npm run qr`, `npm run route`, `npm run placeholders`). It's free and open source (MIT): <https://nodejs.org>. `package.json` pins the exact versions of `leaflet` and `qrcode`, and `package-lock.json` records the full dependency tree.
+
+### Python (optional)
+
+`python3 -m http.server` is used for local previews. It's included with Python (PSF License). Any static web server works.
+
+### GitHub and GitHub Pages
+
+The code is hosted at <https://github.com/taliakberler/beyond-the-white-and-blue>, and the site is served free by GitHub Pages from the `main` branch, over https.
+
+### Free web tools suggested in the docs
+
+These are optional, browser-based helpers for team members:
+
+- **geojson.io**: drawing the walking route
+- **openstreetmap.org/directions**: planning a sidewalk route
+- **jsonlint.com**: finding typos in `stops.json`
+- **WebAIM Contrast Checker**: checking brand colors
+
+### Claude Code (AI coding assistant)
+
+The site's code, scripts, and documentation were drafted with help from Claude Code (Anthropic), working under the project team's direction. AI was **not** used to produce historical content. See [PROCESS_LOG.md](../PROCESS_LOG.md).
+
+---
+
+## Credits checklist for launch
+
+- [ ] OpenStreetMap credit visible on the map (built in, so leave it)
+- [ ] Leaflet license file kept in `js/vendor/leaflet/LICENSE`
+- [ ] Every image has a `credit` that matches the holding repository's requirements
+- [ ] Every stop lists its `sources`
+- [ ] Confirmed attribution preferences for the UNC GIS building layer
+- [ ] Credits for the project team, researchers, and community reviewers added (e.g. an "About this tour" section)
