@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tour route (straight-line placeholder)"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.0476,
+            35.9056
+          ],
+          [
+            -79.046,
+            35.9052
+          ],
+          [
+            -79.0456,
+            35.9043
+          ],
+          [
+            -79.0469,
+            35.9036
+          ],
+          [
+            -79.0482,
+            35.9042
+          ]
+        ]
+      }
+    }
+  ]
+}

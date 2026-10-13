@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Beyond the White and Blue — Walking Tour</title>
+  <meta name="description" content="A free, self-guided historical walking tour of UNC Chapel Hill.">
+  <meta name="theme-color" content="#1f2933" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#12161b" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b5c8a'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to tour content</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <h1 id="tour-title">Beyond the White and Blue</h1>
+      <p id="tour-subtitle" class="subtitle">A historical walking tour</p>
+    </div>
+    <div class="header-actions">
+      <div class="view-switch" role="group" aria-label="Choose view">
+        <button type="button" id="view-map" class="seg" aria-pressed="true">Map</button>
+        <button type="button" id="view-list" class="seg" aria-pressed="false">List</button>
+      </div>
+      <button type="button" id="theme-toggle" class="icon-btn" aria-label="Color theme: automatic">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="map-view" class="view" aria-label="Tour map">
+      <div id="map" role="application" aria-label="Map of tour stops. Tab to reach numbered stop markers; press Enter to open a stop."></div>
+
+      <div class="map-tools">
+        <button type="button" id="locate-btn" class="tool-btn">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 3h-2.07A7 7 0 0 0 13 5.07V3h-2v2.07A7 7 0 0 0 5.07 11H3v2h2.07A7 7 0 0 0 11 18.93V21h2v-2.07A7 7 0 0 0 18.93 13H21v-2Zm-9 6a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
+          <span>You are here</span>
+        </button>
+        <button type="button" id="buildings-btn" class="tool-btn" aria-pressed="true" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 21V7l6-4 6 4v3h6v11H3Zm2-2h2v-2H5v2Zm0-4h2v-2H5v2Zm0-4h2V9H5v2Zm4 8h2v-2H9v2Zm0-4h2v-2H9v2Zm0-4h2V9H9v2Zm4 8h6v-7h-6v7Zm2-2v-2h2v2h-2Z"/></svg>
+          <span id="buildings-label">Buildings</span>
+        </button>
+      </div>
+
+      <button type="button" id="start-btn" class="start-btn" hidden>Start the tour at Stop 1</button>
+    </section>
+
+    <section id="list-view" class="view" aria-labelledby="list-heading" hidden>
+      <div class="list-inner">
+        <h2 id="list-heading">Tour stops</h2>
+        <p id="tour-intro" class="intro"></p>
+        <ol id="stop-list" class="stop-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <aside id="panel" class="panel" aria-labelledby="panel-title" hidden>
+    <div class="panel-top">
+      <button type="button" id="panel-expand" class="handle" aria-expanded="false" aria-controls="panel">
+        <span class="handle-bar" aria-hidden="true"></span>
+        <span class="visually-hidden" id="panel-expand-label">Expand panel</span>
+      </button>
+      <div class="panel-heading">
+        <p class="stop-count" id="stop-count">Stop 1 of 5</p>
+        <button type="button" id="panel-close" class="icon-btn" aria-label="Close stop details">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel-body" id="panel-body" tabindex="-1">
+      <h2 id="panel-title" class="panel-title"></h2>
+      <p id="panel-era" class="era"></p>
+
+      <div id="gallery" class="gallery"></div>
+
+      <p id="panel-summary" class="summary"></p>
+      <div id="panel-history" class="history"></div>
+
+      <section id="people-section" aria-labelledby="people-heading">
+        <h3 id="people-heading">Key people</h3>
+        <ul id="panel-people" class="people"></ul>
+      </section>
+
+      <section id="sources-section" aria-labelledby="sources-heading">
+        <h3 id="sources-heading">Sources</h3>
+        <ol id="panel-sources" class="sources"></ol>
+      </section>
+    </div>
+
+    <nav class="panel-nav" aria-label="Tour navigation">
+      <a id="directions-link" class="directions" href="#" target="_blank" rel="noopener">Get walking directions</a>
+      <div class="prev-next">
+        <button type="button" id="prev-btn" class="nav-btn">‹ Previous</button>
+        <button type="button" id="next-btn" class="nav-btn primary">Next stop ›</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <noscript>
+    <p class="noscript">This tour needs JavaScript to show the map and stops.</p>
+  </noscript>
+
+  <script src="js/vendor/leaflet/leaflet.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
