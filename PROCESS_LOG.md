@@ -383,8 +383,22 @@ The current OpenStreetMap Standard tiles are free, but they're visually busy and
 - **Decision:** add it as option K at the end of the list. **Why:** options A–J may already have been shared with the team, and inserting it earlier would change their letters.
 
 ### Observation for the team
-- **Stop 1 (the Unsung Founders Memorial) may have the wrong coordinates.** The supplied point (35.913913, −79.051746) is about 62 m north of where both OpenStreetMap (35.913360, −79.051791) and the team's illustration place the memorial. The supplied point is close to Graham Memorial. *Not changed; waiting for the team to confirm.*
+- **Stop 1 (the Unsung Founders Memorial) may have the wrong coordinates.** The supplied point (35.913913, −79.051746) is about 62 m north of where both OpenStreetMap (35.913360, −79.051791) and the team's illustration place the memorial. The supplied point is close to Graham Memorial. **The team confirmed it, and Stop 1 was moved to the OpenStreetMap location (see the next entry).**
 
 ### Verified
 - In a browser, option K loads the full image beneath the stops, route, and boundary, and Stops 2–5 line up with the illustration.
+
+---
+
+## 2026-10-14 — Stop 1 location corrected
+
+**Directed by:** project team
+
+### What changed
+- **`data/stops.json`:** moved the Unsung Founders Memorial (Stop 1) from 35.913913, −79.051746 to **35.913360, −79.051791**, OpenStreetMap's location for the memorial. It's about 62 m south of the original point.
+- **`data/route.geojson`:** rebuilt (still straight lines in the provisional order).
+- The stop's id (`unsung-founders-memorial`) is unchanged, so its QR code didn't need to change.
+
+### Decisions and reasons
+- **Decision:** use OpenStreetMap's position. **Why:** OpenStreetMap and the team's illustrated map agree on where the memorial is, and the original point was near Graham Memorial instead.
 
