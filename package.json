@@ -9,7 +9,8 @@
     "placeholders": "node scripts/make-placeholders.js",
     "serve": "python3 -m http.server 8080",
     "boundary": "node scripts/build-campus-boundary.js",
-    "team-map": "node scripts/build-team-map-tiles.js"
+    "team-map": "node scripts/build-team-map-tiles.js",
+    "stamp": "node scripts/stamp-assets.js"
   },
   "devDependencies": {
     "@turf/buffer": "7.4.0",

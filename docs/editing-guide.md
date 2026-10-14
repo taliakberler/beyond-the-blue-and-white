@@ -198,6 +198,18 @@ To host from a subfolder of another site instead, copy everything except `node_m
 
 ---
 
+## After changing CSS or JavaScript
+
+The links to `css/styles.css` and `js/app.js` in `index.html` carry a version stamp (for example `js/app.js?v=71ee66bf`) based on each file's contents. **After editing any CSS or JS file, run:**
+
+```bash
+npm run stamp
+```
+
+This updates the stamps, so visitors' browsers fetch the new files instead of mixing a new page with an old cached script. Mixing them can break the tour until the browser's cache expires (up to 10 minutes on GitHub Pages). Content edits to `data/stops.json` don't need this, because the app always checks for the latest data.
+
+---
+
 ## Record your changes
 
 When you make a meaningful change (new stops, a design update, a code fix), add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) describing what changed and why.

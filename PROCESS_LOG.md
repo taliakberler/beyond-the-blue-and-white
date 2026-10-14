@@ -560,3 +560,26 @@ Implemented by Claude Code.
 - The `#stop=lenoir-hall` deep link opened Stop 3 at zoom 18, with its marker on Lenoir Hall in the illustration.
 - In dark mode, the map stays light, markers are dark blue with a white ring, and the interface around the map is dark.
 
+---
+
+## 2026-10-14 — Fix: "The tour couldn't load" after an update (browser caching)
+
+**Directed by:** project team (reported that the live link showed "The tour couldn't load"). Fixed by Claude Code.
+
+### What happened
+- GitHub Pages lets browsers reuse files for up to 10 minutes. After the illustrated-map update, a browser that had recently visited could combine the **new** `index.html` (without the "Campus buildings" button) with its **old** cached `js/app.js`, which still expected that button. The old script crashed while starting, and the tour showed "The tour couldn't load". The message also wrongly blamed the tour data.
+- This was reproduced locally by serving the new page with the previous `app.js`, which produced the same error. A fresh load of the live site worked correctly.
+
+### What changed
+- **New `scripts/stamp-assets.js` (`npm run stamp`):** adds a content-based version to the CSS and JavaScript links in `index.html` (for example `js/app.js?v=71ee66bf`). When a file changes, its address changes, so a browser can't pair a new page with an old script.
+- **`index.html`:** the CSS and JS links are now stamped.
+- **`js/app.js`:**
+  - The startup error now distinguishes "the data didn't load" from "something went wrong starting the tour", and both offer a **Reload** button.
+  - The optional building layer is now started inside a safety wrapper, so a failure there can't stop the rest of the tour.
+- **`docs/editing-guide.md`:** new section, "After changing CSS or JavaScript": run `npm run stamp`.
+
+### Verified
+- New page with the old script: reproduced the original error (before the fix).
+- New stamped page: loads normally, with 5 markers and the illustrated map.
+- Old cached page with the new script: also loads normally.
+

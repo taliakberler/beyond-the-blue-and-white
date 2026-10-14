@@ -621,12 +621,17 @@
 
   /* ---------------- Boot ---------------- */
 
-  function fail(msg) {
+  function fail(msg, opts) {
     var main = document.getElementById('main');
     main.textContent = '';
     var box = el('div', { 'class': 'list-inner', role: 'alert' });
     box.appendChild(el('h2', null, 'The tour couldn’t load'));
     box.appendChild(el('p', null, msg));
+    if (opts && opts.reload) {
+      var btn = el('button', { type: 'button', 'class': 'nav-btn primary' }, 'Reload');
+      btn.addEventListener('click', function () { location.reload(); });
+      box.appendChild(btn);
+    }
     main.appendChild(box);
   }
 
@@ -636,6 +641,7 @@
 
     if (typeof L === 'undefined') { fail('The map library didn’t load. Please check your connection and reload.'); return; }
 
+    var dataLoaded = false;
     fetch(DATA_URL, { cache: 'no-cache' }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -643,6 +649,7 @@
       state.tour = data.tour || {};
       state.stops = (data.stops || []).slice().sort(function (a, b) { return a.order - b.order; });
       if (!state.stops.length) throw new Error('No stops in data/stops.json');
+      dataLoaded = true;
 
       if (state.tour.title) { els.title.textContent = state.tour.title; document.title = state.tour.title + ' — Walking Tour'; }
       if (state.tour.subtitle) els.subtitle.textContent = state.tour.subtitle;
@@ -651,7 +658,7 @@
       initMap();
       addMarkers();
       loadRoute();
-      loadBuildings();
+      optional(loadBuildings, 'Building layer');
       initLocate();
       initPanel();
       renderList();
@@ -665,8 +672,19 @@
       else { fitAllStops(); updateStartBtn(); }
     }).catch(function (err) {
       console.error(err);
-      fail('We couldn’t load the tour data (data/stops.json). If you opened this file directly from your computer, run it from a local web server instead — see the README.');
+      if (dataLoaded) {
+        // The data arrived but starting the map failed — most often a page and a script from
+        // different versions of the site cached together. A fresh reload fixes it.
+        fail('Something went wrong starting the tour. Please reload the page.', { reload: true });
+      } else {
+        fail('We couldn’t load the tour data (data/stops.json). Check your connection and reload. If you opened this file directly from your computer, run it from a local web server instead — see the README.', { reload: true });
+      }
     });
+  }
+
+  // Runs an optional feature so that, if it breaks, the rest of the tour still works.
+  function optional(fn, name) {
+    try { fn(); } catch (e) { console.warn(name + ' failed:', e); }
   }
 
   boot();
