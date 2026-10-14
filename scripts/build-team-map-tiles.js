@@ -13,7 +13,10 @@
  *   source       PNG export of the illustration (e.g. from Illustrator, about 6000px wide)
  *   bounds       real-world corners of the illustration (it is north-up and to scale)
  *   background   the illustration's background color, to be faded out away from campus
- *   edgeMarginMeters / closeGapsMeters / featherMeters  shape of the kept area around campus
+ *   closeGapsMeters   fill gaps (lawns, courtyards) narrower than about twice this between drawn features
+ *   edgeMarginMeters  how far the background color extends beyond drawn features before fading out
+ *   borderFadeMeters  short fade at the artboard border so nothing ends in a hard cut
+ *   featherMeters     final softening of the mask edge
  *   minZoom, maxZoom, output
  *
  * Run: npm run team-map            (requires `npm install` once; uses sharp, Apache-2.0)
@@ -58,32 +61,49 @@ function distanceTo(grid, w, h) {
   return d;
 }
 
-// Builds an alpha mask: opaque over the drawn campus plus a margin, transparent beyond, soft edge.
+// Builds the alpha mask. Drawn features (buildings, paths, the cemetery) stay opaque; the flat
+// background color is kept only near them and fades out with distance, so the edge of the
+// illustration follows the shape of what's drawn rather than the rectangle of the artboard.
+const smooth = t => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
+
 async function buildMask(W, H) {
-  const small = 1000, sh = Math.round(small * H / W);
+  const small = 2000, sh = Math.round(small * H / W);      // ~0.55 m per mask pixel
   const mPerPx = groundWidthM / small;
   const { data } = await sharp(src).removeAlpha().resize(small, sh).raw().toBuffer({ resolveWithObject: true });
   const [br, bg, bb] = hex(cfg.background), tol = cfg.backgroundTolerance || 18;
-  const art = new Uint8Array(small * sh);
-  for (let i = 0; i < art.length; i++) {
+  const n = small * sh, art = new Uint8Array(n);
+  for (let i = 0; i < n; i++) {
     const r = data[i * 3], g = data[i * 3 + 1], bl = data[i * 3 + 2];
     art[i] = Math.abs(r - br) + Math.abs(g - bg) + Math.abs(bl - bb) > tol ? 1 : 0;
   }
-  // Morphological closing (grow, then shrink) fills courtyards and lawns between drawn features,
-  // then the remaining growth leaves a margin of background color around the campus.
-  const grow = (cfg.closeGapsMeters + cfg.edgeMarginMeters) / mPerPx;
-  const shrink = cfg.closeGapsMeters / mPerPx;
+
+  // 1. Closing (grow, then shrink) fills lawns and courtyards between drawn features. The artboard
+  //    border counts as "outside" while shrinking, so the filled area pulls back from straight edges.
+  const close = cfg.closeGapsMeters / mPerPx;
   const d1 = distanceTo(art, small, sh);
-  const grown = new Uint8Array(d1.length); for (let i = 0; i < d1.length; i++) grown[i] = d1[i] <= grow ? 1 : 0;
-  const outside = new Uint8Array(grown.length); for (let i = 0; i < grown.length; i++) outside[i] = grown[i] ? 0 : 1;
-  const d2 = distanceTo(outside, small, sh);
-  const mask = Buffer.alloc(d2.length); for (let i = 0; i < d2.length; i++) mask[i] = d2[i] > shrink ? 255 : 0;
-  // Clear a thin frame at the image border so the blur fades out instead of ending in a hard edge.
-  const frame = Math.max(2, Math.round((cfg.featherMeters || 6) / mPerPx));
+  const outside = new Uint8Array(n);
   for (let y = 0; y < sh; y++) for (let x = 0; x < small; x++) {
-    if (x < frame || y < frame || x >= small - frame || y >= sh - frame) mask[y * small + x] = 0;
+    const i = y * small + x;
+    outside[i] = d1[i] > close || x === 0 || y === 0 || x === small - 1 || y === sh - 1 ? 1 : 0;
   }
-  const featherPx = Math.max(1, (cfg.featherMeters || 6) * W / groundWidthM);
+  const d2 = distanceTo(outside, small, sh);
+  const region = new Uint8Array(n);
+  for (let i = 0; i < n; i++) region[i] = art[i] || d2[i] > close ? 1 : 0;
+
+  // 2. Background fades out with distance from the drawn area: a halo that hugs its contour.
+  const d3 = distanceTo(region, small, sh);
+  const halo = cfg.edgeMarginMeters / mPerPx;
+  const mask = Buffer.alloc(n);
+  for (let i = 0; i < n; i++) mask[i] = Math.round(255 * (1 - smooth(d3[i] / halo)));
+
+  // 3. A short fade at the artboard border so nothing ever ends in a hard cut.
+  const ramp = Math.max(1, (cfg.borderFadeMeters || 12) / mPerPx);
+  for (let y = 0; y < sh; y++) for (let x = 0; x < small; x++) {
+    const i = y * small + x;
+    mask[i] = Math.round(mask[i] * smooth(Math.min(x, y, small - 1 - x, sh - 1 - y) / ramp));
+  }
+
+  const featherPx = Math.max(1, (cfg.featherMeters || 2) * W / groundWidthM);
   return sharp(mask, { raw: { width: small, height: sh, channels: 1 } })
     .resize(W, H, { kernel: 'linear' }).blur(featherPx).extractChannel(0).raw().toBuffer();
 }

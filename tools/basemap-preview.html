@@ -124,7 +124,12 @@
   var current = null, boundary = null, buildings = null, hoverBuildings = null;
   function choose(i) {
     var b = BASEMAPS[i];
-    if (current) map.removeLayer(current);
+    if (current) {
+      map.removeLayer(current);
+      // Some layers (the vector maps) leave their credit behind when removed; clear it explicitly.
+      var credit = current.options && current.options.attribution;
+      if (credit) map.attributionControl.removeAttribution(credit);
+    }
     current = b.make();
     if (current) current.addTo(map);
     window.currentBasemap = current;  // for debugging in the browser console

@@ -8,9 +8,10 @@
   },
   "background": "#9fc6e0",
   "backgroundTolerance": 18,
-  "edgeMarginMeters": 18,
+  "edgeMarginMeters": 22,
   "closeGapsMeters": 55,
-  "featherMeters": 6,
+  "featherMeters": 2,
+  "borderFadeMeters": 12,
   "minZoom": 14,
   "maxZoom": 18,
   "output": "tiles/team-map"

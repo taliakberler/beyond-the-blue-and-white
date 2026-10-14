@@ -133,10 +133,11 @@ The illustrated map is served as map tiles in `tiles/team-map/`, built from a PN
 4. Commit the updated `tiles/team-map/` folder.
 
 Other settings in `scripts/team-map.json`:
-- `background`: the art's background color, which fades to transparent away from campus
-- `edgeMarginMeters`: how far the background color extends around the drawn campus
-- `closeGapsMeters`: fills gaps between drawn features so no holes appear
-- `featherMeters`: softness of the edge
+- `background`: the art's flat background color. Drawn features stay solid, and this color fades out with distance from them, so the map's edge follows the shape of the drawing.
+- `closeGapsMeters`: fills lawns and courtyards narrower than about twice this between drawn features, so no holes appear inside campus
+- `edgeMarginMeters`: how far the background color extends beyond drawn features before it has faded out completely
+- `borderFadeMeters`: a short fade at the artboard's own border, so nothing ends in a hard cut
+- `featherMeters`: final softening of the edge
 - `minZoom` / `maxZoom`: which zoom levels get tiles
 
 ---

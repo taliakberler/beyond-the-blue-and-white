@@ -461,3 +461,45 @@ Implemented by Claude Code.
 - Option J shows 577 outlined buildings, and option C shows no building layer.
 - The "UNC buildings" checkbox no longer appears.
 
+---
+
+## 2026-10-14 — Softer edges on the illustrated map
+
+**Directed by:** project team (the left and bottom edges looked like hard, unnatural cuts). Implemented by Claude Code.
+
+### What changed
+- **`scripts/build-team-map-tiles.js`:** the illustration now fades gradually to transparent over the last **45 m** inside each of its borders, using a smooth (smoothstep) ramp. This replaced a 6 m fade that only cleared a thin frame. The setting is the new `borderFadeMeters` in `scripts/team-map.json`.
+- **`tiles/team-map/`:** rebuilt (99 tiles, 1.4 MB).
+- **`tools/basemap-preview.html`:** switching basemaps now also clears the old one's credit line. OpenFreeMap's credit had stayed visible after switching from option C to K.
+- **`docs/editing-guide.md`:** documented `borderFadeMeters`.
+
+### Decisions and reasons
+- **Decision:** fade toward the image's own borders, not just around the drawn campus. **Why:** on the left and bottom, the drawing (Peabody, Sitterson, Kenan Labs, and the paths beside them) runs almost to the edge of the artboard. The background around campus was kept solid all the way to that edge, so it ended in straight lines. A wider fade at every border lets the drawing dissolve into the faded street map instead.
+- **Note:** the long straight white lines that fade out near the edges are walkway lines in the illustration itself, not tile seams. Pixel values across tile boundaries were checked and match.
+
+### Verified
+- With the browser cache cleared, the left and bottom edges at zoom 16 and 17 fade smoothly into the surrounding streets on a 2x-resolution screen. Option C's credit no longer remains after switching to K.
+
+---
+
+## 2026-10-14 — Illustrated map edge follows the drawing
+
+**Directed by:** project team (the left edge was still too sharp and should follow the illustration's content). Implemented by Claude Code.
+
+### What changed
+- **`scripts/build-team-map-tiles.js`:** rewrote how the transparency mask is built:
+  1. Drawn features (buildings, paths, the cemetery) are found by color and stay opaque.
+  2. Lawns and courtyards between them are filled in (55 m gap-closing). The artboard border now counts as "outside" during this step, so the filled area pulls back from straight edges instead of running into them.
+  3. The flat background color fades out with **distance from the nearest drawn feature**, reaching zero at 22 m, so the edge forms a soft halo that follows the drawing's contour.
+  4. A short 12 m fade at the artboard border remains as a safety net, followed by a 2 m final softening.
+  5. The mask is now built at about 0.55 m per pixel (previously 1.1 m), so the halo follows smaller details.
+- **`scripts/team-map.json`:** `edgeMarginMeters` 22, `closeGapsMeters` 55, `borderFadeMeters` 12, `featherMeters` 2.
+- **`tiles/team-map/`:** rebuilt (99 tiles, 1.4 MB).
+- **`docs/editing-guide.md`:** updated the settings descriptions.
+
+### Decisions and reasons
+- **Decision:** fade by distance from the drawing, not from the artboard edge. **Why:** the previous 45 m border fade was smooth, but still ran parallel to the artboard's straight edges. On the left side, Hill, Smith, Peabody, Sitterson, and the paths beside them sit close to the edge, so the fade there looked like a blurred straight line. Tying the fade to the drawn features makes the outline wrap around them.
+
+### Verified
+- At zoom 17, the left side's halo wraps around Hill, Smith, Peabody, Sitterson, Murray, and Kenan Labs with no straight line visible. At zoom 16, the illustration's whole outline follows the campus shape on all sides.
+
