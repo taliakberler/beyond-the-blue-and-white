@@ -17,8 +17,7 @@
     title: $('tour-title'), subtitle: $('tour-subtitle'), intro: $('tour-intro'),
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
-    locateBtn: $('locate-btn'), buildingsBtn: $('buildings-btn'), buildingsLabel: $('buildings-label'),
-    boundaryBtn: $('boundary-btn'), boundaryLabel: $('boundary-label'),
+    locateBtn: $('locate-btn'),
     startBtn: $('start-btn'), themeBtn: $('theme-toggle'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'),
@@ -111,19 +110,33 @@
     var map = L.map('map', { zoomControl: true }).setView(center, state.tour.zoom || 17);
     state.map = map;
 
+    map.createPane('art');
+    map.getPane('art').style.zIndex = 250;       // illustrated map: above the faded streets (200)
     map.createPane('buildings');
-    map.getPane('buildings').style.zIndex = 350; // below routes (400) and markers (600)
-    map.createPane('boundary');
-    map.getPane('boundary').style.zIndex = 340;  // campus outline sits beneath the buildings
-    map.getPane('boundary').style.pointerEvents = 'none';
+    map.getPane('buildings').style.zIndex = 350; // invisible hover targets: below routes (400) and markers (600)
 
-    var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    var OSM_CREDIT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    var bm = state.tour.basemap || {};
+
+    // Surrounding streets: OpenStreetMap, grayed and faded into the illustration's blue (see CSS .faded-streets).
+    var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      className: 'faded-streets', opacity: bm.streetsOpacity || 0.38,
+      maxNativeZoom: 19, maxZoom: 20, attribution: OSM_CREDIT
     }).addTo(map);
 
+    // The team's illustrated campus map, as pre-built tiles (scripts/build-team-map-tiles.js).
+    var art = null;
+    if (bm.tiles && bm.bounds) {
+      art = L.tileLayer(bm.tiles, {
+        pane: 'art', bounds: bm.bounds,
+        minZoom: 0, minNativeZoom: bm.minNativeZoom || 14, maxNativeZoom: bm.maxNativeZoom || 18, maxZoom: 20,
+        attribution: bm.attribution || ''
+      }).addTo(map);
+    }
+    map.setMaxZoom(20);
+
     var tileErrors = 0, warned = false;
-    tiles.on('tileerror', function () {
+    function onTileError() {
       tileErrors++;
       if (!warned && tileErrors >= 3) {
         warned = true;
@@ -132,8 +145,11 @@
           action: { label: 'Show list', run: function () { setView('list'); } }
         });
       }
+    }
+    function onTileLoad() { tileErrors = 0; warned = false; }
+    [streets, art].forEach(function (layer) {
+      if (layer) layer.on('tileerror', onTileError).on('load', onTileLoad);
     });
-    tiles.on('load', function () { tileErrors = 0; warned = false; });
 
     window.addEventListener('offline', function () { toast('You’re offline. Saved stop text still works; map tiles and images may not load.'); });
     window.addEventListener('online', function () { toast('Back online.', { duration: 2500 }); });
@@ -202,7 +218,7 @@
       L.geoJSON(geo, {
         interactive: false,
         style: function () {
-          return { color: getCss('--color-route'), weight: 5, opacity: 0.85, dashArray: '2 10', lineCap: 'round' };
+          return { color: getCss('--color-map-marker'), weight: 5, opacity: 0.85, dashArray: '2 10', lineCap: 'round' };
         }
       }).addTo(state.map);
     }).catch(function (err) {
@@ -214,59 +230,23 @@
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#2b5c8a';
   }
 
-  /* ---------------- Optional ArcGIS building layer ---------------- */
+  /* ---------------- Optional ArcGIS building layer (invisible; info on hover or tap) ---------------- */
 
-  /* ---------------- Campus boundary (pre-built file, see scripts/build-campus-boundary.js) ---------------- */
-
-  function loadBoundary() {
-    var cfg = state.tour.campusBoundary;
-    var file = cfg && cfg.file;
-    if (!file) return;
-    if (cfg.label) els.boundaryLabel.textContent = cfg.label;
-
-    fetch(file, { cache: 'no-cache' }).then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    }).then(function (geo) {
-      state.boundaryLayer = L.geoJSON(geo, {
-        pane: 'boundary',
-        interactive: false,
-        style: function () {
-          return {
-            color: getCss('--color-boundary-line'), weight: 2, opacity: 0.8,
-            fillColor: getCss('--color-boundary-fill'), fillOpacity: 0.08
-          };
-        }
-      }).addTo(state.map);
-      els.boundaryBtn.hidden = false;
-    }).catch(function (err) {
-      console.warn('Campus boundary not loaded:', err);  // the tour works fine without it
-    });
-
-    els.boundaryBtn.addEventListener('click', function () {
-      if (!state.boundaryLayer) return;
-      var on = els.boundaryBtn.getAttribute('aria-pressed') === 'true';
-      if (on) state.map.removeLayer(state.boundaryLayer);
-      else state.boundaryLayer.addTo(state.map);
-      els.boundaryBtn.setAttribute('aria-pressed', String(!on));
-    });
-  }
-
+  // UNC's building footprints don't line up exactly with the illustrated map, so they are never drawn.
+  // They are kept as invisible targets: hovering (desktop) or tapping (phones) a building shows its
+  // name and, when available, the year it was built.
   function loadBuildings() {
     var cfg = state.tour.buildingLayer;
     var base = cfg && (typeof cfg === 'string' ? cfg : cfg.url);
     if (!base) return;
     base = base.replace(/\/+$/, '').replace(/\/query$/, '');
-    var nameField = (cfg && cfg.nameField) || null;
-    if (cfg && cfg.label) els.buildingsLabel.textContent = cfg.label;
-
-    els.buildingsBtn.hidden = false;
-    els.buildingsBtn.setAttribute('aria-busy', 'true');
-    els.buildingsBtn.disabled = true;
+    var nameField = (cfg && cfg.nameField) || 'name';
+    var yearField = (cfg && cfg.yearField) || null;
+    var fields = [nameField].concat(yearField ? [yearField] : []).join(',');
 
     var features = [];
     function page(offset, n) {
-      var url = base + '/query?where=1%3D1&outFields=*&outSR=4326&f=geojson' +
+      var url = base + '/query?where=1%3D1&outFields=' + encodeURIComponent(fields) + '&outSR=4326&f=geojson' +
         (offset ? '&resultOffset=' + offset : '');
       var ctrl = 'AbortController' in window ? new AbortController() : null;
       var timer = ctrl && setTimeout(function () { ctrl.abort(); }, BUILDING_TIMEOUT_MS);
@@ -287,31 +267,19 @@
       if (!features.length) throw new Error('no features');
       state.buildingLayer = L.geoJSON({ type: 'FeatureCollection', features: features }, {
         pane: 'buildings',
-        style: function () {
-          return {
-            color: getCss('--color-building-line'), weight: 1,
-            fillColor: getCss('--color-building-fill'), fillOpacity: 0.22, opacity: 0.6
-          };
-        },
+        style: function () { return { stroke: false, fill: true, fillColor: '#000', fillOpacity: 0 }; },
         onEachFeature: function (f, layer) {
-          var name = f.properties && (nameField ? f.properties[nameField] : (f.properties.name || f.properties.NAME));
-          if (name) layer.bindTooltip(String(name), { sticky: true, direction: 'top' });
+          var p = f.properties || {};
+          if (!p[nameField]) return;
+          var box = el('div', { 'class': 'building-tip' });
+          box.appendChild(el('strong', null, String(p[nameField])));
+          if (yearField && p[yearField]) box.appendChild(el('span', null, 'Built ' + p[yearField]));
+          layer.bindTooltip(box, { sticky: true, direction: 'top', offset: [0, -6] });
+          layer.on('click', function (e) { layer.openTooltip(e.latlng); });
         }
       }).addTo(state.map);
-      els.buildingsBtn.disabled = false;
-      els.buildingsBtn.removeAttribute('aria-busy');
-      els.buildingsBtn.setAttribute('aria-pressed', 'true');
     }).catch(function (err) {
-      console.warn('Building layer not loaded:', err);
-      els.buildingsBtn.hidden = true;  // the tour works fine without it
-    });
-
-    els.buildingsBtn.addEventListener('click', function () {
-      if (!state.buildingLayer) return;
-      var on = els.buildingsBtn.getAttribute('aria-pressed') === 'true';
-      if (on) state.map.removeLayer(state.buildingLayer);
-      else state.buildingLayer.addTo(state.map);
-      els.buildingsBtn.setAttribute('aria-pressed', String(!on));
+      console.warn('Building layer not loaded:', err);  // the tour works fine without it
     });
   }
 
@@ -339,7 +307,7 @@
             icon: L.divIcon({ className: '', html: '<div class="you-are-here"></div>', iconSize: [22, 22], iconAnchor: [11, 11] }),
             keyboard: false, interactive: false, zIndexOffset: 1000
           }).addTo(state.map);
-          state.youCircle = L.circle(ll, { radius: acc, color: getCss('--color-accent'), weight: 1, fillOpacity: 0.1, interactive: false }).addTo(state.map);
+          state.youCircle = L.circle(ll, { radius: acc, color: getCss('--color-map-active'), weight: 1, fillOpacity: 0.1, interactive: false }).addTo(state.map);
         } else {
           state.youMarker.setLatLng(ll);
           state.youCircle.setLatLng(ll).setRadius(acc);
@@ -683,7 +651,6 @@
       initMap();
       addMarkers();
       loadRoute();
-      loadBoundary();
       loadBuildings();
       initLocate();
       initPanel();

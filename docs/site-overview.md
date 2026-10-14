@@ -12,7 +12,7 @@ All tour content comes from two data files:
 
 | File | Contents |
 |---|---|
-| `data/stops.json` | Tour settings (title, map center, building layer) and every stop's text, images, people, and sources |
+| `data/stops.json` | Tour settings (title, map center, basemap, building layer) and every stop's text, images, people, and sources |
 | `data/route.geojson` | The walking path, as a GeoJSON LineString |
 
 Changing those files changes the tour, with no code edits needed.
@@ -24,8 +24,8 @@ Changing those files changes the tour, with no code edits needed.
 ### Map view (default)
 
 - A street map of campus with **numbered markers** for each stop and a **dotted route line** connecting them in walking order.
-- **Campus building outlines** (light gray) from UNC's GIS service, with a toggle button.
-- **Campus boundary:** a thin outline with a faint tint showing UNC's central campus, built from UNC's campus-boundary parcels, with a toggle button.
+- **The team's illustrated campus map** as the basemap, with nearby streets shown faintly around it.
+- **Building names on hover or tap:** UNC's building footprints are invisible. Hovering (desktop) or tapping (phones) a building shows its name and year built.
 - A **"You are here"** button that shows the visitor's position as an orange dot with an accuracy circle.
 - A **"Start the tour at Stop 1"** button when no stop is open.
 - Zoom buttons and map credits.
@@ -79,17 +79,16 @@ index.html
  ├─ js/vendor/leaflet/leaflet.js + .css  map library (bundled)
  └─ js/app.js
      ├─ fetch data/stops.json            → title, stops, settings
-     ├─ draw map + OpenStreetMap tiles
+     ├─ draw map: faded OpenStreetMap streets + illustrated-map tiles (tiles/team-map)
      ├─ draw numbered markers
      ├─ fetch data/route.geojson         → dotted route line
-     ├─ fetch data/campus-boundary.geojson (optional) → campus outline
-     ├─ fetch UNC building layer (optional, in background)
+     ├─ fetch UNC building layer (optional, in background) → invisible hover/tap targets
      ├─ build List view
      └─ if the address has #stop=…, open that stop; otherwise fit all stops on screen
 ```
 
 - If `stops.json` can't load, the page shows a clear error message instead of a blank screen.
-- If the route, campus boundary, or building layer can't load, the tour works without them.
+- If the route or building layer can't load, the tour works without them.
 - Data files are fetched with `cache: 'no-cache'`: the browser checks with the server for a newer version on every visit, so content updates appear right away instead of after the browser's cache expires. Leaflet and the images are cached normally.
 
 All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the site works at the root of a domain or inside any subfolder.
@@ -102,7 +101,7 @@ All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the s
 |---|---|
 | **Keyboard** | Every control is reachable with Tab. Map markers can be focused and opened with Enter or Space. Escape closes the stop panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
 | **Focus** | A thick orange focus ring on every focused element. Opening a stop moves focus into its panel; closing returns focus to that stop's marker. |
-| **Screen readers** | Markers are announced as buttons ("Stop 3: …"). The Map/List and building toggles report on/off state (`aria-pressed`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
+| **Screen readers** | Markers are announced as buttons ("Stop 3: …"). The Map/List switch reports its state (`aria-pressed`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
 | **Images** | Every image has alt text from `stops.json`, and images that fail to load are replaced by a labeled text box. |
 | **Text** | 17px base size in `rem` units, so it follows browser text-size settings. Zooming the page isn't blocked. |
 | **Color** | All text/background pairs meet WCAG 2.1 AA contrast in light and dark mode ([measurements](design-and-styles.md#measured-contrast)). Information is never conveyed by color alone: the active stop is also enlarged and named in the panel. |
@@ -123,8 +122,7 @@ These were checked by hand and with scripted tests in a browser (see [PROCESS_LO
 | Location permission denied | "Location permission was denied. That's OK — follow the numbered stops, or allow location in your browser settings…" |
 | Location times out or is unavailable | A friendly message suggesting trying again in an open area |
 | Visitor is far from campus | Their location is still shown, with a note that they appear to be away from campus |
-| Building layer unavailable | The toggle button disappears; nothing else changes |
-| Campus boundary file missing | The boundary toggle stays hidden; nothing else changes |
+| Building layer unavailable | Building names don't appear on hover or tap; nothing else changes |
 | Tour data can't load | A full-page message explaining the problem |
 
 ---
@@ -133,7 +131,7 @@ These were checked by hand and with scripted tests in a browser (see [PROCESS_LO
 
 - No analytics, cookies, trackers, ads, or accounts.
 - Location is only requested when the visitor taps "You are here". It stays on the device and is never sent anywhere.
-- The only outside requests are for map tiles (OpenStreetMap), building outlines (UNC GIS), and, only when tapped, the directions link (Apple or Google Maps).
+- The only outside requests are for street tiles (OpenStreetMap), building names (UNC GIS), and, only when tapped, the directions link (Apple or Google Maps). The illustrated map is served from this site.
 
 Details are in [software-and-credits.md](software-and-credits.md).
 

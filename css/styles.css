@@ -43,15 +43,18 @@
   --color-on-primary: #ffffff;
   --color-accent: #b4541a;        /* active stop / "you are here" — ~5:1 with white */
   --color-on-accent: #ffffff;
-  --color-route: #2b5c8a;
-  --color-building-fill: #8a97a5;
-  --color-building-line: #6b7785;
-  --color-boundary-line: #2b5c8a;
-  --color-boundary-fill: #2b5c8a;
   --color-focus: #b4541a;
   --color-header-bg: #1f2933;
   --color-header-text: #ffffff;
   --color-placeholder-badge: #fff3c4;
+  --color-map-bg: #9fc6e0;        /* the illustrated map's background blue */
+  /* Symbols drawn ON the map. The illustrated map is light in both themes, so these are
+     intentionally not redefined in the dark-mode blocks below. */
+  --color-map-marker: #2b5c8a;     /* stop markers, route line — 7.0:1 with white */
+  --color-map-marker-text: #ffffff;
+  --color-map-active: #b4541a;     /* active stop, "you are here" — 5.0:1 with white */
+  --color-map-active-text: #ffffff;
+  --color-map-ring: #ffffff;
 
   /* ---- Type & spacing ---- */
   --font-system: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -84,11 +87,6 @@
     --color-on-primary: #0d1620;
     --color-accent: #f0a46c;
     --color-on-accent: #1a0e05;
-    --color-route: #8cb8e6;
-    --color-building-fill: #9aa8b8;
-    --color-building-line: #b7c3d0;
-    --color-boundary-line: #8cb8e6;
-    --color-boundary-fill: #8cb8e6;
     --color-focus: #f0a46c;
     --color-header-bg: #0b0e12;
     --color-header-text: #eef2f6;
@@ -108,11 +106,6 @@
   --color-on-primary: #0d1620;
   --color-accent: #f0a46c;
   --color-on-accent: #1a0e05;
-  --color-route: #8cb8e6;
-  --color-building-fill: #9aa8b8;
-  --color-building-line: #b7c3d0;
-  --color-boundary-line: #8cb8e6;
-  --color-boundary-fill: #8cb8e6;
   --color-focus: #f0a46c;
   --color-header-bg: #0b0e12;
   --color-header-text: #eef2f6;
@@ -211,13 +204,19 @@ button { font: inherit; color: inherit; }
 main { flex: 1; position: relative; min-height: 0; }
 .view { position: absolute; inset: 0; }
 
-#map { position: absolute; inset: 0; background: var(--color-surface-2); }
+#map { position: absolute; inset: 0; background: var(--color-map-bg); }
 
-/* Dark-mode map tiles: soften the bright OSM tiles. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.6); }
-}
-:root[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.6); }
+/* Basemap: the team's illustrated map over faded OpenStreetMap streets.
+   The map keeps its light illustration in dark mode too; only the interface around it changes. */
+.faded-streets { filter: grayscale(1) contrast(0.85) brightness(1.08); }
+/* Overlap street tiles by 1px so the browser never leaves hairline gaps between them. */
+.faded-streets img.leaflet-tile { width: 257px !important; height: 257px !important; }
+
+/* Building info tooltip (hover or tap a building) */
+/* The building shapes are invisible tap targets; never show a focus ring that would reveal them. */
+.leaflet-buildings-pane path:focus, .leaflet-buildings-pane path:focus-visible { outline: none; }
+.building-tip strong { display: block; font-size: var(--fs-small); }
+.building-tip span { font-size: 0.8125rem; color: #47525e; }
 
 .leaflet-container { font-family: var(--font-body); font-size: var(--fs-small); }
 .leaflet-control-attribution { font-size: 12px; }
@@ -268,24 +267,24 @@ main { flex: 1; position: relative; min-height: 0; }
 .stop-marker span {
   width: 36px; height: 36px; border-radius: 50%;
   display: grid; place-items: center;
-  background: var(--color-primary); color: var(--color-on-primary);
+  background: var(--color-map-marker); color: var(--color-map-marker-text);
   font-family: var(--font-heading); font-weight: 700; font-size: 18px;
-  border: 3px solid var(--color-surface);
+  border: 3px solid var(--color-map-ring);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s ease;
 }
 .stop-marker-wrap:focus-visible span { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 .stop-marker-wrap.is-active span {
-  background: var(--color-accent); color: var(--color-on-accent);
+  background: var(--color-map-active); color: var(--color-map-active-text);
   transform: scale(1.18);
 }
 .stop-label { font-weight: 700; }
 
 .you-are-here {
   width: 22px; height: 22px; border-radius: 50%;
-  background: var(--color-accent);
-  border: 4px solid #fff;
-  box-shadow: 0 0 0 2px var(--color-accent), 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: var(--color-map-active);
+  border: 4px solid var(--color-map-ring);
+  box-shadow: 0 0 0 2px var(--color-map-active), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------- List view ---------- */

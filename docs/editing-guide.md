@@ -29,9 +29,10 @@ All tour content and settings live in **`data/stops.json`**. Keep the quotes, co
 | `title`, `subtitle` | Shown in the header |
 | `center`, `zoom` | Starting map view, `[lat, lng]` |
 | `intro` | Paragraph shown at the top of the List view |
-| `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). Delete the whole `buildingLayer` block to turn it off. |
-| `buildingLayer.nameField` | Attribute shown when hovering over a building (`BUILDINGNAME` for UNC's layer) |
-| `buildingLayer.label` | Text on the toggle button |
+| `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
+| `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
+| `buildingLayer.yearField` | Attribute shown as "Built …" under the name (`YEARBUILT` for UNC's layer) |
+| `basemap` | The illustrated map: `tiles` (tile path), `bounds` (its real-world corners), `minNativeZoom` / `maxNativeZoom` (zooms the tiles were built for), `streetsOpacity` (how faint the surrounding streets are), and `attribution` (credit line) |
 
 ### Each stop (`"stops": [ … ]`)
 
@@ -102,9 +103,9 @@ The app accepts either a single Feature or a FeatureCollection with LineString o
 
 ---
 
-## Update the campus boundary
+## Update the campus boundary (comparison page only)
 
-The campus outline is a pre-built file, `data/campus-boundary.geojson`, made from UNC's campus-boundary parcels. To rebuild it (for example, after UNC updates its data), run this after `npm install`:
+The campus boundary is **no longer shown on the tour**. It's only used by the basemap comparison page in `tools/`. The outline is a pre-built file, `data/campus-boundary.geojson`, made from UNC's campus-boundary parcels. To rebuild it (for example, after UNC updates its data), run this after `npm install`:
 
 ```bash
 npm run boundary
@@ -117,13 +118,11 @@ The settings are in `data/stops.json` under `tour.campusBoundary`:
 | `sourceUrl` | UNC's boundary layer |
 | `where` | Which parcels to include. `BROADAREAS = 'Central Campus'` is the main campus. `1=1` includes every UNC property, including distant ones. |
 | `closeGapsMeters` | Bridges gaps narrower than about twice this distance (the public streets between University parcels), so campus reads as one area. Use `0` to show exact parcel lines. |
-| `label` | Text on the toggle button |
-
-To turn the boundary off, delete the `campusBoundary` block.
+| `label` | Label in the comparison page |
 
 ---
 
-## Update the team's illustrated map (draft basemap)
+## Update the team's illustrated map (the tour's basemap)
 
 The illustrated map is served as map tiles in `tiles/team-map/`, built from a PNG export of the Illustrator file. To update it after editing the art:
 

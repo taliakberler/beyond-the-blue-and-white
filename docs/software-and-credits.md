@@ -12,7 +12,7 @@ These are the things a visitor's phone loads or contacts while using the tour.
 
 | | |
 |---|---|
-| **What it does** | Draws the map, numbered markers, route line, and building outlines, and handles panning and zooming |
+| **What it does** | Draws the map, the illustrated-map tiles, numbered markers, and route line, and handles panning and zooming |
 | **Version** | 1.9.4 |
 | **License** | BSD 2-Clause (© 2010–2023 Volodymyr Agafonkin, © 2010–2011 CloudMade) |
 | **Where it lives** | `js/vendor/leaflet/` (copied into the repository, with its `LICENSE` file) |
@@ -21,11 +21,11 @@ These are the things a visitor's phone loads or contacts while using the tour.
 
 **Why it's bundled rather than loaded from a CDN:** the site keeps working if a third-party CDN is slow or blocked (as on some campus or conference networks), visitors' browsers make no extra requests to outside servers, and the version can't change without anyone noticing.
 
-### OpenStreetMap: base map tiles
+### OpenStreetMap: surrounding streets
 
 | | |
 |---|---|
-| **What it does** | Provides the street-map background images (tiles) |
+| **What it does** | Shows the streets and features around campus, beyond the illustrated map. The tiles are drawn grayscale at 38% opacity over the illustration's blue, so they stay in the background. |
 | **Address** | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` |
 | **Data license** | Open Database License (ODbL). Map data © OpenStreetMap contributors. |
 | **Usage policy** | <https://operations.osmfoundation.org/policies/tiles/>. Free for light use, with attribution, no bulk downloading, and a valid referrer (browsers send one automatically). |
@@ -33,19 +33,19 @@ These are the things a visitor's phone loads or contacts while using the tour.
 
 A campus walking tour is well within normal use. If traffic ever grows very large (for example, a major campaign), switch to another free tile provider by changing the tile address in `js/app.js` (search for `tile.openstreetmap.org`) and updating the credit text.
 
-### UNC Chapel Hill GIS: campus building outlines (optional)
+### UNC Chapel Hill GIS: building names (optional)
 
 | | |
 |---|---|
-| **What it does** | Supplies the outlines of campus buildings, drawn as a light gray layer beneath the tour, with a toggle button |
+| **What it does** | Supplies each campus building's footprint, name, and year built. The footprints are **never drawn**, because they don't align exactly with the illustrated map. They're invisible targets: hovering (desktop) or tapping (phones) a building shows its name and year built. |
 | **Service** | `https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0` (ArcGIS REST FeatureServer) |
 | **Request used** | `…/query?where=1%3D1&outFields=*&outSR=4326&f=geojson`, which asks for all buildings as GeoJSON in standard latitude/longitude |
 | **Data observed (2026-10-13)** | 577 building polygons. The server returns up to 1,000 per request, so one request covers the whole layer (the app pages through larger layers automatically). The building name comes from the `BUILDINGNAME` field. |
 | **Cross-origin access** | Checked 2026-10-13: the server allows requests from other websites (it returns an `Access-Control-Allow-Origin` header), which is what lets a GitHub Pages site load it |
 | **Terms** | Published by UNC Chapel Hill as a public map service. Check with UNC Facilities/GIS about attribution preferences before the public launch. |
-| **If it's unavailable** | The toggle button hides itself and the rest of the tour works normally (tested) |
+| **If it's unavailable** | Building names simply don't appear, and the rest of the tour works normally |
 
-The building layer is set in `data/stops.json` under `tour.buildingLayer`. Remove that block to turn the layer off.
+The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`, `nameField`, `yearField`). Remove that block to turn it off.
 
 ### Fonts: Gasoek One, Oswald, Lato
 
@@ -66,13 +66,21 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer`. Remov
 
 | | |
 |---|---|
-| **What it does** | Supplies the parcels that make up UNC's campus. They're merged into one outline, drawn as a thin line with a faint tint beneath the buildings, with a toggle button. |
+| **What it does** | Supplies the parcels that make up UNC's campus, merged into one outline. **It's no longer shown on the tour** (removed 2026-10-14 when the illustrated map became the basemap). It's still used by the basemap comparison page in `tools/`. |
 | **Service** | `https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16` ("Campus Boundary") |
 | **Data observed (2026-10-14)** | 195 land parcels across UNC's Central, North, South, East, West, and Outlying areas (about 1.4 MB as GeoJSON). The tour uses only the 121 parcels where `BROADAREAS = 'Central Campus'`. |
 | **How it's used** | Visitors' browsers **don't** contact this service. `npm run boundary` (`scripts/build-campus-boundary.js`) downloads the parcels, merges them, bridges the public streets between parcels (15 m gap-closing), and simplifies the result to about 1 m accuracy. It saves the outline as `data/campus-boundary.geojson` (about 22 KB). Re-run it if UNC updates the boundary. |
 | **Settings** | `tour.campusBoundary` in `data/stops.json`: `sourceUrl`, `where`, `closeGapsMeters`, `file`, `label` |
-| **If the file is missing** | The toggle button stays hidden and the tour works normally |
 | **Note** | Old Chapel Hill Cemetery isn't part of UNC's campus parcels, so it appears just outside the boundary. |
+
+### The team's illustrated campus map
+
+| | |
+|---|---|
+| **What it does** | The tour's basemap: the project team's own illustration of central campus, placed on real-world coordinates so stops and "You are here" line up with it |
+| **Where it lives** | `tiles/team-map/{z}/{x}/{y}.png`: 99 web-map tiles for zooms 14–18, built by `npm run team-map` from a PNG export of the team's Illustrator file. The export itself isn't in the repository. |
+| **Settings** | `tour.basemap` in `data/stops.json` (tile path, bounds, zoom range, street opacity, credit), and `scripts/team-map.json` for building the tiles |
+| **Credit** | "Illustrated map: Beyond the White and Blue team", shown in the map's credit line |
 
 ### Phone map apps: walking directions
 
@@ -169,4 +177,5 @@ The site's code, scripts, and documentation were drafted with help from Claude C
 - [ ] Every image has a `credit` that matches the holding repository's requirements
 - [ ] Every stop lists its `sources`
 - [ ] Confirmed attribution preferences for the UNC GIS building layer
+- [ ] Credit for the illustrated map's designers added (the map credit currently says "Beyond the White and Blue team")
 - [ ] Credits for the project team, researchers, and community reviewers added (e.g. an "About this tour" section)

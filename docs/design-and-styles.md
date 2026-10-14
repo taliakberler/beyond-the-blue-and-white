@@ -37,15 +37,23 @@ Each token has a light value and a dark value. Dark values apply automatically w
 | `--color-on-primary` | `#ffffff` | `#0d1620` | Text on primary-colored fills |
 | `--color-accent` | `#b4541a` | `#f0a46c` | Active stop marker, "you are here" dot |
 | `--color-on-accent` | `#ffffff` | `#1a0e05` | Text on accent fills |
-| `--color-route` | `#2b5c8a` | `#8cb8e6` | Dotted route line |
-| `--color-building-fill` | `#8a97a5` | `#9aa8b8` | Building polygons (at 22% opacity) |
-| `--color-building-line` | `#6b7785` | `#b7c3d0` | Building outlines |
-| `--color-boundary-line` | `#2b5c8a` | `#8cb8e6` | Campus boundary outline |
-| `--color-boundary-fill` | `#2b5c8a` | `#8cb8e6` | Campus boundary tint (at 8% opacity) |
 | `--color-focus` | `#b4541a` | `#f0a46c` | Keyboard focus ring |
 | `--color-header-bg` | `#1f2933` | `#0b0e12` | Top bar |
 | `--color-header-text` | `#ffffff` | `#eef2f6` | Top bar text |
 | `--color-placeholder-badge` | `#fff3c4` | `#4a3f12` | "PLACEHOLDER CONTENT" badge |
+
+### Map symbol tokens
+
+The illustrated map stays light in both themes, so the symbols drawn on it keep the same colors in dark mode. These tokens are defined once and intentionally aren't overridden by the dark-mode blocks.
+
+| Token | Value | Used for |
+|---|---|---|
+| `--color-map-bg` | `#9fc6e0` | Map background (the illustration's own blue) |
+| `--color-map-marker` | `#2b5c8a` | Stop markers and the dotted route line |
+| `--color-map-marker-text` | `#ffffff` | Numbers on stop markers (7.0:1) |
+| `--color-map-active` | `#b4541a` | Active stop marker, "You are here" dot |
+| `--color-map-active-text` | `#ffffff` | Number on the active marker (5.0:1) |
+| `--color-map-ring` | `#ffffff` | White ring around markers and the location dot |
 
 ### Measured contrast
 
@@ -143,9 +151,9 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 | **Header** | Dark bar with the tour title, subtitle, a Map/List switch (pill-shaped toggle), and a theme button |
 | **Stop markers** | 36px numbered circles inside a 44px tap area, with a white ring and drop shadow so they stand out against the map. The active stop turns accent orange and enlarges slightly. |
 | **Route line** | 5px dotted line in the primary color, drawn beneath the markers |
-| **Building layer** | Light gray polygons at 22% fill opacity, drawn beneath the route so it never competes with the tour |
-| **Campus boundary** | Solid 2px line in the primary color with an 8% tint inside, drawn beneath the buildings. It's solid rather than dashed so it can't be mistaken for the dotted route. |
-| **Map buttons** | White pill buttons ("You are here", building toggle) in the top-right corner. When the building layer is switched off, its button dims. |
+| **Basemap** | The team's illustrated campus map (tiles) over OpenStreetMap streets that are grayscale and 38% opaque on the illustration's blue. The illustration's edge follows its drawing and fades softly into the streets. |
+| **Building info** | Invisible building footprints from UNC. Hovering (desktop) or tapping (phones) a building shows a tooltip with its name in bold and "Built YEAR" below. No outline or focus ring is ever drawn, because the footprints don't align exactly with the illustration. |
+| **Map button** | White pill button ("You are here") in the top-right corner |
 | **"Start the tour" button** | Large pill at the bottom of the map, shown only when no stop is open |
 | **Stop panel** | Stop count → title → era → image gallery → summary (bold) → history → key people (shaded boxes) → sources (numbered list) → pinned navigation |
 | **Image gallery** | Full-width 4:3 images that swipe sideways and snap into place, with previous/next buttons and an "1 / 2" counter below |
@@ -158,7 +166,7 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 
 - **Automatic:** follows the device's light/dark setting (`prefers-color-scheme`).
 - **Manual override:** the moon button in the header cycles **automatic → light → dark**. The choice is remembered on that device. If browser storage is blocked, the site simply falls back to automatic.
-- **Map tiles:** OpenStreetMap only provides light-colored tiles, so in dark mode the tiles are filtered (inverted, hue-rotated, dimmed, and desaturated) to avoid a bright glare. Markers, route, and buildings are not filtered.
+- **The map stays light:** the illustrated map is the team's artwork, so it isn't color-inverted in dark mode. Only the interface around it (header, panel, list, buttons) switches to dark. Markers, the route, and the location dot keep their light-mode colors (see [Map symbol tokens](#map-symbol-tokens)) so they stay visible on the light map.
 
 ---
 

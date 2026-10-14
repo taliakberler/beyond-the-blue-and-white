@@ -8,11 +8,28 @@
       -79.048693
     ],
     "zoom": 17,
+    "basemap": {
+      "tiles": "tiles/team-map/{z}/{x}/{y}.png",
+      "bounds": [
+        [
+          35.9086919,
+          -79.0543463
+        ],
+        [
+          35.9150093,
+          -79.0421617
+        ]
+      ],
+      "minNativeZoom": 14,
+      "maxNativeZoom": 18,
+      "streetsOpacity": 0.38,
+      "attribution": "Illustrated map: Beyond the White and Blue team"
+    },
     "intro": "PLACEHOLDER introduction — replace with a short welcome to the tour, its theme, and roughly how long the walk takes.",
     "buildingLayer": {
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME",
-      "label": "Campus buildings"
+      "yearField": "YEARBUILT"
     },
     "campusBoundary": {
       "sourceUrl": "https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16",

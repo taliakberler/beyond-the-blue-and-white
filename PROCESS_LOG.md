@@ -518,3 +518,45 @@ Implemented by Claude Code.
 ### Verified
 - With the browser cache cleared, the left and bottom areas at zoom 17 show no straight edges or tile lines. The illustration's outline follows the drawing.
 
+---
+
+## 2026-10-14 — Illustrated map (option K) becomes the tour's basemap
+
+**Directed by:** project team. The team chose option K in its present form, asked to remove the campus boundary toggle, and confirmed the boundary shouldn't be shown at all. Implemented by Claude Code.
+
+### What changed
+- **`js/app.js`:**
+  - The basemap is now the team's illustrated map (`tiles/team-map/`, in its own pane), drawn over OpenStreetMap streets in grayscale at 38% opacity. Both layers feed the "map tiles couldn't load" message. The map allows zooming to 20.
+  - The UNC building layer is now **invisible**. Hovering (desktop) or tapping (phones) a building shows its name and year built. Only the name and year fields are downloaded.
+  - **Removed** the campus boundary layer and its loader.
+- **`index.html`:** removed the "Campus boundary" and "Campus buildings" toggle buttons. Only "You are here" remains.
+- **`data/stops.json`:**
+  - new `tour.basemap` block: tile path, bounds, zoom range, street opacity, and credit
+  - `tour.buildingLayer` now has `yearField: "YEARBUILT"`, and its `label` is removed (there's no button for it anymore)
+  - `tour.campusBoundary` is kept for the comparison page and `npm run boundary`, but the tour no longer uses it
+- **`css/styles.css`:**
+  - new `--color-map-bg` and map-symbol tokens (`--color-map-marker`, `--color-map-active`, and others), which keep markers, the route, and the location dot in their light colors in both themes
+  - removed the dark-mode filter that inverted map tiles
+  - removed the unused `--color-route`, `--color-building-*`, and `--color-boundary-*` tokens
+  - added faded-street styles (with the 1px overlap that prevents tile seams)
+  - added building tooltip styles
+  - no focus ring is drawn on the invisible building shapes
+- **Docs:** updated the README credits, the site overview, the design doc (map symbol tokens, components, dark mode), the software and credits doc (illustrated map; OpenStreetMap's new role; building names; the boundary used only by the comparison page), and the editing guide (`basemap` settings, `yearField`).
+
+### Decisions and reasons
+- **Decision:** remove the "Campus buildings" button too. **Why:** with option K, building footprints are never drawn, so there's nothing visible for the button to switch. Building info is always available on hover or tap.
+- **Decision:** remove the campus boundary entirely rather than always showing it. **Why:** the team's choice. The illustration already shows campus, and the outline overlapped the art.
+- **Decision:** keep the map light in dark mode. **Why:** the illustration is the team's artwork, and inverting its colors would distort it. Dark mode now changes only the interface around the map.
+- **Decision:** fix the marker, route, and location-dot colors in both themes. **Why:** in dark mode these had switched to a pale blue (`#8cb8e6`), which nearly disappeared against the light illustration.
+- **Decision:** hide the focus ring on the invisible building shapes. **Why:** tapping a building made the browser draw a focus outline around it, revealing the misaligned footprint the design deliberately hides. The shapes can't be reached with the keyboard, so no keyboard focus is lost.
+- **Note:** `tools/basemap-preview.html` (the temporary comparison page) is still published. It can be deleted now that a basemap has been chosen.
+
+### Verified
+- At 375px width in light mode:
+  - The opening view shows the illustration (6 tiles, none missing), the faded streets, 5 markers, and the route, with no sideways scrolling.
+  - The map credit line reads "© OpenStreetMap contributors, Illustrated map: Beyond the White and Blue team".
+  - Only the "You are here" button appears.
+- Tapping Davis Library showed "Davis Library — Built 1983" with no outline or focus ring, and no stop opened.
+- The `#stop=lenoir-hall` deep link opened Stop 3 at zoom 18, with its marker on Lenoir Hall in the illustration.
+- In dark mode, the map stays light, markers are dark blue with a white ring, and the interface around the map is dark.
+
