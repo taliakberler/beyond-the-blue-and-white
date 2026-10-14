@@ -102,6 +102,27 @@ The app accepts either a single Feature or a FeatureCollection with LineString o
 
 ---
 
+## Update the campus boundary
+
+The campus outline is a pre-built file, `data/campus-boundary.geojson`, made from UNC's campus-boundary parcels. To rebuild it (for example, after UNC updates its data), run this after `npm install`:
+
+```bash
+npm run boundary
+```
+
+The settings are in `data/stops.json` under `tour.campusBoundary`:
+
+| Field | What it does |
+|---|---|
+| `sourceUrl` | UNC's boundary layer |
+| `where` | Which parcels to include. `BROADAREAS = 'Central Campus'` is the main campus. `1=1` includes every UNC property, including distant ones. |
+| `closeGapsMeters` | Bridges gaps narrower than about twice this distance (the public streets between University parcels), so campus reads as one area. Use `0` to show exact parcel lines. |
+| `label` | Text on the toggle button |
+
+To turn the boundary off, delete the `campusBoundary` block.
+
+---
+
 ## Set BASE_URL and generate QR codes
 
 QR codes point to `<BASE_URL>/index.html#stop=<id>`. **BASE_URL is set in one place:** `scripts/qr-config.json`.

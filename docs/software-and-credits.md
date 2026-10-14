@@ -62,6 +62,18 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer`. Remov
 | **License terms in brief** | Free to use, bundle, and redistribute, including commercially and in print. Keep the license files with the fonts, and don't sell the font files themselves. A modified version can't use a font's Reserved Font Name. |
 | **Required credit** | No visible credit is required. The license files must stay in `fonts/`. |
 
+### UNC Chapel Hill GIS: campus boundary
+
+| | |
+|---|---|
+| **What it does** | Supplies the parcels that make up UNC's campus. They're merged into one outline, drawn as a thin line with a faint tint beneath the buildings, with a toggle button. |
+| **Service** | `https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16` ("Campus Boundary") |
+| **Data observed (2026-10-14)** | 195 land parcels across UNC's Central, North, South, East, West, and Outlying areas (about 1.4 MB as GeoJSON). The tour uses only the 121 parcels where `BROADAREAS = 'Central Campus'`. |
+| **How it's used** | Visitors' browsers **don't** contact this service. `npm run boundary` (`scripts/build-campus-boundary.js`) downloads the parcels, merges them, bridges the public streets between parcels (15 m gap-closing), and simplifies the result to about 1 m accuracy. It saves the outline as `data/campus-boundary.geojson` (about 22 KB). Re-run it if UNC updates the boundary. |
+| **Settings** | `tour.campusBoundary` in `data/stops.json`: `sourceUrl`, `where`, `closeGapsMeters`, `file`, `label` |
+| **If the file is missing** | The toggle button stays hidden and the tour works normally |
+| **Note** | Old Chapel Hill Cemetery isn't part of UNC's campus parcels, so it appears just outside the boundary. |
+
 ### Phone map apps: walking directions
 
 The "Get walking directions" link opens the visitor's own map app. It uses only public link formats, with no API keys:
@@ -99,6 +111,17 @@ These tools run on a team member's computer to prepare files. They aren't part o
 | **Settings** | Error correction level Q (about 25% of the code can be damaged and still scan), 4-module quiet zone, 1200×1200px, black on white |
 
 The codes are **static**: each stop's web address is encoded directly in the image. No QR-code service, redirect, or tracking is involved, so the codes keep working as long as the website address does.
+
+### Turf (npm packages): geometry tools
+
+| | |
+|---|---|
+| **What it does** | `scripts/build-campus-boundary.js` uses `@turf/union`, `@turf/buffer`, `@turf/simplify`, `@turf/truncate`, and `@turf/helpers` to merge, gap-close, and simplify the campus parcels |
+| **Version** | 7.4.0 |
+| **License** | MIT |
+| **Source** | <https://turfjs.org> |
+
+These are used only when building the boundary file, not by visitors.
 
 ### Node.js and npm
 

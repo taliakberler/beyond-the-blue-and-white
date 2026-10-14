@@ -7,9 +7,15 @@
     "qr": "node scripts/generate-qr.js",
     "route": "node scripts/build-route.js",
     "placeholders": "node scripts/make-placeholders.js",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "boundary": "node scripts/build-campus-boundary.js"
   },
   "devDependencies": {
+    "@turf/buffer": "7.4.0",
+    "@turf/helpers": "7.4.0",
+    "@turf/simplify": "7.4.0",
+    "@turf/truncate": "7.4.0",
+    "@turf/union": "7.4.0",
     "leaflet": "1.9.4",
     "qrcode": "1.5.4"
   }

@@ -13,6 +13,13 @@
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME",
       "label": "Campus buildings"
+    },
+    "campusBoundary": {
+      "sourceUrl": "https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16",
+      "where": "BROADAREAS = 'Central Campus'",
+      "closeGapsMeters": 15,
+      "file": "data/campus-boundary.geojson",
+      "label": "Campus boundary"
     }
   },
   "stops": [

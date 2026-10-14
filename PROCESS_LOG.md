@@ -295,3 +295,53 @@ Tested in a browser on a local server at 375px phone width and at 1280px desktop
   - The List view shows the five sites in order.
   - An old `#stop=placeholder-stop-3` link falls back to the List view with a message.
 
+---
+
+## 2026-10-14 — Campus boundary layer, and basemap research
+
+**Directed by:** project team (add UNC's campus boundary; explore better basemaps). Implemented by Claude Code.
+
+### What changed
+- **New `scripts/build-campus-boundary.js` (`npm run boundary`):** downloads UNC's campus-boundary parcels (`basemap/FeatureServer/16`), merges them into one outline, bridges the streets between parcels, simplifies the result, and writes **`data/campus-boundary.geojson`** (about 22 KB).
+- **New `tour.campusBoundary` settings** in `data/stops.json`: `sourceUrl`, `where`, `closeGapsMeters`, `file`, and `label`.
+- **Map (`js/app.js`, `index.html`, `css/styles.css`):** the campus boundary is drawn as a solid 2px outline with an 8% tint, beneath the buildings and route, with a new "Campus boundary" toggle button. It's turned on by default. Added the `--color-boundary-line` and `--color-boundary-fill` color tokens (light and dark).
+- **New dev dependencies:** `@turf/union`, `@turf/buffer`, `@turf/simplify`, `@turf/truncate`, and `@turf/helpers` (7.4.0, MIT). These are used only by the build script.
+- **New team tool `tools/basemap-preview.html`:** shows the tour's stops, route, and campus boundary over ten interchangeable basemaps for comparison. It isn't linked from the tour.
+  - It's **published temporarily** on GitHub Pages so the team can compare options and give input: <https://taliakberler.github.io/beyond-the-white-and-blue/tools/basemap-preview.html>.
+  - Options are lettered A–J, and links can open a specific option (e.g. `#C`).
+  - It's marked `noindex` so search engines skip it.
+  - It's to be deleted once a basemap is chosen.
+- **Docs:** documented the boundary in the software and credits, site overview, editing guide, and design docs.
+
+### Decisions and reasons
+- **Decision:** pre-build the boundary as a small file instead of loading UNC's layer live. **Why:**
+  - The live layer is 195 separate parcels (about 1.4 MB), which is heavy for visitors on cellular data.
+  - Drawing the parcels as they are produces internal lines along every street.
+  - A static file also keeps working if UNC's server is down. Campus boundaries change rarely, and the script can be re-run when they do.
+- **Decision:** include only `BROADAREAS = 'Central Campus'` (121 parcels). **Why:** the full layer includes properties miles away (for example, a park-and-ride in Chatham County, and Carolina North), which would pull the map far from the tour.
+- **Decision:** close gaps of up to about 30 m (`closeGapsMeters: 15`). **Why:** public streets separate University parcels, so a plain merge produced 49 fragments with outlines along both sides of each street. That looked like a second street network and competed with the dotted route. Gap-closing reduced it to 12 areas that read as one campus. The outer edge stays in place, but the outline is approximate where streets were bridged.
+- **Decision:** draw the boundary as a solid thin line with a faint tint, not a dashed line. **Why:** the first version used a dashed line, which was easily confused with the dotted tour route.
+- **Observation:** Old Chapel Hill Cemetery falls outside UNC's campus parcels, so it appears just outside the boundary.
+
+### Basemap research (no change made yet)
+The current OpenStreetMap Standard tiles are free, but they're visually busy and can't be restyled. These options were checked against the project's constraint of no API keys or paid services:
+
+| Option | Key or account? | Notes |
+|---|---|---|
+| **OpenFreeMap** (Positron, Bright, Liberty, Dark) | None | Free vector tiles with no usage limits, funded by donations and provided as-is. Colors can be fully restyled to match the brand palette, and there's a true dark style. Needs the open-source MapLibre GL library (larger download than Leaflet alone). |
+| **UNC campus basemaps** (standard, blue buildings, aerial) | None | UNC's own campus maps, with building names. They're published in North Carolina's state map projection, so the server has to draw each map tile when it's requested, which is slower. Campus area only. |
+| **OpenStreetMap Humanitarian** | None | Softer colors than Standard. Volunteer-hosted with no guarantees. |
+| **No basemap** (brand-colored background with UNC buildings and boundary) | None | Fully on-brand, but has no streets or labels. |
+| **CARTO** (Positron, Voyager, Dark Matter) | **API key now required** | Keyless requests now show an "API key required" watermark. Excluded by the no-keys constraint. |
+| **Esri** (Light Gray Canvas, imagery) | Current key requirements unconfirmed | Esri basemaps generally require an ArcGIS account for apps. Not pursued. |
+| **Stadia / Stamen, MapTiler, Thunderforest** | Account or key required | Excluded by the no-keys constraint. |
+
+### Verified
+- In a browser at 375px width, the campus boundary loads as one outline around central campus, beneath the buildings and route, and the toggle button appears.
+- In the preview tool, these basemaps were checked to load:
+  - OpenFreeMap Positron, Bright, and Liberty (tested directly with MapLibre)
+  - UNC's blue-buildings basemap
+  - the no-basemap option
+
+  The browser pane used for testing pauses WebGL drawing while hidden, which briefly made OpenFreeMap look broken during testing. This doesn't affect visitors.
+

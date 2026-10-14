@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Basemap preview — Beyond the White and Blue</title>
+<!-- TEMPORARY team tool for comparing basemaps. Not linked from the tour; delete once a basemap is chosen. -->
+<link rel="stylesheet" href="../js/vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.8.0/dist/maplibre-gl.css">
+<style>
+  @font-face { font-family: "Lato"; src: url("../fonts/lato-400-latin.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Lato"; src: url("../fonts/lato-700-latin.woff2") format("woff2"); font-weight: 700; }
+  @font-face { font-family: "Oswald"; src: url("../fonts/oswald-700-latin.woff2") format("woff2"); font-weight: 700; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; font-family: "Lato", system-ui, sans-serif; color: #141a21; background: #f4f6f8; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 10px 14px; background: #1f2933; color: #fff; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+  h1 { font: 700 18px/1.2 "Oswald", sans-serif; margin: 0; }
+  label { font-size: 14px; }
+  select { font: inherit; font-size: 16px; min-height: 40px; padding: 0 8px; border-radius: 8px; max-width: 100%; }
+  #note { flex-basis: 100%; margin: 0; font-size: 13px; opacity: 0.9; }
+  #intro { flex-basis: 100%; margin: 0; font-size: 14px; }
+  #map { width: 100%; height: 100%; background: #e9edf1; }
+  .stop { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+          background: #2b5c8a; color: #fff; font: 700 16px "Oswald", sans-serif; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Basemap preview</h1>
+  <p id="intro">Help choose the tour’s background map. Try each option (A–J), zoom and pan around, then tell the team which letter you prefer and why.</p>
+  <label>Basemap
+    <select id="pick"></select>
+  </label>
+  <label><input type="checkbox" id="bnd" checked> Campus boundary</label>
+  <label><input type="checkbox" id="bld"> UNC buildings</label>
+  <p id="note"></p>
+</header>
+<div id="map"></div>
+
+<script src="../js/vendor/leaflet/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.8.0/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
+<script>
+(function () {
+  var OSM = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+  var UNC = 'Basemap: UNC Chapel Hill Facilities Technology Group';
+
+  // Renders an ArcGIS MapServer "export" image for each 256px tile (works for any projection the server has).
+  var ArcExport = L.TileLayer.extend({
+    getTileUrl: function (c) {
+      var size = this.getTileSize();
+      var nw = this._map.unproject(c.scaleBy(size), c.z);
+      var se = this._map.unproject(c.add([1, 1]).scaleBy(size), c.z);
+      var a = L.CRS.EPSG3857.project(nw), b = L.CRS.EPSG3857.project(se);
+      return this._url + '/export?bbox=' + [a.x, b.y, b.x, a.y].join(',') +
+        '&bboxSR=3857&imageSR=3857&size=512,512&dpi=192&format=png&transparent=false&f=image';
+    }
+  });
+  var unc = function (svc) {
+    return new ArcExport('https://gismaps.unc.edu/arcgis/rest/services/Cache/' + svc + '/MapServer',
+      { attribution: UNC, maxZoom: 20, minZoom: 14 });
+  };
+  var ofm = function (style) {
+    return L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/' + style,
+      canvasContextAttributes: { preserveDrawingBuffer: true },  // lets screenshots capture the map
+      attribution: '<a href="https://openfreemap.org">OpenFreeMap</a> ' + OSM });
+  };
+
+  var BASEMAPS = [
+    { name: 'OpenStreetMap Standard (current)', make: function () { return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: OSM }); },
+      note: 'Raster tiles. Free with attribution; heavy use is limited by the OSM tile policy. Busy, saturated colors; can’t be restyled.' },
+    { name: 'OpenStreetMap Humanitarian (HOT)', make: function () { return L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', { maxZoom: 19, subdomains: 'ab', attribution: OSM + ', tiles by HOT, hosted by OSM France' }); },
+      note: 'Raster tiles. Free; softer colors than Standard. Volunteer-hosted with no guarantees; can’t be restyled.' },
+    { name: 'OpenFreeMap — Positron (light gray)', make: function () { return ofm('positron'); },
+      note: 'Vector tiles. Free, no key, no usage limits. Quiet gray map that lets the tour stand out. Colors can be fully restyled to the brand palette.' },
+    { name: 'OpenFreeMap — Bright', make: function () { return ofm('bright'); },
+      note: 'Vector tiles. Free, no key, no usage limits. Full-color street map with building names. Restylable.' },
+    { name: 'OpenFreeMap — Liberty', make: function () { return ofm('liberty'); },
+      note: 'Vector tiles. Free, no key, no usage limits. The actively maintained OpenFreeMap style. Restylable.' },
+    { name: 'OpenFreeMap — Dark (for dark mode)', make: function () { return ofm('dark'); },
+      note: 'Vector tiles. A true dark map would replace the color-inverting filter the site uses in dark mode today.' },
+    { name: 'UNC campus basemap', make: function () { return unc('CacheBasemapWM'); },
+      note: 'UNC’s own campus map: building outlines, walkways, green space, and building names. Drawn by UNC’s server on request (slower). Campus area only; zoom 14+.' },
+    { name: 'UNC campus basemap — blue buildings', make: function () { return unc('CacheBasemapBlue_new'); },
+      note: 'UNC’s own campus map with blue buildings and labels. Drawn on request (slower). Campus area only; zoom 14+.' },
+    { name: 'UNC aerial imagery', make: function () { return unc('Cache_Aerial'); },
+      note: 'UNC’s aerial photography. Shows the real ground, trees, and rooftops. Drawn on request (slower). Campus area only; zoom 14+.' },
+    { name: 'No basemap (brand color + UNC buildings)', make: function () { return null; }, buildings: true,
+      note: 'No map tiles at all: a plain background in the site’s color tokens with UNC’s building outlines and the campus boundary. Fully on-brand and fast, but no streets or labels.' }
+  ];
+
+  var map = L.map('map', { zoomControl: true }).setView([35.912, -79.0487], 16);
+  map.createPane('boundary'); map.getPane('boundary').style.zIndex = 340;
+  map.createPane('buildings'); map.getPane('buildings').style.zIndex = 350;
+
+  var pick = document.getElementById('pick'), note = document.getElementById('note');
+  var letter = function (i) { return String.fromCharCode(65 + i); };
+  BASEMAPS.forEach(function (b, i) { var o = document.createElement('option'); o.value = i; o.textContent = letter(i) + '. ' + b.name; pick.appendChild(o); });
+
+  var current = null, boundary = null, buildings = null;
+  function choose(i) {
+    var b = BASEMAPS[i];
+    if (current) map.removeLayer(current);
+    current = b.make();
+    if (current) current.addTo(map);
+    window.currentBasemap = current;  // for debugging in the browser console
+    note.textContent = letter(i) + ': ' + b.note;
+    if (b.buildings && !document.getElementById('bld').checked) { document.getElementById('bld').checked = true; toggleBuildings(); }
+    try { history.replaceState(null, '', '#' + letter(i)); } catch (e) {}
+  }
+  pick.addEventListener('change', function () { choose(+pick.value); });
+
+  fetch('../data/campus-boundary.geojson').then(function (r) { return r.json(); }).then(function (g) {
+    boundary = L.geoJSON(g, { pane: 'boundary', interactive: false,
+      style: { color: '#2b5c8a', weight: 2, opacity: 0.8, fillColor: '#2b5c8a', fillOpacity: 0.08 } }).addTo(map);
+  });
+  document.getElementById('bnd').addEventListener('change', function (e) {
+    if (boundary) e.target.checked ? boundary.addTo(map) : map.removeLayer(boundary);
+  });
+
+  function toggleBuildings() {
+    var on = document.getElementById('bld').checked;
+    if (!on) { if (buildings) map.removeLayer(buildings); return; }
+    if (buildings) { buildings.addTo(map); return; }
+    fetch('https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0/query?where=1%3D1&outFields=BUILDINGNAME&outSR=4326&f=geojson')
+      .then(function (r) { return r.json(); }).then(function (g) {
+        buildings = L.geoJSON(g, { pane: 'buildings',
+          style: { color: '#6b7785', weight: 1, fillColor: '#8a97a5', fillOpacity: 0.35, opacity: 0.8 },
+          onEachFeature: function (f, l) { if (f.properties.BUILDINGNAME) l.bindTooltip(f.properties.BUILDINGNAME); } }).addTo(map);
+      });
+  }
+  document.getElementById('bld').addEventListener('change', toggleBuildings);
+
+  Promise.all([fetch('../data/stops.json').then(function (r) { return r.json(); }),
+               fetch('../data/route.geojson').then(function (r) { return r.json(); })]).then(function (res) {
+    L.geoJSON(res[1], { interactive: false, style: { color: '#2b5c8a', weight: 5, opacity: 0.85, dashArray: '2 10', lineCap: 'round' } }).addTo(map);
+    res[0].stops.forEach(function (s) {
+      L.marker([s.lat, s.lng], { title: s.title, icon: L.divIcon({ className: '', html: '<div class="stop">' + s.order + '</div>', iconSize: [32, 32], iconAnchor: [16, 16] }) })
+        .bindTooltip(s.order + '. ' + s.title).addTo(map);
+    });
+  });
+
+  // Link straight to an option with #A … #J (e.g. basemap-preview.html#C).
+  var h = location.hash.slice(1).toUpperCase();
+  var start = /^[A-Z]$/.test(h) ? h.charCodeAt(0) - 65 : parseInt(h, 10);
+  pick.value = (start >= 0 && start < BASEMAPS.length) ? start : 0;
+  map.whenReady(function () { setTimeout(function () { choose(+pick.value); }, 0); });
+})();
+</script>
+</body>
+</html>

@@ -40,6 +40,8 @@ Each token has a light value and a dark value. Dark values apply automatically w
 | `--color-route` | `#2b5c8a` | `#8cb8e6` | Dotted route line |
 | `--color-building-fill` | `#8a97a5` | `#9aa8b8` | Building polygons (at 22% opacity) |
 | `--color-building-line` | `#6b7785` | `#b7c3d0` | Building outlines |
+| `--color-boundary-line` | `#2b5c8a` | `#8cb8e6` | Campus boundary outline |
+| `--color-boundary-fill` | `#2b5c8a` | `#8cb8e6` | Campus boundary tint (at 8% opacity) |
 | `--color-focus` | `#b4541a` | `#f0a46c` | Keyboard focus ring |
 | `--color-header-bg` | `#1f2933` | `#0b0e12` | Top bar |
 | `--color-header-text` | `#ffffff` | `#eef2f6` | Top bar text |
@@ -142,6 +144,7 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 | **Stop markers** | 36px numbered circles inside a 44px tap area, with a white ring and drop shadow so they stand out against the map. The active stop turns accent orange and enlarges slightly. |
 | **Route line** | 5px dotted line in the primary color, drawn beneath the markers |
 | **Building layer** | Light gray polygons at 22% fill opacity, drawn beneath the route so it never competes with the tour |
+| **Campus boundary** | Solid 2px line in the primary color with an 8% tint inside, drawn beneath the buildings. It's solid rather than dashed so it can't be mistaken for the dotted route. |
 | **Map buttons** | White pill buttons ("You are here", building toggle) in the top-right corner. When the building layer is switched off, its button dims. |
 | **"Start the tour" button** | Large pill at the bottom of the map, shown only when no stop is open |
 | **Stop panel** | Stop count → title → era → image gallery → summary (bold) → history → key people (shaded boxes) → sources (numbered list) → pinned navigation |

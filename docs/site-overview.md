@@ -25,6 +25,7 @@ Changing those files changes the tour, with no code edits needed.
 
 - A street map of campus with **numbered markers** for each stop and a **dotted route line** connecting them in walking order.
 - **Campus building outlines** (light gray) from UNC's GIS service, with a toggle button.
+- **Campus boundary:** a thin outline with a faint tint showing UNC's central campus, built from UNC's campus-boundary parcels, with a toggle button.
 - A **"You are here"** button that shows the visitor's position as an orange dot with an accuracy circle.
 - A **"Start the tour at Stop 1"** button when no stop is open.
 - Zoom buttons and map credits.
@@ -81,13 +82,14 @@ index.html
      ├─ draw map + OpenStreetMap tiles
      ├─ draw numbered markers
      ├─ fetch data/route.geojson         → dotted route line
+     ├─ fetch data/campus-boundary.geojson (optional) → campus outline
      ├─ fetch UNC building layer (optional, in background)
      ├─ build List view
      └─ if the address has #stop=…, open that stop; otherwise fit all stops on screen
 ```
 
 - If `stops.json` can't load, the page shows a clear error message instead of a blank screen.
-- If the route or building layer can't load, the tour works without them.
+- If the route, campus boundary, or building layer can't load, the tour works without them.
 - Data files are fetched with `cache: 'no-cache'`: the browser checks with the server for a newer version on every visit, so content updates appear right away instead of after the browser's cache expires. Leaflet and the images are cached normally.
 
 All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the site works at the root of a domain or inside any subfolder.
@@ -122,6 +124,7 @@ These were checked by hand and with scripted tests in a browser (see [PROCESS_LO
 | Location times out or is unavailable | A friendly message suggesting trying again in an open area |
 | Visitor is far from campus | Their location is still shown, with a note that they appear to be away from campus |
 | Building layer unavailable | The toggle button disappears; nothing else changes |
+| Campus boundary file missing | The boundary toggle stays hidden; nothing else changes |
 | Tour data can't load | A full-page message explaining the problem |
 
 ---

@@ -18,6 +18,7 @@
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
     locateBtn: $('locate-btn'), buildingsBtn: $('buildings-btn'), buildingsLabel: $('buildings-label'),
+    boundaryBtn: $('boundary-btn'), boundaryLabel: $('boundary-label'),
     startBtn: $('start-btn'), themeBtn: $('theme-toggle'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'),
@@ -112,6 +113,9 @@
 
     map.createPane('buildings');
     map.getPane('buildings').style.zIndex = 350; // below routes (400) and markers (600)
+    map.createPane('boundary');
+    map.getPane('boundary').style.zIndex = 340;  // campus outline sits beneath the buildings
+    map.getPane('boundary').style.pointerEvents = 'none';
 
     var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -211,6 +215,42 @@
   }
 
   /* ---------------- Optional ArcGIS building layer ---------------- */
+
+  /* ---------------- Campus boundary (pre-built file, see scripts/build-campus-boundary.js) ---------------- */
+
+  function loadBoundary() {
+    var cfg = state.tour.campusBoundary;
+    var file = cfg && cfg.file;
+    if (!file) return;
+    if (cfg.label) els.boundaryLabel.textContent = cfg.label;
+
+    fetch(file, { cache: 'no-cache' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (geo) {
+      state.boundaryLayer = L.geoJSON(geo, {
+        pane: 'boundary',
+        interactive: false,
+        style: function () {
+          return {
+            color: getCss('--color-boundary-line'), weight: 2, opacity: 0.8,
+            fillColor: getCss('--color-boundary-fill'), fillOpacity: 0.08
+          };
+        }
+      }).addTo(state.map);
+      els.boundaryBtn.hidden = false;
+    }).catch(function (err) {
+      console.warn('Campus boundary not loaded:', err);  // the tour works fine without it
+    });
+
+    els.boundaryBtn.addEventListener('click', function () {
+      if (!state.boundaryLayer) return;
+      var on = els.boundaryBtn.getAttribute('aria-pressed') === 'true';
+      if (on) state.map.removeLayer(state.boundaryLayer);
+      else state.boundaryLayer.addTo(state.map);
+      els.boundaryBtn.setAttribute('aria-pressed', String(!on));
+    });
+  }
 
   function loadBuildings() {
     var cfg = state.tour.buildingLayer;
@@ -643,6 +683,7 @@
       initMap();
       addMarkers();
       loadRoute();
+      loadBoundary();
       loadBuildings();
       initLocate();
       initPanel();
