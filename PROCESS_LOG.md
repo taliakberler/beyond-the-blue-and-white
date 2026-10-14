@@ -211,3 +211,40 @@ Tested in a browser on a local server at 375px phone width and at 1280px desktop
 ### Decisions and reasons
 - **Decision:** use the team's wording as supplied, changing only typography. **Why:** the framing belongs to the team. The pasted text used modifier-letter apostrophes (ʼ), which were changed to standard apostrophes (’) so the words display, search, and read aloud correctly.
 - **Decision:** don't restructure the stop panel or the stop data around Discover / Dig deeper / Reflect for now. **Why:** the team considers the storytelling structure an idea at this stage, not a requirement. A mapping of the layers into the content guidelines was drafted and then withdrawn for the same reason.
+
+---
+
+## 2026-10-14 — Brand typefaces
+
+**Directed by:** project team (typeface choices). Implemented by Claude Code.
+
+### What changed
+- **Typefaces set by the team:**
+  - **Logo:** Gasoek One
+  - **Headers:** Oswald Bold
+  - **Body copy:** Lato Regular
+- **New `fonts/` folder:** Latin-subset `.woff2` files for Gasoek One 400, Oswald 700, Lato 400, and Lato 700 (about 54 KB total), with each family's SIL Open Font License file.
+- **`css/styles.css`:**
+  - added `@font-face` rules and the `--font-logo`, `--font-heading`, and `--font-body` tokens, each with a similar-shaped fallback
+  - applied the logo font to the header tour name
+  - applied Oswald to all headings, list-card titles, and the numbers in map markers and list cards
+  - set every bold weight to 700
+  - increased the logo's line height to 1.3
+- **`index.html`:** preloads the logo and body fonts.
+- **`scripts/generate-qr.js` and `qr/sheet.html`:** the printable QR signs now use the same three typefaces. The QR code images themselves are unchanged.
+- **Docs:** updated the typography section of `docs/design-and-styles.md`, added the fonts and their licenses to `docs/software-and-credits.md`, and added `fonts/` to the README's file list.
+
+### Decisions and reasons
+- **Decision:** read "Gaoesk One" in the team's note as **Gasoek One**. **Why:** no font named "Gaoesk One" exists on Google Fonts, and Gasoek One is a heavy display typeface that fits the logo role. **Confirmed by the team.**
+- **Decision:** self-host the font files instead of linking to Google Fonts. **Why:** linking would send each visitor's IP address to Google, contradicting the site's no-tracking promise. Self-hosting also keeps fonts working on any host. **Approved by the team.**
+- **Decision:** also include **Lato Bold**, which the team didn't specify. **Why:** the body copy has bold text (the summary line, people's names, button labels). Without the real bold file, browsers draw a blurry imitation bold. **Approved by the team.**
+- **Decision:** use Oswald for numbers in markers and list cards, not only for headings. **Why:** the numbers act as headings for each stop, and Oswald's condensed figures read clearly inside the small circles.
+- **Decision:** load only the Latin subset. **Why:** it covers English and Western European names at about a quarter of the full download size. Other characters fall back to a system font.
+- **Decision:** apply the typefaces to the QR sign sheet. **Why:** the signs are part of the campaign materials and should match the site.
+- **Decision:** don't record new contrast measurements. **Why:** typefaces don't change color contrast, so the existing measurements still hold.
+
+### Verified
+- In a browser at 375px and 1280px, all four font files loaded. The header uses Gasoek One, the stop and list titles use Oswald, and the body text uses Lato.
+- There's no sideways scrolling at 375px.
+- The QR sign sheet loads all four fonts.
+

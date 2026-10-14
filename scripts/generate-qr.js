@@ -57,17 +57,21 @@ const urlFor = s => `${BASE_URL}/index.html#stop=${encodeURIComponent(s.id)}`;
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(tour.title || 'Walking Tour')} — QR signs</title>
 <style>
+  @font-face { font-family: "Gasoek One"; src: url("../fonts/gasoek-one-400-latin.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Oswald"; src: url("../fonts/oswald-700-latin.woff2") format("woff2"); font-weight: 700; }
+  @font-face { font-family: "Lato"; src: url("../fonts/lato-400-latin.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Lato"; src: url("../fonts/lato-700-latin.woff2") format("woff2"); font-weight: 700; }
   @page { size: letter portrait; margin: 0.5in; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #000; background: #e9edf1; }
+  body { margin: 0; font-family: "Lato", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #000; background: #e9edf1; }
   .help { max-width: 7.5in; margin: 16px auto; padding: 12px 16px; background: #fff; border-radius: 8px; font-size: 14px; }
   .sign { width: 7.5in; height: 10in; margin: 16px auto; padding: 0.4in; background: #fff;
           display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
           border: 2px solid #000; page-break-after: always; break-after: page; }
-  .tour { margin: 0; font-size: 20pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .tour { margin: 0; font-family: "Gasoek One", "Arial Black", sans-serif; font-size: 22pt; font-weight: 400; letter-spacing: 0.02em; }
   .num { margin: 0.2in 0 0.1in; width: 1.3in; height: 1.3in; border-radius: 50%; background: #000; color: #fff;
-         display: grid; place-items: center; font-size: 60pt; font-weight: 800; line-height: 1; }
-  h1 { margin: 0 0 0.2in; font-size: 26pt; line-height: 1.15; }
+         display: grid; place-items: center; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 64pt; font-weight: 700; line-height: 1; }
+  h1 { margin: 0 0 0.2in; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 28pt; font-weight: 700; line-height: 1.15; }
   img { width: 5in; height: 5in; image-rendering: pixelated; }
   .cta { margin: 0.15in 0 0.05in; font-size: 18pt; font-weight: 700; }
   .url { margin: 0; font-size: 9pt; color: #333; word-break: break-all; }

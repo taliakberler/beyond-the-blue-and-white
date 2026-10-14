@@ -2,7 +2,9 @@
 
 All styling lives in one file, [`css/styles.css`](../css/styles.css), with no CSS framework or build step. Colors, type sizes, and key dimensions are **CSS custom properties (variables)** declared at the top of the file, so the look can change without touching layout code.
 
-> **Status:** the current palette is a **neutral placeholder** (slate grays with a muted blue and a burnt-orange accent), chosen to be easy to read outdoors until a final visual identity is decided. It is not a UNC brand palette.
+> **Status:**
+> - **Typefaces are decided** (2026-10-14): Gasoek One for the logo, Oswald Bold for headers, and Lato Regular for body copy.
+> - **The color palette is still a neutral placeholder** (slate grays with a muted blue and a burnt-orange accent), chosen to be easy to read outdoors until final colors are decided. It is not a UNC brand palette.
 
 ---
 
@@ -63,17 +65,49 @@ Every pair passes AA, and most pass AAA (7:1).
 
 ## Typography
 
+### Typefaces
+
+| Role | Typeface | Weight | Where it's used |
+|---|---|---|---|
+| **Logo** | [Gasoek One](https://fonts.google.com/specimen/Gasoek+One) | Regular (400, the only weight) | Tour name in the header; tour name at the top of each printed QR sign |
+| **Headers** | [Oswald](https://fonts.google.com/specimen/Oswald) | Bold (700) | Stop titles, section headings ("Key people", "Sources", "Tour stops"), list-card titles, numbers in map markers and list cards, stop titles and numbers on QR signs |
+| **Body copy** | [Lato](https://fonts.google.com/specimen/Lato) | Regular (400) | All running text: summaries, history, captions, credits, people, sources, buttons, and messages |
+| *Body emphasis* | Lato | Bold (700) | Bold text within body copy and buttons (the summary line, people's names, button labels). Included so bold text uses Lato's real bold face rather than a browser-generated imitation. |
+
+### Tokens
+
+| Token | Value |
+|---|---|
+| `--font-logo` | `"Gasoek One", "Arial Black", Impact, <system stack>` |
+| `--font-heading` | `"Oswald", "Arial Narrow", "Roboto Condensed", <system stack>` |
+| `--font-body` | `"Lato", <system stack>` |
+| `--font-system` | `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` |
+
+The fallbacks after each brand font are similar in shape (heavy for the logo, condensed for headers), so the layout holds steady while fonts load, or if a font file can't load.
+
+### How the fonts are loaded
+
+- **Self-hosted:** the font files live in [`fonts/`](../fonts/) and are declared with `@font-face` at the top of `css/styles.css`. Visitors' browsers never contact Google or any other font service. This keeps the privacy promise in [software-and-credits.md](software-and-credits.md), and fonts keep working wherever the site is hosted.
+- **Latin subset only:** each file covers the basic and Western European Latin characters (U+0000–00FF plus common punctuation such as curly quotes and dashes). The four files total about **54 KB**. Characters outside that range (for example, some Eastern European letters in a name) are drawn in the fallback font. If content needs them, add the `latin-ext` files from Google Fonts.
+- **`font-display: swap`:** text appears immediately in the fallback font and switches to the brand font as soon as it arrives, so slow connections never leave visitors staring at blank text.
+- **Preloaded:** the logo and body fonts are preloaded in `index.html`, since they're visible on first paint.
+- **Weights:** only 400 and 700 are loaded. Any bold style in the CSS uses `font-weight: 700`.
+
+### Sizes
+
 | Token | Value | Notes |
 |---|---|---|
-| `--font-body` | System UI stack (`system-ui, -apple-system, "Segoe UI", Roboto, …`) | No web fonts are downloaded. This keeps the page fast on cellular connections and uses each phone's most legible built-in font. |
-| `--font-heading` | Same as body | Separate token so a display face can be added later |
 | `--fs-base` | 17px (1.0625rem) | Slightly larger than the usual 16px, for outdoor reading |
 | `--fs-small` | 15px | Captions, credits, secondary text (never smaller than 13px anywhere) |
-| `--fs-h1` | 18px (20px on desktop) | Tour title in the header |
+| `--fs-h1` | 18px (20px on desktop) | Logo in the header |
 | `--fs-h2` | 24px | Stop title |
 | `--fs-h3` | 18px | Section headings ("Key people", "Sources") |
 
-Line height is 1.55 for body text and 1.25 for headings. All sizes use `rem`, so they scale with the visitor's browser text-size setting.
+Line height is 1.55 for body text, 1.2 for headings, and 1.3 for the two-line logo. All sizes use `rem`, so they scale with the visitor's browser text-size setting.
+
+### Using the fonts elsewhere
+
+The same three typefaces are free to download from Google Fonts for print and motion materials. They're all under the SIL Open Font License, which allows commercial and print use. The QR sign sheet (`qr/sheet.html`) already uses them.
 
 ---
 
@@ -145,4 +179,4 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 
 > **A note on light brand blues.** Many university palettes are built around a light blue. Light blues usually have **too little contrast with white** to use for text or for white text on a blue button. For example, `#4B9CD3` on white measures about 3.0:1, which fails AA for normal text. Use such a color for large shapes, the route line, or accents on dark backgrounds, and pair it with a dark navy for text and buttons. Confirm official values with the University's brand guidelines before using them.
 
-To use a web font, add its `<link>` in `index.html` and set `--font-heading` and/or `--font-body`. Keep the system stack as the fallback.
+To change a typeface, add the new `.woff2` file to `fonts/` with its license, update the matching `@font-face` rule and token in `css/styles.css` (and the `@font-face` rules in `scripts/generate-qr.js` for the signs), and keep a similar-shaped fallback.

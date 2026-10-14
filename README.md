@@ -93,6 +93,7 @@ Then open <http://localhost:8080/>.
 ```
 index.html             The app (a single page)
 css/styles.css         All styles; colors are CSS variables
+fonts/                 Brand typefaces (self-hosted, with licenses)
 js/app.js              App logic
 js/vendor/leaflet/     Leaflet map library (bundled copy)
 data/stops.json        All tour content and settings

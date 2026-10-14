@@ -3,7 +3,30 @@
    --------------------------------------------------------------------------
    BRAND COLORS: swap the values in the two token blocks below (light + dark).
    Everything else in this file reads from these variables.
+   FONTS: self-hosted in /fonts (SIL Open Font License). See docs/design-and-styles.md.
    ========================================================================== */
+
+/* ---- Brand typefaces (Latin subsets, self-hosted) ---- */
+@font-face {
+  font-family: "Gasoek One";            /* logo / wordmark */
+  src: url("../fonts/gasoek-one-400-latin.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Oswald";                /* headers */
+  src: url("../fonts/oswald-700-latin.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Lato";                  /* body copy */
+  src: url("../fonts/lato-400-latin.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Lato";                  /* bold emphasis in body copy and buttons */
+  src: url("../fonts/lato-700-latin.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
 
 :root {
   color-scheme: light dark;
@@ -29,8 +52,10 @@
   --color-placeholder-badge: #fff3c4;
 
   /* ---- Type & spacing ---- */
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-heading: var(--font-body);
+  --font-system: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-logo: "Gasoek One", "Arial Black", Impact, var(--font-system);
+  --font-heading: "Oswald", "Arial Narrow", "Roboto Condensed", var(--font-system);
+  --font-body: "Lato", var(--font-system);
   --fs-base: 1.0625rem;  /* 17px — readable outdoors */
   --fs-small: 0.9375rem;
   --fs-h1: 1.125rem;
@@ -104,7 +129,7 @@ body {
   height: 100dvh;
   overflow: hidden;
 }
-h1, h2, h3 { font-family: var(--font-heading); line-height: 1.25; margin: 0; }
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; margin: 0; }
 a { color: var(--color-primary); }
 img { max-width: 100%; display: block; }
 button { font: inherit; color: inherit; }
@@ -142,7 +167,7 @@ button { font: inherit; color: inherit; }
   z-index: 1100;
 }
 .brand { min-width: 0; }
-.brand h1 { font-size: var(--fs-h1); font-weight: 750; letter-spacing: 0.01em; }
+.brand h1 { font-family: var(--font-logo); font-size: var(--fs-h1); font-weight: 400; letter-spacing: 0.02em; line-height: 1.3; }
 .subtitle {
   margin: 0; font-size: 0.8125rem; opacity: 0.85;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -163,7 +188,7 @@ button { font: inherit; color: inherit; }
   border-radius: 999px;
   background: transparent;
   color: var(--color-header-text);
-  font-weight: 650;
+  font-weight: 700;
   cursor: pointer;
 }
 .seg[aria-pressed="true"] { background: var(--color-header-text); color: var(--color-header-bg); }
@@ -205,7 +230,7 @@ main { flex: 1; position: relative; min-height: 0; }
   border-radius: 999px;
   background: var(--color-surface);
   color: var(--color-text);
-  font-weight: 650;
+  font-weight: 700;
   font-size: var(--fs-small);
   box-shadow: var(--shadow);
   cursor: pointer;
@@ -238,7 +263,7 @@ main { flex: 1; position: relative; min-height: 0; }
   width: 36px; height: 36px; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--color-primary); color: var(--color-on-primary);
-  font-weight: 800; font-size: 17px;
+  font-family: var(--font-heading); font-weight: 700; font-size: 18px;
   border: 3px solid var(--color-surface);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s ease;
@@ -248,7 +273,7 @@ main { flex: 1; position: relative; min-height: 0; }
   background: var(--color-accent); color: var(--color-on-accent);
   transform: scale(1.18);
 }
-.stop-label { font-weight: 650; }
+.stop-label { font-weight: 700; }
 
 .you-are-here {
   width: 22px; height: 22px; border-radius: 50%;
@@ -276,9 +301,9 @@ main { flex: 1; position: relative; min-height: 0; }
   width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--color-primary); color: var(--color-on-primary);
-  font-weight: 800; font-size: 18px;
+  font-family: var(--font-heading); font-weight: 700; font-size: 20px;
 }
-.stop-card .t { display: block; font-weight: 700; font-size: 1.0625rem; line-height: 1.3; }
+.stop-card .t { display: block; font-family: var(--font-heading); font-weight: 700; font-size: 1.1875rem; line-height: 1.25; }
 .stop-card .e { display: block; color: var(--color-text-muted); font-size: var(--fs-small); margin-top: 2px; }
 .stop-card .s { display: block; margin-top: 6px; font-size: var(--fs-small); }
 .stop-card .go { display: inline-block; margin-top: 8px; color: var(--color-primary); font-weight: 700; font-size: var(--fs-small); }
@@ -317,8 +342,8 @@ main { flex: 1; position: relative; min-height: 0; }
 }
 .panel-body:focus { outline: none; }
 .panel-title { font-size: var(--fs-h2); }
-.era { margin: 4px 0 14px; color: var(--color-text-muted); font-weight: 600; }
-.summary { font-weight: 600; margin: 16px 0 8px; }
+.era { margin: 4px 0 14px; color: var(--color-text-muted); font-weight: 700; }
+.summary { font-weight: 700; margin: 16px 0 8px; }
 .history p { margin: 0 0 12px; }
 .panel-body h3 { font-size: var(--fs-h3); margin: 22px 0 8px; }
 .people { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -355,7 +380,7 @@ main { flex: 1; position: relative; min-height: 0; }
   display: grid; place-items: center; text-align: center;
   padding: 16px;
   background: var(--color-surface-2); color: var(--color-text-muted);
-  border-radius: var(--radius); font-weight: 600;
+  border-radius: var(--radius); font-weight: 700;
 }
 .gallery figcaption { padding: 8px 2px 0; font-size: var(--fs-small); }
 .gallery .credit { display: block; color: var(--color-text-muted); font-size: 0.8125rem; margin-top: 2px; }
@@ -367,7 +392,7 @@ main { flex: 1; position: relative; min-height: 0; }
   font-size: 22px; line-height: 1; cursor: pointer;
 }
 .gallery-controls button:disabled { opacity: 0.35; cursor: default; }
-.gallery-count { font-size: var(--fs-small); color: var(--color-text-muted); font-weight: 600; }
+.gallery-count { font-size: var(--fs-small); color: var(--color-text-muted); font-weight: 700; }
 
 /* ---------- Panel navigation ---------- */
 .panel-nav {
@@ -389,7 +414,7 @@ main { flex: 1; position: relative; min-height: 0; }
   border-radius: 12px;
   border: 2px solid var(--color-primary);
   background: var(--color-surface); color: var(--color-primary);
-  font-weight: 750; cursor: pointer;
+  font-weight: 700; cursor: pointer;
 }
 .nav-btn.primary { background: var(--color-primary); color: var(--color-on-primary); }
 .nav-btn:disabled { opacity: 0.4; cursor: default; }
@@ -404,7 +429,7 @@ main { flex: 1; position: relative; min-height: 0; }
   border-radius: 12px;
   background: var(--color-text); color: var(--color-bg);
   box-shadow: var(--shadow);
-  font-size: var(--fs-small); font-weight: 600;
+  font-size: var(--fs-small); font-weight: 700;
 }
 .toast button {
   margin-left: 8px; min-height: 32px; padding: 0 10px;

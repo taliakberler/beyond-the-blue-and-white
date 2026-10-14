@@ -47,6 +47,21 @@ A campus walking tour is well within normal use. If traffic ever grows very larg
 
 The building layer is set in `data/stops.json` under `tour.buildingLayer`. Remove that block to turn the layer off.
 
+### Fonts: Gasoek One, Oswald, Lato
+
+| Typeface | Role | Designer / copyright | License |
+|---|---|---|---|
+| **Gasoek One** | Logo | © 2022 The Gasoek Project Authors (JAMO Typeface), <https://github.com/JAMO-TYPEFACE/Gasoek> | SIL Open Font License 1.1 |
+| **Oswald** (Bold) | Headers | © 2016 The Oswald Project Authors, <https://github.com/googlefonts/OswaldFont> | SIL Open Font License 1.1 |
+| **Lato** (Regular, Bold) | Body copy | © 2010–2014 Łukasz Dziedzic (tyPoland), Reserved Font Name "Lato" | SIL Open Font License 1.1 |
+
+| | |
+|---|---|
+| **Where they live** | `fonts/`: Latin-subset `.woff2` files downloaded from Google Fonts on 2026-10-14, with each family's license (`OFL-GasoekOne.txt`, `OFL-Oswald.txt`, `OFL-Lato.txt`) |
+| **Why they're self-hosted** | Loading fonts from Google's servers would send each visitor's IP address to Google. Hosting the files with the site avoids that and removes a dependency on an outside service. |
+| **License terms in brief** | Free to use, bundle, and redistribute, including commercially and in print. Keep the license files with the fonts, and don't sell the font files themselves. A modified version can't use a font's Reserved Font Name. |
+| **Required credit** | No visible credit is required. The license files must stay in `fonts/`. |
+
 ### Phone map apps: walking directions
 
 The "Get walking directions" link opens the visitor's own map app. It uses only public link formats, with no API keys:
@@ -65,7 +80,7 @@ The link sends the next stop's coordinates to Apple or Google only when the visi
 | Geolocation | "You are here" dot | Only runs when the visitor taps the button, and the browser asks permission first. The location stays on the device and is never sent or stored. |
 | `localStorage` | Remembers the light/dark theme choice | Stores one word on the visitor's device |
 
-The site uses **no analytics, cookies, trackers, ads, or web fonts.**
+The site uses **no analytics, cookies, trackers, or ads.** Its web fonts are self-hosted (see below), so no font service is contacted.
 
 ---
 
@@ -116,6 +131,7 @@ The site's code, scripts, and documentation were drafted with help from Claude C
 
 - [ ] OpenStreetMap credit visible on the map (built in, so leave it)
 - [ ] Leaflet license file kept in `js/vendor/leaflet/LICENSE`
+- [ ] Font license files kept in `fonts/`
 - [ ] Every image has a `credit` that matches the holding repository's requirements
 - [ ] Every stop lists its `sources`
 - [ ] Confirmed attribution preferences for the UNC GIS building layer
