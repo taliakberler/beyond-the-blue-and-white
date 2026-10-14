@@ -345,3 +345,22 @@ The current OpenStreetMap Standard tiles are free, but they're visually busy and
 
   The browser pane used for testing pauses WebGL drawing while hidden, which briefly made OpenFreeMap look broken during testing. This doesn't affect visitors.
 
+---
+
+## 2026-10-14 — Whole-tour QR code
+
+**Directed by:** project team. Implemented by Claude Code.
+
+### What changed
+- **`scripts/generate-qr.js`:**
+  - now also generates **`qr/tour.png`**, which points to the tour's home page: <https://taliakberler.github.io/beyond-the-white-and-blue/>
+  - adds a whole-tour sign as the first page of `qr/sheet.html`, with the tour name, subtitle, QR code, "Scan with your phone camera to start the tour", and "5 stops · free · no app needed"
+- **`docs/editing-guide.md`:** explains the two kinds of QR code and where each is used.
+
+### Decisions and reasons
+- **Decision:** point the whole-tour code at the bare site address (`<BASE_URL>/`) rather than `index.html`. **Why:** a shorter address makes a simpler code that's easier to scan from a distance, and GitHub Pages serves `index.html` there automatically.
+- **Decision:** use the same settings as the stop codes (error correction Q, 1200px, 4-module quiet zone, black on white). **Why:** this keeps the codes consistent and gives the same scan reliability on posters and flyers as on outdoor signs.
+
+### Verified
+- All six QR codes were decoded with an open-source QR reader (jsQR), and each contains the expected address.
+

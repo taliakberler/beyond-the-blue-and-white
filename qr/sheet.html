@@ -22,12 +22,22 @@
   h1 { margin: 0 0 0.2in; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 28pt; font-weight: 700; line-height: 1.15; }
   img { width: 5in; height: 5in; image-rendering: pixelated; }
   .cta { margin: 0.15in 0 0.05in; font-size: 18pt; font-weight: 700; }
+  .detail { margin: 0 0 0.1in; font-size: 14pt; }
   .url { margin: 0; font-size: 9pt; color: #333; word-break: break-all; }
   @media print { body { background: #fff; } .help { display: none; } .sign { margin: 0; border: 0; } }
 </style>
 </head>
 <body>
-<div class="help">One sign per page (US Letter). Print at 100% scale. Codes point to <code>https://taliakberler.github.io/beyond-the-white-and-blue</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
+<div class="help">One sign per page (US Letter). The first page is a whole-tour sign (for flyers, entrances, and promotion); the rest are one per stop. Print at 100% scale. Codes point to <code>https://taliakberler.github.io/beyond-the-white-and-blue</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
+
+  <section class="sign">
+    <p class="tour">Beyond the White and Blue</p>
+    <h1>A walking tour of Black history at UNC Chapel Hill</h1>
+    <img src="tour.png" alt="QR code linking to the Beyond the White and Blue tour">
+    <p class="cta">Scan with your phone camera to start the tour</p>
+    <p class="detail">5 stops · free · no app needed</p>
+    <p class="url">https://taliakberler.github.io/beyond-the-white-and-blue/</p>
+  </section>
 
   <section class="sign">
     <p class="tour">Beyond the White and Blue</p>

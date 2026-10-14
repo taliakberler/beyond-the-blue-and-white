@@ -125,7 +125,12 @@ To turn the boundary off, delete the `campusBoundary` block.
 
 ## Set BASE_URL and generate QR codes
 
-QR codes point to `<BASE_URL>/index.html#stop=<id>`. **BASE_URL is set in one place:** `scripts/qr-config.json`.
+There are two kinds of QR code:
+
+- **Whole tour:** `qr/tour.png` points to `<BASE_URL>/`, the home page with every stop on the map. Use it on flyers, posters, social media, entrance signs, and other promotion.
+- **Each stop:** `qr/<stop-id>.png` points to `<BASE_URL>/index.html#stop=<id>`. Use these on the sign at each site.
+
+**BASE_URL is set in one place:** `scripts/qr-config.json`.
 
 ```json
 { "BASE_URL": "https://taliakberler.github.io/beyond-the-white-and-blue" }
@@ -147,8 +152,11 @@ npm run qr
 
 This writes:
 
-- `qr/<stop-id>.png`: one 1200×1200 PNG per stop, with error correction level Q (holds up to scuffs on outdoor signs).
-- `qr/sheet.html`: a printable page with one sign per US Letter page (stop number, title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
+- `qr/tour.png`: the whole-tour code.
+- `qr/<stop-id>.png`: one code per stop.
+- `qr/sheet.html`: a printable page with one sign per US Letter page. The first page is a "Scan to start the tour" sign with the whole-tour code. The rest are one per stop (stop number, title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
+
+All codes are 1200×1200 PNGs with error correction level Q (holds up to scuffs on outdoor signs).
 
 You can also override the URL for a single run without editing the config file: `BASE_URL=https://example.org/tour npm run qr`.
 
