@@ -14,5 +14,6 @@
   "borderFadeMeters": 12,
   "minZoom": 14,
   "maxZoom": 18,
-  "output": "tiles/team-map"
+  "output": "tiles/team-map",
+  "ignoreEdgeMeters": 1.5
 }

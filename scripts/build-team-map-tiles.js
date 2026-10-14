@@ -17,6 +17,7 @@
  *   edgeMarginMeters  how far the background color extends beyond drawn features before fading out
  *   borderFadeMeters  short fade at the artboard border so nothing ends in a hard cut
  *   featherMeters     final softening of the mask edge
+ *   ignoreEdgeMeters  outer strip of the artboard ignored when finding drawn features (export artifacts)
  *   minZoom, maxZoom, output
  *
  * Run: npm run team-map            (requires `npm install` once; uses sharp, Apache-2.0)
@@ -75,6 +76,12 @@ async function buildMask(W, H) {
   for (let i = 0; i < n; i++) {
     const r = data[i * 3], g = data[i * 3 + 1], bl = data[i * 3 + 2];
     art[i] = Math.abs(r - br) + Math.abs(g - bg) + Math.abs(bl - bb) > tol ? 1 : 0;
+  }
+  // Ignore the outermost strip of the artboard: PDF/PNG exports can leave a thin white or
+  // anti-aliased line along the edges, which would otherwise be treated as drawing.
+  const ignore = Math.max(2, Math.ceil((cfg.ignoreEdgeMeters || 1.5) / mPerPx));
+  for (let y = 0; y < sh; y++) for (let x = 0; x < small; x++) {
+    if (x < ignore || y < ignore || x >= small - ignore || y >= sh - ignore) art[y * small + x] = 0;
   }
 
   // 1. Closing (grow, then shrink) fills lawns and courtyards between drawn features. The artboard

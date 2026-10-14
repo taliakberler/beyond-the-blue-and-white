@@ -503,3 +503,18 @@ Implemented by Claude Code.
 ### Verified
 - At zoom 17, the left side's halo wraps around Hill, Smith, Peabody, Sitterson, Murray, and Kenan Labs with no straight line visible. At zoom 16, the illustration's whole outline follows the campus shape on all sides.
 
+---
+
+## 2026-10-14 — Remaining straight edges removed from the illustrated map
+
+**Directed by:** project team (a straight edge was still visible on the left and bottom, outside the contoured fade). Implemented by Claude Code.
+
+### What changed
+- **Cause found:** the PNG rendered from the `.ai` file (via the macOS PDF renderer) has a 2-pixel white line along its left and bottom edges. That line isn't in the artwork; it's an export artifact. The tile script treated it as drawing, so it got its own faint halo and showed as a straight line along those two sides.
+- **`scripts/build-team-map-tiles.js`:** ignores the outermost 1.5 m of the artboard when finding drawn features (new `ignoreEdgeMeters` setting in `scripts/team-map.json`). The nearest real artwork (Peabody, Sitterson, and the paths beside them) is about 30 m from the edge, so it isn't affected.
+- **`tiles/team-map/`:** rebuilt (99 tiles, 1.5 MB). A stitched transparency check at zoom 16 now shows only the contoured outline, with no lines along the artboard edges.
+- **`tools/basemap-preview.html`:** the faded street tiles now overlap by 1 pixel. Where two street tiles met, the browser left a hairline gap that showed as a faint straight line through the faded streets. The street tiles are opaque, so the overlap isn't visible.
+
+### Verified
+- With the browser cache cleared, the left and bottom areas at zoom 17 show no straight edges or tile lines. The illustration's outline follows the drawing.
+

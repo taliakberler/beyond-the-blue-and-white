@@ -23,6 +23,8 @@
   #intro { flex-basis: 100%; margin: 0; font-size: 14px; }
   #map { width: 100%; height: 100%; background: #e9edf1; }
   .faded-streets { filter: grayscale(1) contrast(0.85) brightness(1.08); }
+  /* Overlap street tiles by 1px so the browser never leaves hairline gaps between them. */
+  .faded-streets img.leaflet-tile { width: 257px !important; height: 257px !important; }
   .you { width: 18px; height: 18px; border-radius: 50%; background: #b4541a; border: 3px solid #fff; box-shadow: 0 0 0 2px #b4541a, 0 2px 6px rgba(0,0,0,.4); }
   #locate { font: inherit; font-size: 14px; font-weight: 700; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 0; background: #fff; color: #141a21; cursor: pointer; }
   .stop { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
