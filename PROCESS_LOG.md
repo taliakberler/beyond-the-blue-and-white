@@ -364,3 +364,27 @@ The current OpenStreetMap Standard tiles are free, but they're visually busy and
 ### Verified
 - All six QR codes were decoded with an open-source QR reader (jsQR), and each contains the expected address.
 
+---
+
+## 2026-10-14 — Team illustrated map added to the basemap preview
+
+**Directed by:** project team (supplied `Unc Map.ai`). Implemented by Claude Code.
+
+### What changed
+- Rendered the team's Illustrator map to a 4000×2588 PNG, `tools/assets/team-illustrated-map.png`. The `.ai` file itself isn't in the repository.
+- Added it to `tools/basemap-preview.html` as option **K. Team illustrated map (draft)**, drawn beneath the route, boundary, and stops. Outside the illustration, the page uses the illustration's own background color (`#9fc6e0`) so its edges blend in.
+
+### Decisions and reasons
+- **Decision:** place the illustration on the real map by matching buildings, not by guessing its corners. **Why:** the stops must line up with the drawing. 23 buildings drawn in the illustration (for example, Davis Library, Wilson Library, Graham Memorial, Cobb, Peabody, and Joyner) were matched to UNC's building data, and a best-fit position and scale were calculated. The fit showed:
+  - The illustration is **north-up and drawn to scale.** Rotation is under 2°, and the scale is the same horizontally and vertically, about 0.27 m per pixel at full resolution.
+  - So it can be placed as a simple rectangle. Its corners are 35.908692, −79.054346 (south-west) and 35.915009, −79.042162 (north-east), covering about 1.1 km east to west.
+  - The median position error is about **6 m**, and the largest is 16 m.
+- **Decision:** leave "Old East" out of the fit. **Why:** the shape labeled "Old East" sits about 58 m from Old East's position in UNC's data. That's either an artistic choice or a mismatch in identifying the shape, and including it would have distorted the fit.
+- **Decision:** add it as option K at the end of the list. **Why:** options A–J may already have been shared with the team, and inserting it earlier would change their letters.
+
+### Observation for the team
+- **Stop 1 (the Unsung Founders Memorial) may have the wrong coordinates.** The supplied point (35.913913, −79.051746) is about 62 m north of where both OpenStreetMap (35.913360, −79.051791) and the team's illustration place the memorial. The supplied point is close to Graham Memorial. *Not changed; waiting for the team to confirm.*
+
+### Verified
+- In a browser, option K loads the full image beneath the stops, route, and boundary, and Stops 2–5 line up with the illustration.
+

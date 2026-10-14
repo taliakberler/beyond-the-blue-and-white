@@ -29,7 +29,7 @@
 <body>
 <header>
   <h1>Basemap preview</h1>
-  <p id="intro">Help choose the tour’s background map. Try each option (A–J), zoom and pan around, then tell the team which letter you prefer and why.</p>
+  <p id="intro">Help choose the tour’s background map. Try each option (A–K), zoom and pan around, then tell the team which letter you prefer and why.</p>
   <label>Basemap
     <select id="pick"></select>
   </label>
@@ -88,10 +88,19 @@
     { name: 'UNC aerial imagery', make: function () { return unc('Cache_Aerial'); },
       note: 'UNC’s aerial photography. Shows the real ground, trees, and rooftops. Drawn on request (slower). Campus area only; zoom 14+.' },
     { name: 'No basemap (brand color + UNC buildings)', make: function () { return null; }, buildings: true,
-      note: 'No map tiles at all: a plain background in the site’s color tokens with UNC’s building outlines and the campus boundary. Fully on-brand and fast, but no streets or labels.' }
+      note: 'No map tiles at all: a plain background in the site’s color tokens with UNC’s building outlines and the campus boundary. Fully on-brand and fast, but no streets or labels.' },
+    { name: 'Team illustrated map (draft)', background: '#9fc6e0',
+      make: function () {
+        // Placed on the real map by matching 23 buildings to UNC's building data (median error about 6 m).
+        return L.imageOverlay('assets/team-illustrated-map.png',
+          [[35.9086919, -79.0543463], [35.9150093, -79.0421617]],
+          { pane: 'art', interactive: false, attribution: 'Illustrated map: Beyond the White and Blue team' });
+      },
+      note: 'The team’s own illustrated campus map (from “Unc Map.ai”), placed on the real map so the stops line up with it. Fully on-brand, with no outside map service. Covers central campus only; beyond its edges is its light-blue background.' }
   ];
 
   var map = L.map('map', { zoomControl: true }).setView([35.912, -79.0487], 16);
+  map.createPane('art'); map.getPane('art').style.zIndex = 250;  // illustrated map sits under every tour layer
   map.createPane('boundary'); map.getPane('boundary').style.zIndex = 340;
   map.createPane('buildings'); map.getPane('buildings').style.zIndex = 350;
 
@@ -107,6 +116,7 @@
     if (current) current.addTo(map);
     window.currentBasemap = current;  // for debugging in the browser console
     note.textContent = letter(i) + ': ' + b.note;
+    map.getContainer().style.background = b.background || '';
     if (b.buildings && !document.getElementById('bld').checked) { document.getElementById('bld').checked = true; toggleBuildings(); }
     try { history.replaceState(null, '', '#' + letter(i)); } catch (e) {}
   }
