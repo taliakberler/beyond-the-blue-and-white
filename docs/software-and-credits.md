@@ -123,6 +123,17 @@ The codes are **static**: each stop's web address is encoded directly in the ima
 
 These are used only when building the boundary file, not by visitors.
 
+### sharp (npm package): image processing
+
+| | |
+|---|---|
+| **What it does** | `scripts/build-team-map-tiles.js` uses it to cut the team's illustrated map into web-map tiles and fade out its background beyond campus |
+| **Version** | 0.35.5 (0.33.5 was tried first but has known vulnerabilities in its bundled image libraries; `npm audit` reports 0 issues for 0.35.5) |
+| **License** | Apache-2.0 |
+| **Source** | <https://sharp.pixelplumbing.com> |
+
+Used only when building tiles, not by visitors.
+
 ### Node.js and npm
 
 Node.js runs the helper scripts (`npm run qr`, `npm run route`, `npm run placeholders`). It's free and open source (MIT): <https://nodejs.org>. `package.json` pins the exact versions of `leaflet` and `qrcode`, and `package-lock.json` records the full dependency tree.

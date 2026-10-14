@@ -98,6 +98,7 @@ js/app.js              App logic
 js/vendor/leaflet/     Leaflet map library (bundled copy)
 data/stops.json        All tour content and settings
 data/route.geojson     The walking route
+tiles/team-map/        Team illustrated map, as web-map tiles (draft basemap)
 images/                Stop images
 qr/                    Generated QR codes and printable sign sheet
 scripts/               QR generator and helper scripts

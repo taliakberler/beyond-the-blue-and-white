@@ -123,6 +123,24 @@ To turn the boundary off, delete the `campusBoundary` block.
 
 ---
 
+## Update the team's illustrated map (draft basemap)
+
+The illustrated map is served as map tiles in `tiles/team-map/`, built from a PNG export of the Illustrator file. To update it after editing the art:
+
+1. In Illustrator, export the map as a PNG about 6000px wide to `map-source/team-map.png`. This folder is ignored by git, so the large export isn't committed.
+2. If the artboard's extent changed (rather than just the drawing inside it), the map's real-world corners in `scripts/team-map.json` (`bounds`) need to be recalculated by matching buildings again.
+3. Run `npm run team-map`.
+4. Commit the updated `tiles/team-map/` folder.
+
+Other settings in `scripts/team-map.json`:
+- `background`: the art's background color, which fades to transparent away from campus
+- `edgeMarginMeters`: how far the background color extends around the drawn campus
+- `closeGapsMeters`: fills gaps between drawn features so no holes appear
+- `featherMeters`: softness of the edge
+- `minZoom` / `maxZoom`: which zoom levels get tiles
+
+---
+
 ## Set BASE_URL and generate QR codes
 
 There are two kinds of QR code:

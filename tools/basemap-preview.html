@@ -22,6 +22,9 @@
   #note { flex-basis: 100%; margin: 0; font-size: 13px; opacity: 0.9; }
   #intro { flex-basis: 100%; margin: 0; font-size: 14px; }
   #map { width: 100%; height: 100%; background: #e9edf1; }
+  .faded-streets { filter: grayscale(1) contrast(0.85) brightness(1.08); }
+  .you { width: 18px; height: 18px; border-radius: 50%; background: #b4541a; border: 3px solid #fff; box-shadow: 0 0 0 2px #b4541a, 0 2px 6px rgba(0,0,0,.4); }
+  #locate { font: inherit; font-size: 14px; font-weight: 700; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 0; background: #fff; color: #141a21; cursor: pointer; }
   .stop { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
           background: #2b5c8a; color: #fff; font: 700 16px "Oswald", sans-serif; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
 </style>
@@ -34,7 +37,7 @@
     <select id="pick"></select>
   </label>
   <label><input type="checkbox" id="bnd" checked> Campus boundary</label>
-  <label><input type="checkbox" id="bld"> UNC buildings</label>
+  <button type="button" id="locate">Find me</button>
   <p id="note"></p>
 </header>
 <div id="map"></div>
@@ -91,15 +94,25 @@
       note: 'No map tiles at all: a plain background in the site’s color tokens with UNC’s building outlines and the campus boundary. Fully on-brand and fast, but no streets or labels.' },
     { name: 'Team illustrated map (draft)', background: '#9fc6e0',
       make: function () {
-        // Placed on the real map by matching 23 buildings to UNC's building data (median error about 6 m).
-        return L.imageOverlay('assets/team-illustrated-map.png',
-          [[35.9086919, -79.0543463], [35.9150093, -79.0421617]],
-          { pane: 'art', interactive: false, attribution: 'Illustrated map: Beyond the White and Blue team' });
+        // The illustration is cut into map tiles (npm run team-map) so phones load only what's on screen.
+        // It was placed on the real map by matching 23 buildings to UNC's data (median error about 6 m).
+        var art = L.tileLayer('../tiles/team-map/{z}/{x}/{y}.png', {
+          pane: 'art', minZoom: 14, minNativeZoom: 14, maxNativeZoom: 18, maxZoom: 20,
+          bounds: [[35.9086919, -79.0543463], [35.9150093, -79.0421617]],
+          attribution: 'Illustrated map: Beyond the White and Blue team'
+        });
+        // Surrounding streets: OpenStreetMap, grayed and faded into the illustration's blue.
+        var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          className: 'faded-streets', opacity: 0.38, maxNativeZoom: 19, maxZoom: 20, attribution: OSM
+        });
+        return L.layerGroup([streets, art]);
       },
-      note: 'The team’s own illustrated campus map (from “Unc Map.ai”), placed on the real map so the stops line up with it. Fully on-brand, with no outside map service. Covers central campus only; beyond its edges is its light-blue background.' }
+      hoverBuildings: true,
+      note: 'The team’s own illustrated campus map, cut into fast-loading map tiles and placed on the real map so stops and “Find me” line up with it. Around campus, a faded street map shows nearby roads in the background. Hover (or tap) a building to see its name and year built.' }
   ];
 
   var map = L.map('map', { zoomControl: true }).setView([35.912, -79.0487], 16);
+  window.previewMap = map;  // for debugging in the browser console
   map.createPane('art'); map.getPane('art').style.zIndex = 250;  // illustrated map sits under every tour layer
   map.createPane('boundary'); map.getPane('boundary').style.zIndex = 340;
   map.createPane('buildings'); map.getPane('buildings').style.zIndex = 350;
@@ -108,7 +121,7 @@
   var letter = function (i) { return String.fromCharCode(65 + i); };
   BASEMAPS.forEach(function (b, i) { var o = document.createElement('option'); o.value = i; o.textContent = letter(i) + '. ' + b.name; pick.appendChild(o); });
 
-  var current = null, boundary = null, buildings = null;
+  var current = null, boundary = null, buildings = null, hoverBuildings = null;
   function choose(i) {
     var b = BASEMAPS[i];
     if (current) map.removeLayer(current);
@@ -117,7 +130,8 @@
     window.currentBasemap = current;  // for debugging in the browser console
     note.textContent = letter(i) + ': ' + b.note;
     map.getContainer().style.background = b.background || '';
-    if (b.buildings && !document.getElementById('bld').checked) { document.getElementById('bld').checked = true; toggleBuildings(); }
+    showBuildings(!!b.buildings);
+    setHoverBuildings(!!b.hoverBuildings);
     try { history.replaceState(null, '', '#' + letter(i)); } catch (e) {}
   }
   pick.addEventListener('change', function () { choose(+pick.value); });
@@ -130,18 +144,48 @@
     if (boundary) e.target.checked ? boundary.addTo(map) : map.removeLayer(boundary);
   });
 
-  function toggleBuildings() {
-    var on = document.getElementById('bld').checked;
+  // UNC building footprints, downloaded once and shared by the visible and invisible layers.
+  var buildingData = null;
+  function getBuildings() {
+    buildingData = buildingData || fetch('https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0/query?where=1%3D1&outFields=BUILDINGNAME,YEARBUILT&outSR=4326&f=geojson')
+      .then(function (r) { return r.json(); });
+    return buildingData;
+  }
+  // Tooltip: building name, plus year built when UNC's data has it. Hover on desktop; tap on phones.
+  function buildingInfo(f, layer) {
+    var p = f.properties || {};
+    if (!p.BUILDINGNAME) return;
+    var box = document.createElement('div');
+    var name = document.createElement('strong'); name.textContent = p.BUILDINGNAME; box.appendChild(name);
+    if (p.YEARBUILT) { box.appendChild(document.createElement('br')); box.appendChild(document.createTextNode('Built ' + p.YEARBUILT)); }
+    layer.bindTooltip(box, { sticky: true, direction: 'top', offset: [0, -6] });
+    layer.on('click', function (e) { layer.openTooltip(e.latlng); });
+  }
+
+  // Visible footprints, used only by options that have no other building drawing (option J).
+  function showBuildings(on) {
     if (!on) { if (buildings) map.removeLayer(buildings); return; }
     if (buildings) { buildings.addTo(map); return; }
-    fetch('https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0/query?where=1%3D1&outFields=BUILDINGNAME&outSR=4326&f=geojson')
-      .then(function (r) { return r.json(); }).then(function (g) {
-        buildings = L.geoJSON(g, { pane: 'buildings',
-          style: { color: '#6b7785', weight: 1, fillColor: '#8a97a5', fillOpacity: 0.35, opacity: 0.8 },
-          onEachFeature: function (f, l) { if (f.properties.BUILDINGNAME) l.bindTooltip(f.properties.BUILDINGNAME); } }).addTo(map);
-      });
+    getBuildings().then(function (g) {
+      buildings = L.geoJSON(g, { pane: 'buildings',
+        style: { color: '#6b7785', weight: 1, fillColor: '#8a97a5', fillOpacity: 0.35, opacity: 0.8 },
+        onEachFeature: buildingInfo });
+      if (BASEMAPS[+pick.value].buildings) buildings.addTo(map);
+    });
   }
-  document.getElementById('bld').addEventListener('change', toggleBuildings);
+
+  // Invisible footprints: no outline or fill is drawn (they don't align perfectly with the
+  // illustration), but hovering or tapping a building still shows its info.
+  function setHoverBuildings(on) {
+    if (!on) { if (hoverBuildings) map.removeLayer(hoverBuildings); return; }
+    if (hoverBuildings) { hoverBuildings.addTo(map); return; }
+    getBuildings().then(function (g) {
+      hoverBuildings = L.geoJSON(g, { pane: 'buildings',
+        style: { stroke: false, fill: true, fillColor: '#000', fillOpacity: 0 },
+        onEachFeature: buildingInfo });
+      if (BASEMAPS[+pick.value].hoverBuildings) hoverBuildings.addTo(map);
+    });
+  }
 
   Promise.all([fetch('../data/stops.json').then(function (r) { return r.json(); }),
                fetch('../data/route.geojson').then(function (r) { return r.json(); })]).then(function (res) {
@@ -150,6 +194,22 @@
       L.marker([s.lat, s.lng], { title: s.title, icon: L.divIcon({ className: '', html: '<div class="stop">' + s.order + '</div>', iconSize: [32, 32], iconAnchor: [16, 16] }) })
         .bindTooltip(s.order + '. ' + s.title).addTo(map);
     });
+  });
+
+  // "Find me": the same browser geolocation the tour uses, shown on whichever basemap is active.
+  var you = null, youCircle = null;
+  document.getElementById('locate').addEventListener('click', function () {
+    if (!navigator.geolocation) { note.textContent = 'This browser can’t share its location.'; return; }
+    navigator.geolocation.getCurrentPosition(function (p) {
+      var ll = [p.coords.latitude, p.coords.longitude], acc = Math.min(p.coords.accuracy || 30, 500);
+      if (!you) {
+        you = L.marker(ll, { interactive: false, zIndexOffset: 1000, icon: L.divIcon({ className: '', html: '<div class="you"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }) }).addTo(map);
+        youCircle = L.circle(ll, { radius: acc, color: '#b4541a', weight: 1, fillOpacity: 0.1, interactive: false }).addTo(map);
+      } else { you.setLatLng(ll); youCircle.setLatLng(ll).setRadius(acc); }
+      map.setView(ll, Math.max(map.getZoom(), 17));
+    }, function (e) {
+      note.textContent = e.code === 1 ? 'Location permission was denied — allow it in your browser settings to try “Find me”.' : 'Your location isn’t available right now.';
+    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
   });
 
   // Link straight to an option with #A … #J (e.g. basemap-preview.html#C).

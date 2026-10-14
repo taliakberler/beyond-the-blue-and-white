@@ -402,3 +402,62 @@ The current OpenStreetMap Standard tiles are free, but they're visually busy and
 ### Decisions and reasons
 - **Decision:** use OpenStreetMap's position. **Why:** OpenStreetMap and the team's illustrated map agree on where the memorial is, and the original point was near Graham Memorial instead.
 
+---
+
+## 2026-10-14 — Team illustrated map: fast tiles, faded surrounding streets, and "Find me"
+
+**Directed by:** project team. The team chose to decide between options C, H, and K, leaning toward K (the team's illustrated map), provided that:
+1. it renders quickly
+2. surrounding roads and map features are shown, but with less prominence
+3. visitors can still find their location on it
+
+Implemented by Claude Code.
+
+### What changed
+- **New `scripts/build-team-map-tiles.js` (`npm run team-map`) and `scripts/team-map.json`:** cuts the illustration into standard web-map tiles, `tiles/team-map/{z}/{x}/{y}.png`, for zoom levels 14–18. That's 99 tiles and 1.4 MB in total, but a phone loads only the tiles on screen. Each tile is a 512px image drawn in a 256px map square, so it stays sharp on high-resolution phone screens. The tiles use compressed palette PNGs.
+- **Background fade:** the illustration's flat background (`#9fc6e0`) is kept around the drawn campus, with an 18 m margin, and fades softly to transparent beyond it. Gaps between drawn features are filled so no holes appear, and the image borders are faded so there's no hard rectangular edge.
+- **Option K in `tools/basemap-preview.html`** now uses the tiles instead of the single image. Underneath, OpenStreetMap is shown grayscale at 38% opacity over the illustration's blue, so nearby roads and features appear in the background.
+- **"Find me" button** added to the preview, using the same browser geolocation as the tour.
+- **Removed** `tools/assets/team-illustrated-map.png` (the 1.9 MB single image).
+- **New dev dependency:** `sharp` 0.35.5 (Apache-2.0).
+- **`.gitignore`:** added `map-source/`, the large PNG export the tiles are built from.
+- **Docs:** added sharp to the software and credits doc, and added "Update the team's illustrated map" to the editing guide.
+
+### Decisions and reasons
+- **Decision:** use map tiles rather than one image. **Why:** the single image was 1.9 MB, and every visitor would download all of it before seeing the map. With tiles, the opening phone view loads **6 tiles (152 KB)**, about 12 times less, and zooming in loads only the detail needed.
+- **Decision:** render the source from the `.ai` file at 6000px wide. **Why:** at zoom 18 on a high-resolution screen, the tiles need about 0.24 m per pixel. At 6000px across 1.1 km, the source has about 0.18 m per pixel, so text and building edges stay crisp. Zooms 19–20 enlarge the zoom-18 tiles.
+- **Decision:** show surrounding streets by fading OpenStreetMap into the illustration's blue (grayscale, 38% opacity), not with a second vector map library. **Why:** it adds no extra code library, which keeps the map fast, and it matches the illustration's palette. It's also lower-contrast than the illustration, so campus stays the focus.
+- **Decision:** write fully transparent tiles too (about 100 bytes each). **Why:** without them, phones would request missing files inside the map area and get 404 errors.
+- **Decision:** `sharp` 0.35.5 rather than 0.33.5. **Why:** `npm audit` flagged high-severity vulnerabilities in 0.33.5's bundled image libraries (libvips, libheif, librsvg). 0.35.5 reports none.
+- **How "Find me" works on the illustration:** the illustration is positioned on real-world coordinates (from the 23-building fit), so a phone's GPS position lands on the matching spot in the drawing. No link to an outside web map is needed.
+
+### Verified
+- At 375px width, option K's opening view loaded 6 illustration tiles (152 KB) with no missing images, and each tile loaded in under 15 ms locally.
+- Faded streets appear around campus (Franklin, Rosemary, and Raleigh Streets) beneath the illustration.
+- A simulated location at Davis Library put the "Find me" dot on Davis Library in the illustration.
+
+---
+
+## 2026-10-14 — Building info on hover (option K), and preview checkbox removed
+
+**Directed by:** project team. Implemented by Claude Code.
+
+### What changed
+- **Option K in `tools/basemap-preview.html`:**
+  - adds an **invisible** copy of UNC's building layer: no outline or fill is drawn, but hovering a building (or tapping it on a phone) shows a tooltip with its name and year built, from UNC's `BUILDINGNAME` and `YEARBUILT` fields
+  - adds this to the option's description
+- **Removed the "UNC buildings" checkbox** from the preview header. Option J (No basemap) still shows visible building outlines automatically, since they're its only content.
+- The visible and invisible building layers share a single download of UNC's building data.
+
+### Decisions and reasons
+- **Decision:** keep UNC's footprints interactive but fully transparent on the illustrated map. **Why:** UNC's outlines don't align perfectly with the illustration (median offset about 6 m), so drawing them would look like a misprint. The information is still useful, so it's shown on hover or tap only.
+- **Decision:** open the tooltip on tap as well as hover. **Why:** phones have no hover, and phones are the main device.
+- **Decision:** show the building name and year built only. **Why:** these are the fields that make sense to visitors. Other fields in UNC's layer (building numbers, funding codes, square footage) are administrative.
+- **Note:** names come straight from UNC's data, so some are abbreviated (for example, "Steele Bldg" and "Cobb Res Hall"). Near building edges, the small misalignment can occasionally show a neighboring building's name.
+
+### Verified
+- On option K, all 577 building shapes are present and interactive, with no visible outline or fill.
+- A real mouse hover over Davis Library on the illustration showed "Davis Library — Built 1983".
+- Option J shows 577 outlined buildings, and option C shows no building layer.
+- The "UNC buildings" checkbox no longer appears.
+

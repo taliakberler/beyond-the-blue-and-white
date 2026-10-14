@@ -1,0 +1,17 @@
+{
+  "source": "map-source/team-map.png",
+  "bounds": {
+    "south": 35.9086919,
+    "west": -79.0543463,
+    "north": 35.9150093,
+    "east": -79.0421617
+  },
+  "background": "#9fc6e0",
+  "backgroundTolerance": 18,
+  "edgeMarginMeters": 18,
+  "closeGapsMeters": 55,
+  "featherMeters": 6,
+  "minZoom": 14,
+  "maxZoom": 18,
+  "output": "tiles/team-map"
+}
