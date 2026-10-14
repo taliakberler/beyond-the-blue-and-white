@@ -248,3 +248,50 @@ Tested in a browser on a local server at 375px phone width and at 1280px desktop
 - There's no sideways scrolling at 375px.
 - The QR sign sheet loads all four fonts.
 
+---
+
+## 2026-10-14 — The five tour sites
+
+**Directed by:** project team (sites and coordinates). Implemented by Claude Code.
+
+### What changed
+- **`data/stops.json`:** replaced the five placeholder locations with the team's five sites:
+
+  | Order (provisional) | Site | id (used in URL and QR code) | Coordinates |
+  |---|---|---|---|
+  | 1 | The Unsung Founders Memorial | `unsung-founders-memorial` | 35.913913, −79.051746 |
+  | 2 | Steele Building | `steele-building` | 35.911508, −79.050345 |
+  | 3 | Lenoir Hall | `lenoir-hall` | 35.910578, −79.048856 |
+  | 4 | The Pit | `the-pit` | 35.910092, −79.048583 *(see below)* |
+  | 5 | Old Chapel Hill Cemetery | `old-chapel-hill-cemetery` | 35.911029, −79.045639 |
+
+  Each stop's era, summary, history, people, and sources are still **placeholder text**, and its images are still placeholder graphics. No historical content was added. The map's starting center moved to the middle of the five sites (35.912003, −79.048693).
+- **New `"placeholder": true` field** on each stop. It now controls the "PLACEHOLDER CONTENT" badge (`js/app.js`), since the real site names no longer contain the word "PLACEHOLDER".
+- **Regenerated** `data/route.geojson` (straight lines in the provisional order), the placeholder images, and the QR codes. The old `qr/placeholder-stop-*.png` files were deleted and replaced by one PNG per new stop id, and `qr/sheet.html` was rebuilt.
+- **Overview map fit (`js/app.js`):**
+  - The overview now frames the stops with a fixed 24-pixel margin, plus extra space at the bottom for the Start button, instead of a 25% margin. This keeps the five sites at a closer zoom level on phones.
+  - The overview also re-fits when the screen size changes (for example, when a phone is rotated), unless the visitor has already moved the map or opened a stop.
+- **Docs:** updated the README status note, the deep-link example in the editing guide, the placeholder-badge instructions (editing guide, design doc, content guidelines), and the known limits in `docs/site-overview.md`.
+
+### Decisions and reasons
+- **Decision:** use **35.910092, −79.048583** for the Pit instead of the supplied 35.904613, −79.046761. **Why:**
+  - The supplied point is the same "campus center" given in the original requirements, which suggests a copy-paste slip.
+  - When checked against UNC's building layer, that point falls on Morrison Residence Hall on South Campus, about 700 m from the Pit.
+  - OpenStreetMap places the Pit (a pedestrian plaza) at 35.910092, −79.048583, between Lenoir Hall, Student Stores, and the Student Union.
+
+  **Confirmed by the team.**
+- **Decision:** check every supplied coordinate against UNC's building layer before using it. **Why:** QR signs will send visitors to these points, so a wrong coordinate would misdirect people on the ground. The other four sites matched: Steele Building and Lenoir Hall fall on those buildings, the Unsung Founders Memorial point is beside Graham Memorial, and the cemetery point is beside Connor Residence Hall.
+- **Decision:** set a **provisional** walking order using the shortest straight-line path through the five sites (about 810 m): north to south-east, from the Unsung Founders Memorial to Old Chapel Hill Cemetery. **Why:** the team hasn't decided the path yet, but the app needs an order for numbering and Previous / Next. This order can change freely until signs are printed.
+- **Decision:** base stop ids on the site names (e.g. `lenoir-hall`) rather than stop numbers. **Why:** ids appear in the QR codes, so they must stay the same even if the route order changes.
+- **Decision:** mark unverified content with an explicit `placeholder` field instead of putting "PLACEHOLDER" in the title. **Why:** the stops now have real names, but their content is still unverified, and the badge must keep flagging that.
+
+### Verified
+- In a browser at 375px width:
+  - All five markers appear with their names, along with the route line.
+  - The overview fits all five sites at zoom 16.
+  - Each deep link (`#stop=<id>`) opens the right stop with the correct "Stop N of 5" and the placeholder badge.
+  - Next and Previous work, and "Back to Stop 1" appears on the last stop.
+  - The panel stays open when the window is resized.
+  - The List view shows the five sites in order.
+  - An old `#stop=placeholder-stop-3` link falls back to the List view with a message.
+

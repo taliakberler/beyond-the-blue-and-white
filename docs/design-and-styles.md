@@ -147,7 +147,7 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 | **Stop panel** | Stop count → title → era → image gallery → summary (bold) → history → key people (shaded boxes) → sources (numbered list) → pinned navigation |
 | **Image gallery** | Full-width 4:3 images that swipe sideways and snap into place, with previous/next buttons and an "1 / 2" counter below |
 | **Messages (toasts)** | Dark rounded bar just below the header, announced to screen readers. Messages disappear after 6–9 seconds. |
-| **Placeholder badge** | Pale yellow pill reading "PLACEHOLDER CONTENT", shown automatically on any stop whose title contains "PLACEHOLDER" |
+| **Placeholder badge** | Pale yellow pill reading "PLACEHOLDER CONTENT", shown on any stop marked `"placeholder": true` in `stops.json` (or whose title contains "PLACEHOLDER") |
 
 ---
 

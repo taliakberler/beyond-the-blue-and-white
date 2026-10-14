@@ -3,7 +3,10 @@
     "title": "Beyond the White and Blue",
     "subtitle": "A walking tour of Black history at UNC Chapel Hill",
     "campus": "UNC Chapel Hill",
-    "center": [35.904613, -79.046761],
+    "center": [
+      35.912003,
+      -79.048693
+    ],
     "zoom": 17,
     "intro": "PLACEHOLDER introduction — replace with a short welcome to the tour, its theme, and roughly how long the walk takes.",
     "buildingLayer": {
@@ -14,11 +17,12 @@
   },
   "stops": [
     {
-      "id": "placeholder-stop-1",
+      "id": "unsung-founders-memorial",
       "order": 1,
-      "title": "PLACEHOLDER Stop 1 — Site name TBD",
-      "lat": 35.90560,
-      "lng": -79.04760,
+      "title": "The Unsung Founders Memorial",
+      "placeholder": true,
+      "lat": 35.91391347851523,
+      "lng": -79.05174611549224,
       "era": "Era / date TBD (placeholder)",
       "summary": "Placeholder summary — replace with one or two sentences describing this site.",
       "history": [
@@ -26,103 +30,190 @@
         "This second paragraph shows how longer history text is split into paragraphs. Each paragraph is a separate item in the \"history\" list."
       ],
       "people": [
-        { "name": "Placeholder Person A", "description": "One-line description — replace with verified content." },
-        { "name": "Placeholder Person B", "description": "One-line description — replace with verified content." }
+        {
+          "name": "Placeholder Person A",
+          "description": "One-line description — replace with verified content."
+        },
+        {
+          "name": "Placeholder Person B",
+          "description": "One-line description — replace with verified content."
+        }
       ],
       "images": [
-        { "src": "images/stop-1-a.svg", "alt": "Gray placeholder graphic labeled Stop 1, image 1", "caption": "Placeholder caption — describe what the image shows.", "credit": "Placeholder credit — archive or photographer, collection, item ID" },
-        { "src": "images/stop-1-b.svg", "alt": "Gray placeholder graphic labeled Stop 1, image 2", "caption": "Placeholder caption — second image.", "credit": "Placeholder credit — archive or photographer, collection, item ID" }
+        {
+          "src": "images/stop-1-a.svg",
+          "alt": "Gray placeholder graphic for The Unsung Founders Memorial (stop 1), image 1",
+          "caption": "Placeholder caption — describe what the image shows.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        },
+        {
+          "src": "images/stop-1-b.svg",
+          "alt": "Gray placeholder graphic for The Unsung Founders Memorial (stop 1), image 2",
+          "caption": "Placeholder caption — second image.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        }
       ],
       "sources": [
-        { "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)", "url": "" }
+        {
+          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
+          "url": ""
+        }
       ]
     },
     {
-      "id": "placeholder-stop-2",
+      "id": "steele-building",
       "order": 2,
-      "title": "PLACEHOLDER Stop 2 — Site name TBD",
-      "lat": 35.90520,
-      "lng": -79.04600,
+      "title": "Steele Building",
+      "placeholder": true,
+      "lat": 35.911508,
+      "lng": -79.050345,
       "era": "Era / date TBD (placeholder)",
       "summary": "Placeholder summary — replace with one or two sentences describing this site.",
       "history": [
         "Placeholder history — replace with verified content."
       ],
       "people": [
-        { "name": "Placeholder Person C", "description": "One-line description — replace with verified content." }
+        {
+          "name": "Placeholder Person C",
+          "description": "One-line description — replace with verified content."
+        }
       ],
       "images": [
-        { "src": "images/stop-2-a.svg", "alt": "Gray placeholder graphic labeled Stop 2, image 1", "caption": "Placeholder caption — describe what the image shows.", "credit": "Placeholder credit — archive or photographer, collection, item ID" },
-        { "src": "images/stop-2-b.svg", "alt": "Gray placeholder graphic labeled Stop 2, image 2", "caption": "Placeholder caption — second image.", "credit": "Placeholder credit — archive or photographer, collection, item ID" }
+        {
+          "src": "images/stop-2-a.svg",
+          "alt": "Gray placeholder graphic for Steele Building (stop 2), image 1",
+          "caption": "Placeholder caption — describe what the image shows.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        },
+        {
+          "src": "images/stop-2-b.svg",
+          "alt": "Gray placeholder graphic for Steele Building (stop 2), image 2",
+          "caption": "Placeholder caption — second image.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        }
       ],
       "sources": [
-        { "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)", "url": "" }
+        {
+          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
+          "url": ""
+        }
       ]
     },
     {
-      "id": "placeholder-stop-3",
+      "id": "lenoir-hall",
       "order": 3,
-      "title": "PLACEHOLDER Stop 3 — Site name TBD",
-      "lat": 35.90430,
-      "lng": -79.04560,
+      "title": "Lenoir Hall",
+      "placeholder": true,
+      "lat": 35.910578,
+      "lng": -79.048856,
       "era": "Era / date TBD (placeholder)",
       "summary": "Placeholder summary — replace with one or two sentences describing this site.",
       "history": [
         "Placeholder history — replace with verified content."
       ],
       "people": [
-        { "name": "Placeholder Person D", "description": "One-line description — replace with verified content." }
+        {
+          "name": "Placeholder Person D",
+          "description": "One-line description — replace with verified content."
+        }
       ],
       "images": [
-        { "src": "images/stop-3-a.svg", "alt": "Gray placeholder graphic labeled Stop 3, image 1", "caption": "Placeholder caption — describe what the image shows.", "credit": "Placeholder credit — archive or photographer, collection, item ID" },
-        { "src": "images/stop-3-b.svg", "alt": "Gray placeholder graphic labeled Stop 3, image 2", "caption": "Placeholder caption — second image.", "credit": "Placeholder credit — archive or photographer, collection, item ID" }
+        {
+          "src": "images/stop-3-a.svg",
+          "alt": "Gray placeholder graphic for Lenoir Hall (stop 3), image 1",
+          "caption": "Placeholder caption — describe what the image shows.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        },
+        {
+          "src": "images/stop-3-b.svg",
+          "alt": "Gray placeholder graphic for Lenoir Hall (stop 3), image 2",
+          "caption": "Placeholder caption — second image.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        }
       ],
       "sources": [
-        { "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)", "url": "" }
+        {
+          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
+          "url": ""
+        }
       ]
     },
     {
-      "id": "placeholder-stop-4",
+      "id": "the-pit",
       "order": 4,
-      "title": "PLACEHOLDER Stop 4 — Site name TBD",
-      "lat": 35.90360,
-      "lng": -79.04690,
+      "title": "The Pit",
+      "placeholder": true,
+      "lat": 35.910092,
+      "lng": -79.048583,
       "era": "Era / date TBD (placeholder)",
       "summary": "Placeholder summary — replace with one or two sentences describing this site.",
       "history": [
         "Placeholder history — replace with verified content."
       ],
       "people": [
-        { "name": "Placeholder Person E", "description": "One-line description — replace with verified content." }
+        {
+          "name": "Placeholder Person E",
+          "description": "One-line description — replace with verified content."
+        }
       ],
       "images": [
-        { "src": "images/stop-4-a.svg", "alt": "Gray placeholder graphic labeled Stop 4, image 1", "caption": "Placeholder caption — describe what the image shows.", "credit": "Placeholder credit — archive or photographer, collection, item ID" },
-        { "src": "images/stop-4-b.svg", "alt": "Gray placeholder graphic labeled Stop 4, image 2", "caption": "Placeholder caption — second image.", "credit": "Placeholder credit — archive or photographer, collection, item ID" }
+        {
+          "src": "images/stop-4-a.svg",
+          "alt": "Gray placeholder graphic for The Pit (stop 4), image 1",
+          "caption": "Placeholder caption — describe what the image shows.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        },
+        {
+          "src": "images/stop-4-b.svg",
+          "alt": "Gray placeholder graphic for The Pit (stop 4), image 2",
+          "caption": "Placeholder caption — second image.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        }
       ],
       "sources": [
-        { "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)", "url": "" }
+        {
+          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
+          "url": ""
+        }
       ]
     },
     {
-      "id": "placeholder-stop-5",
+      "id": "old-chapel-hill-cemetery",
       "order": 5,
-      "title": "PLACEHOLDER Stop 5 — Site name TBD",
-      "lat": 35.90420,
-      "lng": -79.04820,
+      "title": "Old Chapel Hill Cemetery",
+      "placeholder": true,
+      "lat": 35.91102859131603,
+      "lng": -79.04563912237869,
       "era": "Era / date TBD (placeholder)",
       "summary": "Placeholder summary — replace with one or two sentences describing this site.",
       "history": [
         "Placeholder history — replace with verified content."
       ],
       "people": [
-        { "name": "Placeholder Person F", "description": "One-line description — replace with verified content." }
+        {
+          "name": "Placeholder Person F",
+          "description": "One-line description — replace with verified content."
+        }
       ],
       "images": [
-        { "src": "images/stop-5-a.svg", "alt": "Gray placeholder graphic labeled Stop 5, image 1", "caption": "Placeholder caption — describe what the image shows.", "credit": "Placeholder credit — archive or photographer, collection, item ID" },
-        { "src": "images/stop-5-b.svg", "alt": "Gray placeholder graphic labeled Stop 5, image 2", "caption": "Placeholder caption — second image.", "credit": "Placeholder credit — archive or photographer, collection, item ID" }
+        {
+          "src": "images/stop-5-a.svg",
+          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery (stop 5), image 1",
+          "caption": "Placeholder caption — describe what the image shows.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        },
+        {
+          "src": "images/stop-5-b.svg",
+          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery (stop 5), image 2",
+          "caption": "Placeholder caption — second image.",
+          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+        }
       ],
       "sources": [
-        { "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)", "url": "" }
+        {
+          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
+          "url": ""
+        }
       ]
     }
   ]

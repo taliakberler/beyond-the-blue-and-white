@@ -59,7 +59,7 @@ Visitors don't have to start at Stop 1. Every sign is a way in.
 
 ## Current status
 
-> **This is a working mockup.** The five stops currently on the site are **placeholders**. They have no historical content, and their locations are arbitrary points near the campus center. Real stops will replace them once the content has been researched, verified, and reviewed.
+> **This is a working mockup.** The tour's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet, and the walking order is **provisional** until the route is decided. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
 
 The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.md](PROCESS_LOG.md) for why, and [docs/content-guidelines.md](docs/content-guidelines.md) for how real content should be prepared.
 

@@ -62,7 +62,7 @@ Before a stop goes live:
 1. **Fact check:** a second person checks every claim against the cited sources.
 2. **Subject review:** where possible, invite review from historians of the topic and from descendants or community members connected to the people and events described.
 3. **Accessibility check:** every image has alt text, captions make sense on their own, and the text reads clearly on a phone.
-4. **Placeholder check:** remove the word "PLACEHOLDER" from the title so the badge disappears, and replace the placeholder images.
+4. **Placeholder check:** set `"placeholder": false` on the stop so the badge disappears, and replace the placeholder text and images.
 5. **Log it:** add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) noting the stop was added and who reviewed it.
 
 ## Corrections

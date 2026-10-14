@@ -12,7 +12,7 @@ The page loads `data/stops.json` with `fetch`, so opening `index.html` by double
 python3 -m http.server 8080
 ```
 
-Then open <http://localhost:8080/>. To test a deep link, open <http://localhost:8080/index.html#stop=placeholder-stop-3>.
+Then open <http://localhost:8080/>. To test a deep link, open <http://localhost:8080/index.html#stop=lenoir-hall>.
 
 You can also edit files directly on GitHub (open a file, click the pencil icon, then **Commit changes**). The live site updates within a minute or two.
 
@@ -40,6 +40,7 @@ All tour content and settings live in **`data/stops.json`**. Keep the quotes, co
   "id": "example-site",             // URL slug: lowercase, hyphens, no spaces. Used in QR codes, so don't change it after printing.
   "order": 1,                       // Position in the route (1, 2, 3, …)
   "title": "Site name",
+  "placeholder": true,              // Shows the "PLACEHOLDER CONTENT" badge. Set to false once the content is verified.
   "lat": 35.9050, "lng": -79.0469,  // Decimal degrees. In Google Maps, right-click a spot to copy them.
   "era": "Decade or date range",
   "summary": "One or two sentences.",
@@ -61,7 +62,7 @@ All tour content and settings live in **`data/stops.json`**. Keep the quotes, co
 ```
 
 - **Add a stop:** copy an existing stop block, paste it after a comma, and give it a new `id` and `order`.
-- **Placeholder badge:** stops whose title contains "PLACEHOLDER" show a yellow "PLACEHOLDER CONTENT" badge. The badge goes away once you rename the stop.
+- **Placeholder badge:** stops with `"placeholder": true` show a yellow "PLACEHOLDER CONTENT" badge. Change it to `false` (or delete the line) once the stop's content has been verified. A stop whose title contains the word "PLACEHOLDER" also shows the badge.
 - `people`, `images`, and `sources` can be empty lists (`[]`). The section is then hidden.
 - The comments (`// …`) in the example above are for explanation only. JSON doesn't allow comments, so leave them out of the real file.
 

@@ -144,9 +144,9 @@ The site works in current versions of Safari (iOS and macOS), Chrome (Android an
 
 ## Known limits and future work
 
-- **Placeholder content:** all five stops are placeholders and must be replaced with researched, verified content ([content-guidelines.md](content-guidelines.md)).
+- **Placeholder content:** the five sites are set, but their text and images are placeholders that must be replaced with researched, verified content ([content-guidelines.md](content-guidelines.md)).
 - **Straight-line route:** the route line connects stops directly rather than following sidewalks ([how to fix](editing-guide.md#replace-the-route)).
-- **Map center:** the configured center (35.904613, −79.046761) is on South Campus near Kenan Stadium, so the placeholder stops cluster there. Real stop coordinates will set the actual tour area.
+- **Provisional route order:** the walking order (Unsung Founders Memorial → Steele Building → Lenoir Hall → the Pit → Old Chapel Hill Cemetery) is the shortest straight-line path, chosen only so the app has an order. The team hasn't decided the route yet.
 - **First visit needs a connection:** the site doesn't yet store tiles or content for full offline use. A service worker could add this later.
 - **Not yet tested on physical devices:** successful location fixes, Apple Maps handoff on iPhone, swipe gestures, and the tile-failure message were not verified on real phones.
 - **Assistive technology:** not yet tested with screen readers on real devices.

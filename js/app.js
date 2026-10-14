@@ -73,7 +73,9 @@
     return [];
   }
 
-  function isPlaceholder(stop) { return /placeholder/i.test(stop.title || ''); }
+  // A stop shows the "PLACEHOLDER CONTENT" badge until its content is verified:
+  // set "placeholder": false (or remove it) in stops.json once the stop is ready.
+  function isPlaceholder(stop) { return stop.placeholder === true || /placeholder/i.test(stop.title || ''); }
 
   function setHeaderHeight() {
     var h = document.querySelector('.app-header').getBoundingClientRect().height;
@@ -133,7 +135,13 @@
     window.addEventListener('online', function () { toast('Back online.', { duration: 2500 }); });
 
     // Keep the map sized correctly when the viewport or panel changes.
-    window.addEventListener('resize', function () { setHeaderHeight(); map.invalidateSize(); });
+    window.addEventListener('resize', function () {
+      setHeaderHeight();
+      map.invalidateSize();
+      // Re-fit the tour overview (e.g. after rotating a phone) unless the visitor has moved the map.
+      if (state.current === -1 && !state.viewTouched && state.bounds) fitAllStops();
+    });
+    map.on('dragstart zoomstart', function () { if (!state.fitting) state.viewTouched = true; });
   }
 
   function addMarkers() {
@@ -162,6 +170,17 @@
       bounds.push([stop.lat, stop.lng]);
     });
     state.bounds = L.latLngBounds(bounds);
+  }
+
+  // Fit every stop on screen, leaving room for the map buttons and the Start button.
+  function fitAllStops() {
+    state.fitting = true;
+    state.viewTouched = false;
+    state.map.fitBounds(state.bounds, {
+      paddingTopLeft: [24, 24], paddingBottomRight: [24, 90],
+      maxZoom: state.tour.zoom || 17, animate: false
+    });
+    state.fitting = false;
   }
 
   function labelMarker() {
@@ -635,7 +654,7 @@
       window.addEventListener('hashchange', handleHash);
 
       if (stopIdFromHash()) handleHash();
-      else { state.map.fitBounds(state.bounds.pad(0.25), { maxZoom: state.tour.zoom || 17 }); updateStartBtn(); }
+      else { fitAllStops(); updateStartBtn(); }
     }).catch(function (err) {
       console.error(err);
       fail('We couldn’t load the tour data (data/stops.json). If you opened this file directly from your computer, run it from a local web server instead — see the README.');
