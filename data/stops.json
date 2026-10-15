@@ -32,6 +32,16 @@
       "cta": "Explore the map"
     },
     "mapHint": "Explore the map. Tap a location to get more details.",
+    "iconLabels": {
+      "memorial": "Memorial",
+      "buildings": "Building",
+      "cemetery": "Cemetery",
+      "people": "People",
+      "carpenters": "Carpenters",
+      "masons": "Masons",
+      "painters": "Painters",
+      "seamstress": "Seamstresses"
+    },
     "buildingLayer": {
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME"

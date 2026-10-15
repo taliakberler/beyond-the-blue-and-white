@@ -31,6 +31,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 | `intro` | Paragraph shown at the top of the All stops page |
 | `welcome` | The intro (home) screen: `eyebrow` (small line at the top), `text` (the paragraph under the logo), `cta` (the button label) |
 | `mapHint` | The hint card on the map ("Explore the map. Tap a location to get more details.") |
+| `iconLabels` | The name shown for each icon in the map key, for example `"buildings": "Building"`. The key lists the icons in this order, but only those actually used by a stop. |
 | `about` | The About page (see below) |
 | `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
 | `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
@@ -108,7 +109,7 @@ Each stop's `"icon"` picks its pin. The icons are the team's designs:
 - `images/icons/source/` holds the icons exactly as delivered. Don't edit these by hand; replace them with new exports from the design file.
 - `images/icons/pins/` holds the pin versions, made by `npm run pins`. They're recolored so the navy parts show on the navy pins, and cropped to a square.
 
-**To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, then use `"icon": "<name>"` on a stop. Use `npm run stamp` too if you changed any CSS or JS.
+**To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, add its display name to `tour.iconLabels` (for the map key), then use `"icon": "<name>"` on a stop. Use `npm run stamp` too if you changed any CSS or JS.
 
 The current assignments (the Pit's memorial icon was chosen by the team): memorial for the Unsung Founders Memorial and the Pit, buildings for Steele Building and Lenoir Hall, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, people, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each stop's history.
 

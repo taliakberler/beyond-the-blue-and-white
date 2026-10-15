@@ -24,7 +24,7 @@
     homeBtn: $('go-home'), brandHome: $('brand-home'),
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
-    locateBtn: $('locate-btn'), mapHint: $('map-hint'),
+    locateBtn: $('locate-btn'), mapHint: $('map-hint'), mapHintText: $('map-hint-text'), mapLegend: $('map-legend'),
     aboutBtn: $('view-about'), aboutView: $('about-view'), aboutBody: $('about-body'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'), panelTop: document.querySelector('.panel-top'),
@@ -379,7 +379,7 @@
 
   // The hint card ("Tap a location…") shows on the map whenever no stop is open.
   function updateHint() {
-    var show = !els.mapView.hidden && state.current === -1 && !!els.mapHint.textContent;
+    var show = !els.mapView.hidden && state.current === -1 && !!els.mapHint.textContent.trim();
     els.mapHint.hidden = !show;
     document.body.classList.toggle('hint-visible', show);
     if (show) document.documentElement.style.setProperty('--hint-h', els.mapHint.offsetHeight + 'px');
@@ -394,7 +394,28 @@
     els.introEyebrow.hidden = !els.introEyebrow.textContent;
     els.introText.textContent = w.text || a.description || '';
     if (w.cta) els.introCta.textContent = w.cta;
-    els.mapHint.textContent = state.tour.mapHint || 'Tap a location on the map to get more details.';
+    els.mapHintText.textContent = state.tour.mapHint || 'Tap a location on the map to get more details.';
+    renderLegend();
+  }
+
+  // Map key in the hint card: one entry per icon that's actually used by a stop, in the order of
+  // tour.iconLabels (which also gives each icon its display name).
+  function renderLegend() {
+    var labels = state.tour.iconLabels || {};
+    var used = {};
+    state.stops.forEach(function (s) { used[String(s.icon || DEFAULT_ICON)] = true; });
+    var order = Object.keys(labels).filter(function (k) { return used[k]; })
+      .concat(Object.keys(used).filter(function (k) { return !(k in labels); }));
+    els.mapLegend.textContent = '';
+    order.forEach(function (key) {
+      var li = el('li', { 'class': 'legend-item' });
+      var swatch = el('span', { 'class': 'legend-pin', 'aria-hidden': 'true' });
+      swatch.appendChild(el('img', { src: iconFor({ icon: key }), alt: '' }));
+      li.appendChild(swatch);
+      li.appendChild(el('span', { 'class': 'legend-label' }, labels[key] || key.charAt(0).toUpperCase() + key.slice(1)));
+      els.mapLegend.appendChild(li);
+    });
+    els.mapLegend.hidden = !order.length;
   }
 
   /* ---------------- About ---------------- */
@@ -690,6 +711,11 @@
       setExpanded(true);
     });
     if ('ResizeObserver' in window) new ResizeObserver(syncPanelHeight).observe(els.panel);
+    // Keep the compass and scale clear of the hint card if its height changes (fonts loading, text wrapping).
+    if ('ResizeObserver' in window) new ResizeObserver(function () {
+      if (!els.mapHint.hidden) document.documentElement.style.setProperty('--hint-h', els.mapHint.offsetHeight + 'px');
+    }).observe(els.mapHint);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHint);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !els.panel.hidden) closePanel();
     });

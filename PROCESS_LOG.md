@@ -821,3 +821,28 @@ At 375px:
   - About lists the team in last-name order.
   - The selected pin (the Pit) has the coral outline and a 1.15× scale.
 
+---
+
+## 2026-10-14 — Map key for the pin icons
+
+**Directed by:** project team (asked for a legend for the icons in the white info card at the bottom of the screen). Implemented by Claude Code.
+
+### What changed
+- **The hint card now contains a map key:** below the "Explore the map…" text and a thin divider, each icon in use appears as a small navy circle with the icon, followed by its name in bold. Right now that's **Memorial, Building, Cemetery**.
+- **New `tour.iconLabels`** in `data/stops.json` gives each of the eight icons its display name: Memorial, Building, Cemetery, People, Carpenters, Masons, Painters, Seamstresses. It also sets the order of the key.
+- **`index.html`:** the hint card became a container with the text and a `<ul aria-label="Map key">`.
+- **`js/app.js`:**
+  - new `renderLegend()`
+  - the card's height is re-measured whenever it changes size and after fonts load, so the compass and scale always stay above it
+- **`css/styles.css`:** key styles; the card's maximum width grew from 420px to 460px.
+- **Docs:** the design doc, site overview, and editing guide (`iconLabels`, and the steps for adding an icon).
+
+### Decisions and reasons
+- **Decision:** show only the icons actually used by a stop, not all eight. **Why:** a map key should explain what's on the map. Unused entries would describe pins nobody can find. When the team assigns the trade icons, they'll appear in the key automatically.
+- **Decision:** keep the icon names in `data/stops.json`. **Why:** the wording (for example "Building" or "Buildings", "Seamstresses" or "Seamstress") is a content choice the team can change without editing code.
+
+### Verified
+- At 375px, the key shows Memorial, Building, and Cemetery on one row, with all icon images loaded, and no overlap with the compass, scale, or credit line.
+- **Longer key:** the five stops were temporarily given five different icons, and the page was reloaded. The key wrapped to two rows (a 147px card), and the compass and scale moved up above it, with no overlaps. The real icon assignments were then restored.
+- At 1280px, the key fits on one line in the centered card.
+

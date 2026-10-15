@@ -33,7 +33,7 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 - **The team's illustrated campus map** as the basemap, with nearby streets shown faintly around it.
 - **Icon pins** for each stop, using the team's icons (memorial, buildings, people, cemetery, and so on), on navy circles. There's no route line and no numbering: the sites can be explored in any order.
-- A **hint card** at the bottom ("Explore the map. Tap a location to get more details.") whenever no stop is open.
+- A **hint card** at the bottom ("Explore the map. Tap a location to get more details.") whenever no stop is open, with a **map key** showing what each pin icon means. The key lists only the icons currently used by a stop, so it grows automatically when new icons are assigned.
 - **Building names on hover or tap:** UNC's building footprints are invisible. Hovering (desktop) or tapping (phones) a building shows its name.
 - A round **"Show where I am"** button (top-right), which shows the visitor's position as a coral dot with an accuracy circle.
 - A **compass** and a **scale bar** (meters and feet) in the bottom-left corner. On phones they move up above the hint card or the stop preview, so nothing overlaps.
