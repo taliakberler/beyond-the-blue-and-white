@@ -13,7 +13,6 @@ All of the map's content comes from two data files:
 | File | Contents |
 |---|---|
 | `data/stops.json` | Site settings (title, map center, basemap, building layer, About page) and every stop's text, images, people, and sources |
-| `data/route.geojson` | The walking path, as a GeoJSON LineString |
 
 Changing those files changes the map, with no code edits needed.
 
@@ -21,46 +20,52 @@ Changing those files changes the map, with no code edits needed.
 
 ## What visitors see
 
-### Map view (default)
+The screens follow the team's wireframe (see [design-and-styles.md](design-and-styles.md#screens-and-layout)).
 
-- A street map of campus with **numbered markers** for each stop and a **dotted route line** connecting them in walking order.
+### Splash and intro (home)
+
+- A navy **splash screen** with the logo appears while the map's data loads.
+- On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, a coral **Explore the map** button, and links to **See all stops** and **About this project**. The wording is `tour.welcome` in `data/stops.json`.
+- **Stop links and QR codes skip the intro** and open their stop directly. The splash is skipped for them too, so visitors standing at a site get there as fast as possible.
+- The **Home** button (⌂) or the logo in the header returns to the intro.
+
+### Map
+
 - **The team's illustrated campus map** as the basemap, with nearby streets shown faintly around it.
+- **Icon pins** for each stop, using the team's icons (memorial, buildings, people, cemetery, and so on), on navy circles. There's no route line and no numbering: the sites can be explored in any order.
+- A **hint card** at the bottom ("Explore the map. Tap a location to get more details.") whenever no stop is open.
 - **Building names on hover or tap:** UNC's building footprints are invisible. Hovering (desktop) or tapping (phones) a building shows its name and year built.
-- A **"You are here"** button that shows the visitor's position as an orange dot with an accuracy circle.
-- A **"Start exploring"** button when no stop is open, which opens Stop 1.
-- Zoom buttons and map credits.
-- A **compass** (north is always up) and a **scale bar** in meters and feet, in the bottom-left corner. On phones they move up above the "Start exploring" button and the stop panel, so nothing overlaps.
+- A round **"Show where I am"** button (top-right), which shows the visitor's position as a coral dot with an accuracy circle.
+- A **compass** and a **scale bar** (meters and feet) in the bottom-left corner. On phones they move up above the hint card or the stop preview, so nothing overlaps.
+- **Zooming:** pinch on phones; zoom buttons appear on wider screens.
 
-### Stop panel
+### Stop preview and full story
 
-Opens when a visitor taps a marker, scans a QR code, or picks a stop from the list.
+- **Tapping a pin on a phone** opens a short navy **preview** at the bottom: the site's name (for example "STEELE BUILDING") and its era. The map stays visible, with the stop centered above it.
+- **Tap the preview, swipe it up, or press its handle** to open the **full story**, which fills the screen below the header. Swiping down returns to the preview, and swiping down again (or ⊗) closes it.
+- **Arriving from a stop link or QR code** opens the full story straight away.
+- **On desktop**, stops open as a 420px side panel with the full story.
+- The full story contains, in order:
+  1. a swipeable **image gallery** with captions and credits
+  2. the summary and history
+  3. **Key people** cards (photo, name, one-line description, optional "Learn more" link)
+  4. **Sources**
+  5. **Get walking directions here** (opens Apple Maps or Google Maps to this site), then **‹ Previous** and **Next ›** to browse the other sites
 
-- On phones it's a **bottom sheet** (the map stays visible above). On wider screens it's a **side panel**.
-- Contents, in order:
-  1. "Stop 3 of 5"
-  2. Title and era
-  3. Swipeable **image gallery** with captions and credits
-  4. Summary
-  5. History
-  6. **Key people**
-  7. **Sources**
-- Pinned at the bottom:
-  - **Previous** and **Next stop** buttons
-  - **Get walking directions**, which opens Apple Maps or Google Maps to the next stop
-- On the last stop, Next becomes **Back to Stop 1**, and the directions link points to the current stop.
+  Previous and Next wrap around, so every site is reachable from every other.
 
-### List view
+### All stops
 
-The **Map / List** switch in the header shows every stop in route order as a card (number, title, era, summary). Tapping a card opens that stop on the map.
+The **All stops** button (⋮≡ on phones) shows every stop in order as a card (pin icon and number, name, era, summary). Tapping a card opens that stop on the map.
 
 ### About page
 
-The **ⓘ** button in the header (or the address `…/#about`) opens the About page:
+The **ⓘ** button (or "About" on desktop, or the address `…/#about`) opens the About page:
 - the project's tagline and description
 - where it was made (the Visual Discovery Conference 2026 at UNC Chapel Hill) and the team's prompt (highlight Black history at UNC Chapel Hill)
 - credits for the team, coaches, and community advisors, then the map and software credits and a link to the project's code and documentation
 
-Everything on it comes from `tour.about` in `data/stops.json`. Pressing ⓘ again, or Map or List, leaves the About page.
+Everything on it comes from `tour.about` in `data/stops.json`.
 
 ---
 
@@ -90,15 +95,14 @@ index.html
  └─ js/app.js
      ├─ fetch data/stops.json            → title, stops, settings
      ├─ draw map: faded OpenStreetMap streets + illustrated-map tiles (tiles/team-map)
-     ├─ draw numbered markers
-     ├─ fetch data/route.geojson         → dotted route line
+     ├─ draw icon pins (images/icons/pins)
      ├─ fetch UNC building layer (optional, in background) → invisible hover/tap targets
      ├─ build List view
      └─ if the address has #stop=…, open that stop; otherwise fit all stops on screen
 ```
 
 - If `stops.json` can't load, the page shows a clear error message instead of a blank screen.
-- If the route or building layer can't load, the map works without them.
+- If the building layer can't load, the map works without it.
 - Data files are fetched with `cache: 'no-cache'`: the browser checks with the server for a newer version on every visit, so content updates appear right away instead of after the browser's cache expires. Leaflet and the images are cached normally.
 
 All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the site works at the root of a domain or inside any subfolder.
@@ -109,12 +113,12 @@ All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the s
 
 | Area | What's built in |
 |---|---|
-| **Keyboard** | Every control is reachable with Tab. Map markers can be focused and opened with Enter or Space. Escape closes the stop panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
+| **Keyboard** | Every control is reachable with Tab. Stop pins can be focused and opened with Enter or Space; on the map, the amber focus ring has a navy surround so it shows against the light illustration. Escape closes the stop panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
 | **Focus** | A thick orange focus ring on every focused element. Opening a stop moves focus into its panel; closing returns focus to that stop's marker. |
-| **Screen readers** | Markers are announced as buttons ("Stop 3: …"). The Map/List switch reports its state (`aria-pressed`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
+| **Screen readers** | Pins are announced as buttons ("Stop 3: Lenoir Hall"). The splash announces "Loading the map…". The header's Map, All stops, and About buttons report which is active (`aria-pressed`). The stop sheet's handle reports whether the full story is open (`aria-expanded`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
 | **Images** | Every image has alt text from `stops.json`, and images that fail to load are replaced by a labeled text box. |
 | **Text** | 17px base size in `rem` units, so it follows browser text-size settings. Zooming the page isn't blocked. |
-| **Color** | All text/background pairs meet WCAG 2.1 AA contrast in light and dark mode ([measurements](design-and-styles.md#measured-contrast)). Information is never conveyed by color alone: the active stop is also enlarged and named in the panel. |
+| **Color** | All text/background pairs meet WCAG 2.1 AA contrast ([measurements](design-and-styles.md#measured-contrast)). The coral buttons pass at the large-text level, so their labels are always large and bold. Information is never conveyed by color alone: the active stop is also enlarged and named in the sheet. |
 | **Motion** | Animations are switched off when the device's "reduce motion" setting is on. |
 | **Touch** | All tap targets are at least 44×44px. |
 
@@ -156,8 +160,6 @@ The site works in current versions of Safari (iOS and macOS), Chrome (Android an
 ## Known limits and future work
 
 - **Placeholder content:** the five sites are set, but their text and images are placeholders that must be replaced with researched, verified content ([content-guidelines.md](content-guidelines.md)).
-- **Straight-line route:** the route line connects stops directly rather than following sidewalks ([how to fix](editing-guide.md#replace-the-route)).
-- **Provisional route order:** the walking order (Unsung Founders Memorial → Steele Building → Lenoir Hall → the Pit → Old Chapel Hill Cemetery) is the shortest straight-line path, chosen only so the app has an order. The team hasn't decided the route yet.
 - **First visit needs a connection:** the site doesn't yet store tiles or content for full offline use. A service worker could add this later.
 - **Not yet tested on physical devices:** successful location fixes, Apple Maps handoff on iPhone, swipe gestures, and the tile-failure message were not verified on real phones.
 - **Assistive technology:** not yet tested with screen readers on real devices.

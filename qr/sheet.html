@@ -17,8 +17,6 @@
           display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
           border: 2px solid #000; page-break-after: always; break-after: page; }
   .tour { margin: 0; font-family: "Gasoek One", "Arial Black", sans-serif; font-size: 22pt; font-weight: 400; letter-spacing: 0.02em; }
-  .num { margin: 0.2in 0 0.1in; width: 1.3in; height: 1.3in; border-radius: 50%; background: #000; color: #fff;
-         display: grid; place-items: center; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 64pt; font-weight: 700; line-height: 1; }
   h1 { margin: 0 0 0.2in; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 28pt; font-weight: 700; line-height: 1.15; }
   img { width: 5in; height: 5in; image-rendering: pixelated; }
   .cta { margin: 0.15in 0 0.05in; font-size: 18pt; font-weight: 700; }
@@ -28,59 +26,54 @@
 </style>
 </head>
 <body>
-<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per stop. Print at 100% scale. Codes point to <code>https://taliakberler.github.io/beyond-the-blue-and-white</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
+<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per site. Print at 100% scale. Codes point to <code>https://taliakberler.github.io/beyond-the-blue-and-white</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
     <h1>A digital map of Black history at UNC Chapel Hill</h1>
     <img src="map.png" alt="QR code linking to the Beyond the Blue and White map">
     <p class="cta">Scan with your phone camera to explore the map</p>
-    <p class="detail">5 stops · free · no app needed</p>
+    <p class="detail">5 sites · free · no app needed</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/</p>
   </section>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
-    <div class="num" aria-hidden="true">1</div>
-    <h1>Stop 1: The Unsung Founders Memorial</h1>
-    <img src="unsung-founders-memorial.png" alt="QR code linking to stop 1, The Unsung Founders Memorial">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>The Unsung Founders Memorial</h1>
+    <img src="unsung-founders-memorial.png" alt="QR code linking to The Unsung Founders Memorial">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=unsung-founders-memorial</p>
   </section>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
-    <div class="num" aria-hidden="true">2</div>
-    <h1>Stop 2: Steele Building</h1>
-    <img src="steele-building.png" alt="QR code linking to stop 2, Steele Building">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>Steele Building</h1>
+    <img src="steele-building.png" alt="QR code linking to Steele Building">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=steele-building</p>
   </section>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
-    <div class="num" aria-hidden="true">3</div>
-    <h1>Stop 3: Lenoir Hall</h1>
-    <img src="lenoir-hall.png" alt="QR code linking to stop 3, Lenoir Hall">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>Lenoir Hall</h1>
+    <img src="lenoir-hall.png" alt="QR code linking to Lenoir Hall">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=lenoir-hall</p>
   </section>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
-    <div class="num" aria-hidden="true">4</div>
-    <h1>Stop 4: The Pit</h1>
-    <img src="the-pit.png" alt="QR code linking to stop 4, The Pit">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>The Pit</h1>
+    <img src="the-pit.png" alt="QR code linking to The Pit">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=the-pit</p>
   </section>
 
   <section class="sign">
     <p class="tour">Beyond the Blue and White</p>
-    <div class="num" aria-hidden="true">5</div>
-    <h1>Stop 5: Old Chapel Hill Cemetery</h1>
-    <img src="old-chapel-hill-cemetery.png" alt="QR code linking to stop 5, Old Chapel Hill Cemetery">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>Old Chapel Hill Cemetery</h1>
+    <img src="old-chapel-hill-cemetery.png" alt="QR code linking to Old Chapel Hill Cemetery">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=old-chapel-hill-cemetery</p>
   </section>
 </body>

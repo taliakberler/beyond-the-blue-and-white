@@ -5,60 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Beyond the Blue and White — A Digital Map</title>
   <meta name="description" content="A free multimedia digital map of Black history at UNC Chapel Hill, with the sites, events, and people significant to that history across campus, and resources for learning more.">
-  <meta name="theme-color" content="#1f2933" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#12161b" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b5c8a'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#172849">
+  <link rel="icon" href="images/icons/pins/memorial.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/gasoek-one-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/lato-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=ec929f11">
-  <link rel="stylesheet" href="css/styles.css?v=8d9aefdd">
+  <link rel="stylesheet" href="css/styles.css?v=71717693">
 </head>
-<body>
+<body class="is-loading">
   <a class="skip-link" href="#main">Skip to map content</a>
 
-  <header class="app-header">
-    <div class="brand">
-      <h1 id="tour-title">Beyond the Blue and White</h1>
-      <p id="tour-subtitle" class="subtitle">A digital map of Black history at UNC Chapel Hill</p>
-    </div>
-    <div class="header-actions">
-      <div class="view-switch" role="group" aria-label="Choose view">
-        <button type="button" id="view-map" class="seg" aria-pressed="true">Map</button>
-        <button type="button" id="view-list" class="seg" aria-pressed="false">List</button>
-      </div>
-      <button type="button" id="view-about" class="icon-btn" aria-pressed="false" aria-label="About this project" title="About">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+  <!-- Splash: shown while the map's data loads -->
+  <div id="splash" class="splash" role="status" aria-live="polite">
+    <img src="images/logo/btbb-stacked-carolinablue.svg" alt="Beyond the Blue and White" class="splash-logo" width="280" height="170">
+    <span class="visually-hidden">Loading the map…</span>
+  </div>
+
+  <header class="app-header" hidden>
+    <h1 class="brand">
+      <button type="button" id="brand-home" class="brand-btn" aria-label="Beyond the Blue and White — home">
+        <img src="images/logo/btbb-horizontal-navy.svg" alt="" class="brand-logo" width="1158" height="79">
       </button>
-      <button type="button" id="theme-toggle" class="icon-btn" aria-label="Color theme: automatic">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+    </h1>
+    <nav class="header-nav" aria-label="Main">
+      <button type="button" id="view-map" class="nav-link" aria-pressed="true">Map</button>
+      <button type="button" id="view-list" class="nav-link" aria-pressed="false" aria-label="All stops">
+        <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="4.5" cy="6" r="1.6" fill="currentColor"/><circle cx="4.5" cy="12" r="1.6" fill="currentColor"/><circle cx="4.5" cy="18" r="1.6" fill="currentColor"/></svg>
+        <span class="nav-text" aria-hidden="true">All stops</span>
       </button>
-    </div>
+      <button type="button" id="view-about" class="nav-link" aria-pressed="false" aria-label="About this project">
+        <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+        <span class="nav-text" aria-hidden="true">About</span>
+      </button>
+      <button type="button" id="go-home" class="nav-link icon-only" aria-label="Home">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26"><path d="M3.5 11 12 4l8.5 7M6 9.5V20h4.5v-5.5h3V20H18V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </button>
+    </nav>
   </header>
 
   <main id="main">
-    <section id="map-view" class="view" aria-label="Map">
-      <div id="map" role="application" aria-label="Map of stops. Tab to reach numbered stop markers; press Enter to open a stop."></div>
+    <!-- Intro / home screen -->
+    <section id="intro-view" class="view intro-view" aria-labelledby="intro-heading" hidden>
+      <div class="intro-inner">
+        <p id="intro-eyebrow" class="intro-eyebrow"></p>
+        <h2 id="intro-heading" class="intro-logo">
+          <img src="images/logo/btbb-stacked-carolinablue.svg" alt="Beyond the Blue and White" width="280" height="170">
+        </h2>
+        <p id="intro-text" class="intro-text"></p>
+        <button type="button" id="intro-cta" class="cta">Explore the map</button>
+        <p class="intro-links">
+          <button type="button" id="intro-list" class="text-link">See all stops</button>
+          <span aria-hidden="true">·</span>
+          <button type="button" id="intro-about" class="text-link">About this project</button>
+        </p>
+      </div>
+    </section>
+
+    <section id="map-view" class="view" aria-label="Map" hidden>
+      <div id="map" role="application" aria-label="Map of sites. Tab to reach the pins; press Enter to open a site."></div>
 
       <div class="map-tools">
-        <button type="button" id="locate-btn" class="tool-btn">
-          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 3h-2.07A7 7 0 0 0 13 5.07V3h-2v2.07A7 7 0 0 0 5.07 11H3v2h2.07A7 7 0 0 0 11 18.93V21h2v-2.07A7 7 0 0 0 18.93 13H21v-2Zm-9 6a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
-          <span>You are here</span>
+        <button type="button" id="locate-btn" class="round-btn" aria-label="Show where I am" title="Show where I am">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 3h-2.07A7 7 0 0 0 13 5.07V3h-2v2.07A7 7 0 0 0 5.07 11H3v2h2.07A7 7 0 0 0 11 18.93V21h2v-2.07A7 7 0 0 0 18.93 13H21v-2Zm-9 6a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>
         </button>
       </div>
 
-      <button type="button" id="start-btn" class="start-btn" hidden>Start exploring</button>
+      <p id="map-hint" class="map-hint" hidden></p>
     </section>
 
-    <section id="list-view" class="view" aria-labelledby="list-heading" hidden>
-      <div class="list-inner">
+    <section id="list-view" class="view page-view" aria-labelledby="list-heading" hidden>
+      <div class="page-inner">
         <h2 id="list-heading">All stops</h2>
-        <p id="tour-intro" class="intro"></p>
+        <p id="tour-intro" class="page-intro"></p>
         <ol id="stop-list" class="stop-list"></ol>
       </div>
     </section>
 
-    <section id="about-view" class="view" aria-labelledby="about-heading" hidden>
-      <div class="list-inner about">
+    <section id="about-view" class="view page-view" aria-labelledby="about-heading" hidden>
+      <div class="page-inner about">
         <h2 id="about-heading">About this project</h2>
         <div id="about-body"></div>
       </div>
@@ -67,45 +92,43 @@
 
   <aside id="panel" class="panel" aria-labelledby="panel-title" hidden>
     <div class="panel-top">
-      <button type="button" id="panel-expand" class="handle" aria-expanded="false" aria-controls="panel">
+      <button type="button" id="panel-expand" class="handle" aria-expanded="false" aria-controls="panel-body">
         <span class="handle-bar" aria-hidden="true"></span>
-        <span class="visually-hidden" id="panel-expand-label">Expand panel</span>
+        <span class="visually-hidden" id="panel-expand-label">Show the full story</span>
       </button>
-      <div class="panel-heading">
-        <p class="stop-count" id="stop-count">Stop 1 of 5</p>
-        <button type="button" id="panel-close" class="icon-btn" aria-label="Close stop details">
-          <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>
-        </button>
-      </div>
+      <button type="button" id="panel-close" class="close-btn" aria-label="Close stop details">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <h2 id="panel-title" class="panel-title">
+        <span id="panel-name" class="stop-name"></span>
+      </h2>
+      <p id="panel-era" class="era"></p>
     </div>
 
     <div class="panel-body" id="panel-body" tabindex="-1">
-      <h2 id="panel-title" class="panel-title"></h2>
-      <p id="panel-era" class="era"></p>
-
       <div id="gallery" class="gallery"></div>
 
       <p id="panel-summary" class="summary"></p>
       <div id="panel-history" class="history"></div>
 
       <section id="people-section" aria-labelledby="people-heading">
-        <h3 id="people-heading">Key people</h3>
+        <h3 id="people-heading" class="section-heading">Key people</h3>
         <ul id="panel-people" class="people"></ul>
       </section>
 
       <section id="sources-section" aria-labelledby="sources-heading">
-        <h3 id="sources-heading">Sources</h3>
+        <h3 id="sources-heading" class="section-heading">Sources</h3>
         <ol id="panel-sources" class="sources"></ol>
       </section>
-    </div>
 
-    <nav class="panel-nav" aria-label="Stop navigation">
-      <a id="directions-link" class="directions" href="#" target="_blank" rel="noopener">Get walking directions</a>
-      <div class="prev-next">
-        <button type="button" id="prev-btn" class="nav-btn">‹ Previous</button>
-        <button type="button" id="next-btn" class="nav-btn primary">Next stop ›</button>
-      </div>
-    </nav>
+      <nav class="panel-nav" aria-label="Stop navigation">
+        <a id="directions-link" class="directions" href="#" target="_blank" rel="noopener">Get walking directions</a>
+        <div class="prev-next">
+          <button type="button" id="prev-btn" class="nav-btn">‹ Previous</button>
+          <button type="button" id="next-btn" class="nav-btn primary">Next ›</button>
+        </div>
+      </nav>
+    </div>
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
@@ -115,6 +138,6 @@
   </noscript>
 
   <script src="js/vendor/leaflet/leaflet.js?v=5a640ff8"></script>
-  <script src="js/app.js?v=dd65e20f"></script>
+  <script src="js/app.js?v=38940c48"></script>
 </body>
 </html>

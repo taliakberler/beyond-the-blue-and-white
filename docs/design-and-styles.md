@@ -2,9 +2,7 @@
 
 All styling lives in one file, [`css/styles.css`](../css/styles.css), with no CSS framework or build step. Colors, type sizes, and key dimensions are **CSS custom properties (variables)** declared at the top of the file, so the look can change without touching layout code.
 
-> **Status:**
-> - **Typefaces are decided** (2026-10-14): Gasoek One for the logo, Oswald Bold for headers, and Lato Regular for body copy.
-> - **The color palette is still a neutral placeholder** (slate grays with a muted blue and a burnt-orange accent), chosen to be easy to read outdoors until final colors are decided. It is not a UNC brand palette.
+> **Status:** the interface follows the team's **wireframe** (2026-10-14): a navy interface with fog text, Carolina Blue and sky-blue accents, a coral call to action, and the team's logo and icons. The typefaces are Gasoek One (logo), Oswald Bold (headers), and Lato (body copy).
 
 ---
 
@@ -12,64 +10,55 @@ All styling lives in one file, [`css/styles.css`](../css/styles.css), with no CS
 
 | Goal | How it's met |
 |---|---|
-| Readable outdoors in sunlight | High-contrast text (14:1+), bold markers, 17px base font, solid surfaces (no translucency behind text) |
-| Easy to use one-handed while walking | All tap targets at least 44×44px; key navigation (Previous / Next) pinned at the bottom of the panel within thumb reach |
+| Faithful to the team's wireframe | Splash, intro, map, preview sheet, full story, and Key People screens built from the wireframe, using the team's own logo and icon files |
+| Readable outdoors in sunlight | Fog text on navy (12.5:1), large type (17px base), solid surfaces (no translucency behind text) |
+| Easy to use one-handed while walking | All tap targets at least 44×44px. A stop opens as a short preview at the bottom, within thumb reach. |
 | Phone-first | Designed at 375px wide first; the desktop layout is an enhancement at 900px and up |
-| Accessible | WCAG 2.1 AA contrast in both themes, visible focus rings, reduced-motion support (see [site-overview.md](site-overview.md#accessibility)) |
-| Easy to rebrand | Every color comes from a variable; changing the variables changes the whole site |
+| Accessible | WCAG 2.1 AA contrast, visible amber focus rings, screen-reader labels, reduced-motion support (see [site-overview.md](site-overview.md#accessibility)) |
 
 ---
 
 ## Color tokens
 
-Each token has a light value and a dark value. Dark values apply automatically when the device is in dark mode, or when the visitor picks dark with the theme button.
-
-| Token | Light | Dark | Used for |
-|---|---|---|---|
-| `--color-bg` | `#f4f6f8` | `#12161b` | Page background, List view |
-| `--color-surface` | `#ffffff` | `#1b2129` | Panel, cards, map buttons |
-| `--color-surface-2` | `#e9edf1` | `#252d37` | Key-people boxes, image backgrounds |
-| `--color-text` | `#141a21` | `#eef2f6` | Body text |
-| `--color-text-muted` | `#47525e` | `#b3bdc8` | Era, credits, secondary text |
-| `--color-border` | `#c3ccd5` | `#3a4552` | Dividers, card outlines, sheet handle |
-| `--color-primary` | `#2b5c8a` | `#8cb8e6` | Markers, buttons, links, list numbers |
-| `--color-primary-strong` | `#1f4568` | `#b5d3f2` | Reserved for hover/pressed states |
-| `--color-on-primary` | `#ffffff` | `#0d1620` | Text on primary-colored fills |
-| `--color-accent` | `#b4541a` | `#f0a46c` | Active stop marker, "you are here" dot |
-| `--color-on-accent` | `#ffffff` | `#1a0e05` | Text on accent fills |
-| `--color-focus` | `#b4541a` | `#f0a46c` | Keyboard focus ring |
-| `--color-header-bg` | `#1f2933` | `#0b0e12` | Top bar |
-| `--color-header-text` | `#ffffff` | `#eef2f6` | Top bar text |
-| `--color-placeholder-badge` | `#fff3c4` | `#4a3f12` | "PLACEHOLDER CONTENT" badge |
-
-### Map symbol tokens
-
-The illustrated map stays light in both themes, so the symbols drawn on it keep the same colors in dark mode. These tokens are defined once and intentionally aren't overridden by the dark-mode blocks.
+The palette comes from the team's files: the logo (Carolina Blue `#4b9cd3`, fog `#eceded`), the icons (navy `#172849`, sky `#87aed0`), and colors sampled from the wireframe (navy `#182848`, coral `#d85c54`).
 
 | Token | Value | Used for |
 |---|---|---|
-| `--color-map-bg` | `#9fc6e0` | Map background (the illustration's own blue) |
-| `--color-map-marker` | `#2b5c8a` | Stop markers and the dotted route line |
-| `--color-map-marker-text` | `#ffffff` | Numbers on stop markers (7.0:1) |
-| `--color-map-active` | `#b4541a` | Active stop marker, "You are here" dot |
-| `--color-map-active-text` | `#ffffff` | Number on the active marker (5.0:1) |
-| `--color-map-ring` | `#ffffff` | White ring around markers and the location dot |
+| `--navy` | `#172849` | The interface background: header, intro, pages, stop sheet, pins |
+| `--navy-2` | `#1f3560` | Raised surfaces on navy (list cards, About cards) |
+| `--navy-3` | `#2a4373` | Borders and hover states on navy |
+| `--fog` | `#eceded` | Text and outlines on navy, the hint card, pin rings |
+| `--fog-muted` | `#c3cad6` | Secondary text on navy (captions, credits, sources) |
+| `--carolina` | `#4b9cd3` | Era and date lines, links on navy |
+| `--sky` | `#87aed0` | Key People cards |
+| `--coral` | `#d85c54` | Call to action ("Explore the map"), "Next ›", the active pin ring, the "You are here" dot |
+| `--logo-navy` | `#11294b` | The logo files' navy (links in the map credit line) |
+| `--color-focus` | `#f6c34a` | Keyboard focus ring (amber, visible on navy, fog, and the map) |
+| `--color-placeholder-badge` | `#f6c34a` | "PLACEHOLDER CONTENT" badge |
+| `--color-map-bg` | `#9fc6e0` | The illustrated map's own background blue |
+
+The interface uses this navy palette in both light and dark device settings. (The earlier light/dark theme switch was removed, since the wireframe's design is navy throughout.) The illustrated map is light, so the symbols drawn on it (pins, compass, scale) are navy and fog.
+
+### Note on the two navies
+The logo files use `#11294b`; the icons and wireframe use `#172849`/`#182848`. The interface uses the icons' navy, which matches the wireframe. The logo files appear as delivered.
 
 ### Measured contrast
 
-Ratios were calculated with the WCAG 2.1 relative-luminance formula. AA requires 4.5:1 for normal text and 3:1 for large text and interface parts.
+Ratios were calculated with the WCAG 2.1 relative-luminance formula. AA requires 4.5:1 for normal text and 3:1 for large text (24px, or 18.7px bold) and interface parts.
 
-| Pair | Light | Dark |
+| Pair | Ratio | Result |
 |---|---|---|
-| Body text on surface | 17.5:1 | 14.4:1 |
-| Muted text on surface | 8.0:1 | 8.5:1 |
-| Muted text on surface-2 | 6.8:1 | 7.3:1 |
-| Primary (links) on surface | 7.0:1 | 7.8:1 |
-| Text on primary buttons and markers | 7.0:1 | 8.8:1 |
-| Text on accent (active marker) | 5.0:1 | 9.2:1 |
-| Header text on header | 14.8:1 | 17.2:1 |
-
-Every pair passes AA, and most pass AAA (7:1).
+| Fog text on navy | 12.5:1 | AAA |
+| Muted fog on navy | 8.9:1 | AAA |
+| Carolina Blue (era, links) on navy | 4.9:1 | AA |
+| Navy text on sky (Key People cards) | 6.3:1 | AA |
+| Navy text on fog (hint card, toasts) | 12.5:1 | AAA |
+| Fog text on coral (CTA, "Next ›") | 3.2:1 | **AA for large text only.** These labels are always large and bold (Oswald 700, 20–26px). Don't use coral behind small text. |
+| Navy pin against the map blue | 8.1:1 | Interface part: passes |
+| Coral active ring against navy | 3.9:1 | Interface part: passes |
+| Carolina Blue on the raised surface (`--navy-2`) | 4.0:1 | **Fails AA for normal text**, so Carolina Blue text is only placed on `--navy` (the All stops cards use `--navy` for this reason) |
+| Amber focus ring on navy | 8.9:1 | Passes |
+| Amber focus ring on the map blue | 1.1:1 | Too faint alone, so on the map the ring gets a navy surround (`box-shadow`) |
 
 ---
 
@@ -79,10 +68,10 @@ Every pair passes AA, and most pass AAA (7:1).
 
 | Role | Typeface | Weight | Where it's used |
 |---|---|---|---|
-| **Logo** | [Gasoek One](https://fonts.google.com/specimen/Gasoek+One) | Regular (400, the only weight) | Site name in the header; site name at the top of each printed QR sign |
-| **Headers** | [Oswald](https://fonts.google.com/specimen/Oswald) | Bold (700) | Stop titles, section headings ("Key people", "Sources", "All stops"), list-card titles, numbers in map markers and list cards, stop titles and numbers on QR signs |
-| **Body copy** | [Lato](https://fonts.google.com/specimen/Lato) | Regular (400) | All running text: summaries, history, captions, credits, people, sources, buttons, and messages |
-| *Body emphasis* | Lato | Bold (700) | Bold text within body copy and buttons (the summary line, people's names, button labels). Included so bold text uses Lato's real bold face rather than a browser-generated imitation. |
+| **Logo** | [Gasoek One](https://fonts.google.com/specimen/Gasoek+One) | Regular (400) | The logo *files* use it. On the site, the logo appears as the team's SVG logo files, plus the site name on printed QR signs. |
+| **Headers** | [Oswald](https://fonts.google.com/specimen/Oswald) | Bold (700) | Page headings ("ALL STOPS", "ABOUT THIS PROJECT"), the call-to-action and navigation buttons, and the About tagline |
+| **Body copy** | [Lato](https://fonts.google.com/specimen/Lato) | Regular (400) | All running text |
+| *Body emphasis* | Lato | Bold (700) | Site names in the sheet ("STEELE BUILDING", uppercase, as in the wireframe), "KEY PEOPLE" and "SOURCES" headings, people's names, the summary line, and button labels |
 
 ### Tokens
 
@@ -93,54 +82,47 @@ Every pair passes AA, and most pass AAA (7:1).
 | `--font-body` | `"Lato", <system stack>` |
 | `--font-system` | `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` |
 
-The fallbacks after each brand font are similar in shape (heavy for the logo, condensed for headers), so the layout holds steady while fonts load, or if a font file can't load.
-
 ### How the fonts are loaded
 
-- **Self-hosted:** the font files live in [`fonts/`](../fonts/) and are declared with `@font-face` at the top of `css/styles.css`. Visitors' browsers never contact Google or any other font service. This keeps the privacy promise in [software-and-credits.md](software-and-credits.md), and fonts keep working wherever the site is hosted.
-- **Latin subset only:** each file covers the basic and Western European Latin characters (U+0000–00FF plus common punctuation such as curly quotes and dashes). The four files total about **54 KB**. Characters outside that range (for example, some Eastern European letters in a name) are drawn in the fallback font. If content needs them, add the `latin-ext` files from Google Fonts.
-- **`font-display: swap`:** text appears immediately in the fallback font and switches to the brand font as soon as it arrives, so slow connections never leave visitors staring at blank text.
-- **Preloaded:** the logo and body fonts are preloaded in `index.html`, since they're visible on first paint.
-- **Weights:** only 400 and 700 are loaded. Any bold style in the CSS uses `font-weight: 700`.
+- **Self-hosted** in [`fonts/`](../fonts/) and declared with `@font-face` at the top of `css/styles.css`. Visitors' browsers never contact a font service.
+- **Latin subset only**, about 54 KB for all four files. Characters outside basic and Western European Latin fall back to a system font.
+- **`font-display: swap`**: text appears immediately in the fallback font and switches when the brand font arrives.
+- **Preloaded**: Gasoek One and both Lato weights are preloaded in `index.html`, since they're visible on first paint.
 
 ### Sizes
 
 | Token | Value | Notes |
 |---|---|---|
-| `--fs-base` | 17px (1.0625rem) | Slightly larger than the usual 16px, for outdoor reading |
-| `--fs-small` | 15px | Captions, credits, secondary text (never smaller than 13px anywhere) |
-| `--fs-h1` | 18px (20px on desktop) | Logo in the header |
-| `--fs-h2` | 24px | Stop title |
-| `--fs-h3` | 18px | Section headings ("Key people", "Sources") |
+| `--fs-base` | 17px | Body text, slightly larger than usual for outdoor reading |
+| `--fs-small` | 15px | Secondary text |
+| `--fs-xs` | 13px | Captions, credits, sources, person descriptions (the smallest size used) |
+| `--fs-h2` | 24px | Page headings |
+| `--fs-h3` | 17px | Section headings ("KEY PEOPLE", "SOURCES") |
 
-Line height is 1.55 for body text, 1.2 for headings, and 1.3 for the two-line logo. All sizes use `rem`, so they scale with the visitor's browser text-size setting.
-
-### Using the fonts elsewhere
-
-The same three typefaces are free to download from Google Fonts for print and motion materials. They're all under the SIL Open Font License, which allows commercial and print use. The QR sign sheet (`qr/sheet.html`) already uses them.
+All sizes use `rem`, so they scale with the visitor's browser text-size setting.
 
 ---
 
-## Layout and breakpoints
+## Screens and layout
 
-| Width | Layout |
-|---|---|
-| **Under 420px** (small phones) | Header subtitle hidden; Map/List buttons tightened |
-| **Under 900px** (phones, small tablets) | Stop details open as a **bottom sheet** covering 58% of the screen, with the map visible above. Tap the handle or swipe up to expand it to nearly full height; swipe down to collapse or close. |
-| **900px and up** (tablets, desktop) | Stop details open as a **420px side panel** on the right; map controls shift left to stay visible |
+| Screen | Phone (under 900px) | Desktop (900px and up) |
+|---|---|---|
+| **Splash** | Full-screen navy with the stacked Carolina Blue logo while the map's data loads (held for at least 0.9 s on the home page; skipped immediately for stop links) | Same |
+| **Intro (home)** | Full-screen navy: tagline, stacked logo, the project description, a coral **Explore the map** button, and links to "See all stops" and "About this project" | Same, centered in a 560px column |
+| **Map** | Navy header (horizontal navy logo, with All stops ⋮≡, About ⓘ, and Home ⌂ icons), the illustrated map with icon pins (no route line or numbers), a fog **hint card** at the bottom, the compass and scale bottom-left, and "Show where I am" top-right. Zoom by pinching (the zoom buttons are hidden at 640px and below). | Header shows text links (Map, All stops, About) and Home. Zoom buttons are shown. |
+| **Stop preview** | Tapping a pin opens a short navy sheet: drag handle, ⊗ close, the site name, and the era | (Desktop always shows the full panel) |
+| **Full story** | Tap the preview, swipe up, or open a stop link: the sheet fills the screen below the header, with the gallery, caption and credit, summary, history, KEY PEOPLE, SOURCES, walking directions to the site, and Previous / Next to browse other sites | A 420px navy side panel on the right with the same content |
+| **All stops** | Navy page of stop cards (pin icon, uppercase name, era in Carolina Blue, summary) | Same, in a 760px column |
+| **About** | Navy page: tagline, description, project card, and credits | Same |
 
-Other dimensions:
+Key dimensions:
 
 | Token | Value | Purpose |
 |---|---|---|
 | `--tap` | 44px | Minimum size of every button and control |
-| `--radius` | 14px | Corner rounding on cards, images, and the sheet |
-| `--panel-w` | 420px | Desktop side-panel width |
-| `--header-h` | Measured by JavaScript | Lets the panel and messages sit just below the header |
-
-When a stop opens, the map centers it in the **visible** part of the map (above the sheet on phones, left of the panel on desktop), not behind the panel.
-
-The site respects the iPhone notch and home-indicator areas (`env(safe-area-inset-*)`).
+| `--radius` | 14px | Cards on the All stops and About pages. The sheet uses 20px top corners; the CTA, buttons, and people cards use 4px, as in the wireframe. |
+| `--panel-w` | 420px | Desktop side panel |
+| `--header-h`, `--panel-h`, `--hint-h` | Measured by JavaScript | Keep the map's corner controls clear of the header, the sheet, and the hint card |
 
 ---
 
@@ -148,48 +130,42 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 
 | Component | Notes |
 |---|---|
-| **Header** | Dark bar with the site name, subtitle, a Map/List switch (pill-shaped toggle), an About button (ⓘ), and a theme button |
-| **Stop markers** | 36px numbered circles inside a 44px tap area, with a white ring and drop shadow so they stand out against the map. The active stop turns accent orange and enlarges slightly. |
-| **Route line** | 5px dotted line in the primary color, drawn beneath the markers |
-| **Basemap** | The team's illustrated campus map (tiles) over OpenStreetMap streets that are grayscale and 38% opaque on the illustration's blue. The illustration's edge follows its drawing and fades softly into the streets. |
-| **Building info** | Invisible building footprints from UNC. Hovering (desktop) or tapping (phones) a building shows a tooltip with its name in bold and "Built YEAR" below. No outline or focus ring is ever drawn, because the footprints don't align exactly with the illustration. |
-| **Map button** | White pill button ("You are here") in the top-right corner |
-| **"Start exploring" button** | Large pill at the bottom of the map, shown only when no stop is open; opens Stop 1 |
-| **Compass and scale** | Bottom-left of the map: a north-pointing compass above a scale bar in meters and feet. Both keep their light styling in dark mode, since they sit on the light map. On phones they rise above the "Start exploring" button and the stop panel so nothing overlaps. |
-| **About page** | Opened with the ⓘ button or the `#about` link: the project's tagline and description, the conference and team prompt, and credits for the team, coaches, and community advisors (two columns of name cards on phones, more on wider screens) |
-| **Stop panel** | Stop count → title → era → image gallery → summary (bold) → history → key people (shaded boxes) → sources (numbered list) → pinned navigation |
-| **Image gallery** | Full-width 4:3 images that swipe sideways and snap into place, with previous/next buttons and an "1 / 2" counter below |
-| **Messages (toasts)** | Dark rounded bar just below the header, announced to screen readers. Messages disappear after 6–9 seconds. |
-| **Placeholder badge** | Pale yellow pill reading "PLACEHOLDER CONTENT", shown on any stop marked `"placeholder": true` in `stops.json` (or whose title contains "PLACEHOLDER") |
+| **Pins** | 44px navy circles with a 3px fog ring, holding the site's icon. No numbers, since the sites aren't a set sequence. The active site gets a coral ring and badge and enlarges slightly. Icons come from `images/icons/pins/` (see below). |
+| **Hint card** | Fog card with navy text at the bottom of the map ("Explore the map. Tap a location to get more details."), shown whenever no stop is open. The text is `tour.mapHint` in `data/stops.json`. |
+| **Stop sheet** | Navy, with 20px top corners and a 96px fog drag handle. In preview it shows only the title and era; expanded, it scrolls. The close button is a circled ⊗. |
+| **Gallery** | Full-width 4:3 images that swipe sideways, with the caption and credit in small muted fog text below, and round previous/next image buttons |
+| **Key People cards** | Sky-blue cards with a photo on the left (92px square, 104px on desktop), the name in uppercase bold navy with a short fog underline, a one-line description, and an optional **Learn more ›** link. Placeholder people use `images/person-placeholder.svg`, a coral duotone portrait marked "PLACEHOLDER", in the style of the wireframe. |
+| **Buttons** | **Call to action:** coral with a 2px fog outline and large Oswald text. **Next ›:** coral. **Previous:** outlined in fog. **Round map buttons:** navy with a fog outline. |
+| **Compass and scale** | Bottom-left of the map: a fog compass with a navy north needle, above a scale bar in meters and feet. On phones they move up above the hint card, or above the preview sheet, so nothing overlaps. They're hidden while the full story covers the map. |
+| **Building info** | Invisible UNC footprints. Hovering or tapping a building shows a navy tooltip with its name and year built. |
+| **Placeholder badge** | Amber pill reading "PLACEHOLDER CONTENT", on any stop marked `"placeholder": true` |
 
 ---
 
-## Dark mode
+## Icons and logos
 
-- **Automatic:** follows the device's light/dark setting (`prefers-color-scheme`).
-- **Manual override:** the moon button in the header cycles **automatic → light → dark**. The choice is remembered on that device. If browser storage is blocked, the site simply falls back to automatic.
-- **The map stays light:** the illustrated map is the team's artwork, so it isn't color-inverted in dark mode. Only the interface around it (header, panel, list, buttons) switches to dark. Markers, the route, and the location dot keep their light-mode colors (see [Map symbol tokens](#map-symbol-tokens)) so they stay visible on the light map.
+**Logos** (`images/logo/`): the team's SVG logo files, copied unchanged from the design handoff.
+
+| File | Used for |
+|---|---|
+| `btbb-stacked-carolinablue.svg` | Splash screen and intro |
+| `btbb-horizontal-navy.svg` | Header (navy bars with fog lettering, which blend into the navy header) |
+| The other four (`…-franklinfog`, `…-carolinablue`, `…-navy`) | Available for future use |
+
+**Icons:**
+- `images/icons/source/` holds the team's eight icon SVGs, unchanged: buildings, carpenters, cemetery, masons, memorial, painters, people, seamstress.
+- `images/icons/pins/` holds the **map-pin versions** built from them by `npm run pins` (`scripts/build-pin-icons.js`). In these, the icons' navy (`#172849`) becomes fog, so the tools in the four hand icons stay visible on the navy pins, and the light blue (`#87aed0`) is kept. Each icon is also cropped to a square around its drawing, so all of them fill their pins evenly.
+- Each stop chooses its icon with `"icon"` in `data/stops.json` (for example `"icon": "memorial"`).
 
 ---
 
 ## Motion
 
-- The map glides (0.6s) to each stop, and the sheet expands with a 0.25s animation.
-- If the visitor has turned on **reduce motion** in their device settings, all transitions and smooth scrolling are switched off.
+- The splash fades out over 0.45 s, the map glides (0.6 s) to each stop, and the active pin enlarges.
+- With **reduce motion** turned on in the device settings, all transitions are switched off.
 
 ---
 
-## Applying brand colors
+## Changing colors
 
-1. Open `css/styles.css`.
-2. Change the token values in **all three** places they appear:
-   - the `:root { … }` block (light),
-   - the `@media (prefers-color-scheme: dark)` block (automatic dark),
-   - the `:root[data-theme="dark"]` block (manual dark). This must match the automatic dark block.
-3. Check every text/background pair from the contrast table above at <https://webaim.org/resources/contrastchecker/>.
-4. Update the `theme-color` values in `index.html` so the phone's browser bar matches the header.
-5. Record the change in [PROCESS_LOG.md](../PROCESS_LOG.md).
-
-> **A note on light brand blues.** Many university palettes are built around a light blue. Light blues usually have **too little contrast with white** to use for text or for white text on a blue button. For example, `#4B9CD3` on white measures about 3.0:1, which fails AA for normal text. Use such a color for large shapes, the route line, or accents on dark backgrounds, and pair it with a dark navy for text and buttons. Confirm official values with the University's brand guidelines before using them.
-
-To change a typeface, add the new `.woff2` file to `fonts/` with its license, update the matching `@font-face` rule and token in `css/styles.css` (and the `@font-face` rules in `scripts/generate-qr.js` for the signs), and keep a similar-shaped fallback.
+Edit the tokens at the top of `css/styles.css`, then check every text/background pair in the [contrast table](#measured-contrast) at <https://webaim.org/resources/contrastchecker/>. After changing any CSS, run `npm run stamp` (see the [editing guide](editing-guide.md#after-changing-css-or-javascript)).

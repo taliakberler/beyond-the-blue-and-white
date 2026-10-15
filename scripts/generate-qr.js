@@ -47,17 +47,16 @@ const writeQR = (name, url) => QRCode.toFile(path.join(outDir, name), url, {
     <h1>${esc(tour.subtitle || 'A digital map')}</h1>
     <img src="map.png" alt="QR code linking to the ${esc(tour.title || 'digital')} map">
     <p class="cta">Scan with your phone camera to explore the map</p>
-    <p class="detail">${stops.length} stops · free · no app needed</p>
+    <p class="detail">${stops.length} sites · free · no app needed</p>
     <p class="url">${esc(HOME_URL)}</p>
   </section>`;
 
   const cards = stops.map(s => `
   <section class="sign">
     <p class="tour">${esc(tour.title || 'Digital Map')}</p>
-    <div class="num" aria-hidden="true">${s.order}</div>
-    <h1>Stop ${s.order}: ${esc(s.title)}</h1>
-    <img src="${esc(s.id)}.png" alt="QR code linking to stop ${s.order}, ${esc(s.title)}">
-    <p class="cta">Scan with your phone camera to open this stop</p>
+    <h1>${esc(s.title)}</h1>
+    <img src="${esc(s.id)}.png" alt="QR code linking to ${esc(s.title)}">
+    <p class="cta">Scan with your phone camera to learn about this site</p>
     <p class="url">${esc(urlFor(s))}</p>
   </section>`).join('\n');
 
@@ -80,8 +79,6 @@ const writeQR = (name, url) => QRCode.toFile(path.join(outDir, name), url, {
           display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
           border: 2px solid #000; page-break-after: always; break-after: page; }
   .tour { margin: 0; font-family: "Gasoek One", "Arial Black", sans-serif; font-size: 22pt; font-weight: 400; letter-spacing: 0.02em; }
-  .num { margin: 0.2in 0 0.1in; width: 1.3in; height: 1.3in; border-radius: 50%; background: #000; color: #fff;
-         display: grid; place-items: center; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 64pt; font-weight: 700; line-height: 1; }
   h1 { margin: 0 0 0.2in; font-family: "Oswald", "Arial Narrow", sans-serif; font-size: 28pt; font-weight: 700; line-height: 1.15; }
   img { width: 5in; height: 5in; image-rendering: pixelated; }
   .cta { margin: 0.15in 0 0.05in; font-size: 18pt; font-weight: 700; }
@@ -91,7 +88,7 @@ const writeQR = (name, url) => QRCode.toFile(path.join(outDir, name), url, {
 </style>
 </head>
 <body>
-<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per stop. Print at 100% scale. Codes point to <code>${esc(BASE_URL)}</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
+<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per site. Print at 100% scale. Codes point to <code>${esc(BASE_URL)}</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
 ${homeCard}
 ${cards}
 </body>

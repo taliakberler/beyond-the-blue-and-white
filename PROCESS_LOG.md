@@ -678,3 +678,102 @@ The assets haven't been added to the repository yet. They'll be brought in as th
 - All six QR codes were decoded with jsQR and point to `https://taliakberler.github.io/beyond-the-blue-and-white/…`.
 - The new site address and its `data/stops.json` return 200 (OK), and the old site address returns 404.
 
+---
+
+## 2026-10-14 — Wireframe design implemented, with the team's logo and icons
+
+**Directed by:** project team (supplied the wireframe, logo files, and icons; asked to start implementing the wireframe with the new icons). Implemented by Claude Code.
+
+### What changed
+- **New screens, following the six wireframe frames:**
+  1. **Splash:** navy with the stacked Carolina Blue logo, while the data loads
+  2. **Intro / home:** tagline, stacked logo, project description, coral **Explore the map** button, and links to All stops and About
+  3. **Map:** navy header (horizontal navy logo; All stops, About, and Home), the illustrated map with **icon pins**, the dotted route, and a fog **hint card** at the bottom
+  4. **Stop preview:** a short navy sheet with "STOP N OF 5 / NAME" and the era
+  5. **Full story:** gallery, caption and credit, history
+  6. **Key People** cards: sky blue, with photo, uppercase name, a short fog underline, description, and an optional "Learn more"
+- **`index.html`:** rebuilt for these screens. The header uses the logo image in place of text, and the theme toggle was removed.
+- **`css/styles.css`:** rewritten around the wireframe palette:
+  - navy `#172849`, fog `#eceded`, Carolina Blue `#4b9cd3`, sky `#87aed0`, coral `#d85c54`
+  - wireframe-style components (sheet, cards, buttons, pins, hint card)
+  - map controls restyled in navy and fog
+  - an amber focus ring
+  - the compass and scale, the seamless-tile fix, and the faded streets are kept
+- **`js/app.js`:**
+  - **Screens:** splash and intro screens, and Home buttons.
+  - **Map:** icon pins with number badges, and the hint card (replacing "Start exploring").
+  - **Stop sheet:** opens as a preview from a pin. Tap it, swipe up, or use the handle to expand it; swipe down to shrink it or close it. Stop links and QR codes open it fully expanded.
+  - **Key People cards:** photo, name, description, and optional "Learn more" link.
+  - **Corner controls:** sized to keep clear of the sheet and hint card, and hidden while the full story covers the map.
+  - The splash is removed from the page after it fades.
+  - The light/dark theme code was removed.
+- **New assets:**
+  - `images/logo/`: the six logo SVGs, unchanged
+  - `images/icons/source/`: the eight icon SVGs, unchanged, renamed to lowercase (for example `Memorial Icon.svg` became `memorial.svg`)
+  - `images/icons/pins/`: pin versions built by the new **`scripts/build-pin-icons.js` (`npm run pins`)**
+  - `images/person-placeholder.svg`: a coral duotone placeholder portrait
+- **`data/stops.json`:**
+  - each stop now has an `icon`
+  - people have `image`, `imageAlt`, and `link` fields (set to the placeholder portrait for now)
+  - new `tour.welcome` (intro screen text) and `tour.mapHint` (hint card text)
+- **Docs:**
+  - `docs/design-and-styles.md` rewritten for the wireframe design (palette, contrast, screens, components, logos and icons)
+  - the site overview, editing guide (`icon`, `welcome`, `mapHint`, people `image`/`link`, "Map pin icons"), software and credits (the team's logo and icons; the `localStorage` theme note removed), and README file list updated
+
+### Decisions and reasons
+- **Decision:** use the icons' navy (`#172849`) for the interface rather than the logo's (`#11294b`). **Why:** colors sampled from the wireframe (`#182848`) match the icon navy.
+- **Decision:** build separate pin versions of the icons, recoloring their navy parts to fog. **Why:** the wireframe's pins are navy circles. In the four hand-tool icons (carpenters, masons, painters, seamstress), the tool itself is drawn in navy and would disappear on a navy pin. The delivered files are kept unchanged in `images/icons/source/`.
+- **Decision:** add a small stop-number badge to each pin (not in the wireframe). **Why:** the sheet says "Stop 3 of 5", and Previous / Next follow the order, so visitors need to see the numbers on the map. The badge can be removed if the team prefers the plain wireframe pins.
+- **Decision:** assign icons by kind of place: memorial for the Unsung Founders Memorial, buildings for Steele Building and Lenoir Hall, people for the Pit, and cemetery for Old Chapel Hill Cemetery. **Why:** assigning the trade icons (carpenters, masons, painters, seamstress) to particular sites would be a historical claim about who built or worked there. **The team should make that choice** from its research.
+- **Decision:** stop links and QR codes skip the intro and splash, and open the full story. **Why:** someone scanning a sign at a site wants that site's story straight away. Tapping a pin on the map still opens the wireframe's short preview first.
+- **Decision:** replace the "Start exploring" button with the wireframe's hint card. **Why:** it matches the wireframe, and the intro's **Explore the map** button now serves as the starting point.
+- **Decision:** keep All stops and About in the header, as icons on phones and text links on desktop, alongside the wireframe's Home icon. **Why:** the wireframe header shows only Home. Without these, visitors would have to go back to the intro to reach the list or the credits.
+- **Decision:** remove the light/dark theme switch. **Why:** the wireframe's design is navy throughout, so a separate dark theme no longer adds anything. The interface looks the same whatever the device setting.
+- **Decision:** hide the zoom buttons at 640px and below. **Why:** the wireframe's map has none, and phones zoom by pinching. They still show on wider screens for mouse and keyboard users.
+- **Decision:** keep the coral call to action despite its 3.2:1 contrast with fog text. **Why:** it's the wireframe's color, and it passes WCAG AA for large text. The labels are always large and bold (Oswald 700, 20–26px).
+- **Accessibility fixes found while building:**
+  - Carolina Blue on the raised navy surface measured 4.0:1 (below AA), so the All stops cards use the main navy (4.9:1).
+  - The amber focus ring measured 1.1:1 against the map's light blue, so on the map it gets a navy surround.
+
+### Verified
+At 375px (phone) and 1280px (desktop):
+- **Opening screens:** the splash shows and then the intro. **Explore the map** opens the map with 5 icon pins (all images loaded), the hint card, and the compass and scale, with no overlaps measured between them and the credit line.
+- **Stop sheet:**
+  - Tapping Stop 2's pin opens the preview ("STOP 2 OF 5 / STEELE BUILDING"), with the pin's coral ring centered above it.
+  - Tapping the preview expands it to show the gallery, history, a Key People card with the placeholder portrait, sources, and navigation.
+- **Links and navigation:**
+  - A `#stop=old-chapel-hill-cemetery` link skips the intro and opens the full story, with "Back to Stop 1".
+  - Previous works. Closing brings back the hint card.
+- **Other screens:** All stops shows 5 cards with icons, About shows 13 names, and Home returns to the intro.
+- **Desktop:** text links in the header, and a side panel.
+- **Keyboard:** Tab moves between pins, with the amber and navy focus ring visible on the map.
+
+---
+
+## 2026-10-14 — Route line and stop numbering removed
+
+**Directed by:** project team. After reviewing the wireframe build in the browser, the team noted that the project is no longer a walking tour, so there shouldn't be a dotted route line, and the stops shouldn't be numbered. Implemented by Claude Code.
+
+### What changed
+- **Map:**
+  - removed the dotted route line
+  - removed the number badges on pins
+  - pins are labeled by site name only (for example, "Steele Building")
+- **Stop sheet:**
+  - shows only the site name: "STOP 2 OF 5" is gone
+  - **"Next stop ›" became "Next ›"**, and Previous / Next now **wrap around** (Next from the last site goes to the first), so they browse between sites rather than following a sequence. "Back to Stop 1" was removed.
+  - the directions link now reads **"Get walking directions here"** and goes to the site being viewed, not to "the next stop"
+- **All stops:** cards have no number badge, and the link reads "Open on the map ›".
+- **QR sign sheet:** each site's sign shows just the site name. The large number circle and the "Stop N:" prefix are gone, and the call to action reads "Scan with your phone camera to learn about this site". The QR codes themselves are unchanged.
+- **Deleted** `data/route.geojson` and `scripts/build-route.js`, and the `npm run route` command. They can be recovered from git history if a route is ever wanted again.
+- **Kept:** each stop's `order` field. It still sets the order of the All stops list and of Previous / Next, but it's never shown.
+- **Docs:** route and numbering references removed from the README, site overview, design doc, editing guide (the "Replace the route" section was removed), and software and credits doc.
+
+### Verified
+At 375px:
+- the map shows 5 pins, no number badges, and no route line
+- the stop preview shows only "STEELE BUILDING" and its era
+- Next from Old Chapel Hill Cemetery goes to the Unsung Founders Memorial, and Previous goes back
+- All stops cards have no badges
+- the regenerated QR codes still decode to the same addresses
+

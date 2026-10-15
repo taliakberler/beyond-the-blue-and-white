@@ -26,6 +26,12 @@
       "attribution": "Illustrated map: Beyond the Blue and White team"
     },
     "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each stop, and the resources it offers.",
+    "welcome": {
+      "eyebrow": "Every stop has a story.",
+      "text": "An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.",
+      "cta": "Explore the map"
+    },
+    "mapHint": "Explore the map. Tap a location to get more details.",
     "buildingLayer": {
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME",
@@ -123,6 +129,7 @@
       "id": "unsung-founders-memorial",
       "order": 1,
       "title": "The Unsung Founders Memorial",
+      "icon": "memorial",
       "placeholder": true,
       "lat": 35.9133601,
       "lng": -79.0517912,
@@ -135,11 +142,17 @@
       "people": [
         {
           "name": "Placeholder Person A",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         },
         {
           "name": "Placeholder Person B",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         }
       ],
       "images": [
@@ -167,6 +180,7 @@
       "id": "steele-building",
       "order": 2,
       "title": "Steele Building",
+      "icon": "buildings",
       "placeholder": true,
       "lat": 35.911508,
       "lng": -79.050345,
@@ -178,7 +192,10 @@
       "people": [
         {
           "name": "Placeholder Person C",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         }
       ],
       "images": [
@@ -206,6 +223,7 @@
       "id": "lenoir-hall",
       "order": 3,
       "title": "Lenoir Hall",
+      "icon": "buildings",
       "placeholder": true,
       "lat": 35.910578,
       "lng": -79.048856,
@@ -217,7 +235,10 @@
       "people": [
         {
           "name": "Placeholder Person D",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         }
       ],
       "images": [
@@ -245,6 +266,7 @@
       "id": "the-pit",
       "order": 4,
       "title": "The Pit",
+      "icon": "people",
       "placeholder": true,
       "lat": 35.910092,
       "lng": -79.048583,
@@ -256,7 +278,10 @@
       "people": [
         {
           "name": "Placeholder Person E",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         }
       ],
       "images": [
@@ -284,6 +309,7 @@
       "id": "old-chapel-hill-cemetery",
       "order": 5,
       "title": "Old Chapel Hill Cemetery",
+      "icon": "cemetery",
       "placeholder": true,
       "lat": 35.91102859131603,
       "lng": -79.04563912237869,
@@ -295,7 +321,10 @@
       "people": [
         {
           "name": "Placeholder Person F",
-          "description": "One-line description — replace with verified content."
+          "description": "One-line description — replace with verified content.",
+          "image": "images/person-placeholder.svg",
+          "imageAlt": "Placeholder portrait",
+          "link": ""
         }
       ],
       "images": [

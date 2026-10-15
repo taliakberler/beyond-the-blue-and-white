@@ -12,7 +12,7 @@ These are the things a visitor's phone loads or contacts while using the map.
 
 | | |
 |---|---|
-| **What it does** | Draws the map, the illustrated-map tiles, numbered markers, and route line, and handles panning and zooming |
+| **What it does** | Draws the map, the illustrated-map tiles, and icon pins, and handles panning and zooming |
 | **Version** | 1.9.4 |
 | **License** | BSD 2-Clause (© 2010–2023 Volodymyr Agafonkin, © 2010–2011 CloudMade) |
 | **Where it lives** | `js/vendor/leaflet/` (copied into the repository, with its `LICENSE` file) |
@@ -82,6 +82,15 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`
 | **Settings** | `tour.basemap` in `data/stops.json` (tile path, bounds, zoom range, street opacity, credit), and `scripts/team-map.json` for building the tiles |
 | **Credit** | "Illustrated map: Beyond the Blue and White team", shown in the map's credit line |
 
+### The team's logo and icons
+
+| | |
+|---|---|
+| **What** | The *Beyond the Blue and White* logo (horizontal and stacked, in Carolina Blue, Franklin Fog, and Navy) and eight map icons (buildings, carpenters, cemetery, masons, memorial, painters, people, seamstress) |
+| **Where they live** | `images/logo/` (SVG, unchanged) and `images/icons/source/` (SVG, unchanged). The pin versions in `images/icons/pins/` are built from them by `npm run pins`. |
+| **Created by** | The Beyond the Blue and White team |
+| **Checked** | 2026-10-14: valid and fully vector, with no scripts or outside references (see [PROCESS_LOG.md](../PROCESS_LOG.md)) |
+
 ### Phone map apps: walking directions
 
 The "Get walking directions" link opens the visitor's own map app. It uses only public link formats, with no API keys:
@@ -91,14 +100,13 @@ The "Get walking directions" link opens the visitor's own map app. It uses only 
 | iPhone / iPad | Apple Maps: `https://maps.apple.com/?daddr=<lat>,<lng>&dirflg=w` |
 | Everything else | Google Maps: `https://www.google.com/maps/dir/?api=1&destination=<lat>,<lng>&travelmode=walking` |
 
-The link sends the next stop's coordinates to Apple or Google only when the visitor taps it. The site itself never shares the visitor's location with anyone.
+The link sends the site's coordinates to Apple or Google only when the visitor taps it. The site itself never shares the visitor's location with anyone.
 
 ### Browser features (no outside service)
 
 | Feature | Used for | Privacy |
 |---|---|---|
 | Geolocation | "You are here" dot | Only runs when the visitor taps the button, and the browser asks permission first. The location stays on the device and is never sent or stored. |
-| `localStorage` | Remembers the light/dark theme choice | Stores one word on the visitor's device |
 
 The site uses **no analytics, cookies, trackers, or ads.** Its web fonts are self-hosted (see below), so no font service is contacted.
 
@@ -144,7 +152,7 @@ Used only when building tiles, not by visitors.
 
 ### Node.js and npm
 
-Node.js runs the helper scripts (`npm run qr`, `npm run route`, `npm run placeholders`). It's free and open source (MIT): <https://nodejs.org>. `package.json` pins the exact versions of `leaflet` and `qrcode`, and `package-lock.json` records the full dependency tree.
+Node.js runs the helper scripts (`npm run qr`, `npm run pins`, `npm run team-map`, `npm run boundary`, `npm run stamp`, `npm run placeholders`). It's free and open source (MIT): <https://nodejs.org>. `package.json` pins the exact versions of `leaflet` and `qrcode`, and `package-lock.json` records the full dependency tree.
 
 ### Python (optional)
 
@@ -158,8 +166,6 @@ The code is hosted at <https://github.com/taliakberler/beyond-the-blue-and-white
 
 These are optional, browser-based helpers for team members:
 
-- **geojson.io**: drawing the walking route
-- **openstreetmap.org/directions**: planning a sidewalk route
 - **jsonlint.com**: finding typos in `stops.json`
 - **WebAIM Contrast Checker**: checking brand colors
 

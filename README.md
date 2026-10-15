@@ -53,13 +53,13 @@ So the experience feels cohesive, even when the histories vary.
 
 1. A visitor scans the **QR code** on a sign at one of the sites, or opens the map from a link.
 2. The map opens on their phone, **zoomed to that site**, with its history, images, key people, sources, and links to related resources.
-3. They can follow the numbered **walking route** to the next stop, get walking directions in their phone's map app, or browse **all stops** in a list.
+3. They can explore the other sites on the map, get walking directions to any of them in their phone's map app, or browse **all stops** in a list.
 
 Visitors don't have to start at Stop 1. Every sign is a way in.
 
 ## Current status
 
-> **This is a working mockup.** The map's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet, and the walking order is **provisional** until the route is decided. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
+> **This is a working mockup.** The map's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
 
 The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.md](PROCESS_LOG.md) for why, and [docs/content-guidelines.md](docs/content-guidelines.md) for how real content should be prepared.
 
@@ -68,9 +68,9 @@ The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.m
 | Document | What it covers |
 |---|---|
 | [docs/site-overview.md](docs/site-overview.md) | How the site works: pages (map, list, About), features, data flow, deep links, accessibility, offline behavior, known limits |
-| [docs/editing-guide.md](docs/editing-guide.md) | Step-by-step guide to editing stops, adding images, changing the route, generating QR codes, and deploying |
+| [docs/editing-guide.md](docs/editing-guide.md) | Step-by-step guide to editing stops, adding images and icons, generating QR codes, and deploying |
 | [docs/content-guidelines.md](docs/content-guidelines.md) | Standards for researching, writing, sourcing, and crediting the map's content |
-| [docs/design-and-styles.md](docs/design-and-styles.md) | Color tokens, typography, layout, dark mode, contrast measurements, and how to apply brand colors |
+| [docs/design-and-styles.md](docs/design-and-styles.md) | The wireframe-based design: color tokens, typography, screens, components, logos and icons, and contrast measurements |
 | [docs/software-and-credits.md](docs/software-and-credits.md) | Every library, map service, and data source used, with licenses and required credits |
 | [PROCESS_LOG.md](PROCESS_LOG.md) | Dated record of every decision and code change, kept for publication |
 
@@ -97,9 +97,10 @@ fonts/                 Brand typefaces (self-hosted, with licenses)
 js/app.js              App logic
 js/vendor/leaflet/     Leaflet map library (bundled copy)
 data/stops.json        All map content and settings
-data/route.geojson     The walking route
 tiles/team-map/        The team's illustrated campus map, as web-map tiles (the site's basemap)
-images/                Stop images
+images/                Stop images, placeholder portrait
+images/logo/           The team's logo files (SVG)
+images/icons/          The team's icons: source/ (as delivered) and pins/ (map-pin versions)
 qr/                    Generated QR codes and printable sign sheet
 scripts/               QR generator and helper scripts
 docs/                  Project documentation

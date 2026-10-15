@@ -1,6 +1,6 @@
 # Editing guide
 
-This guide covers updating the map without writing code: stops, images, the route, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a stop, see [content-guidelines.md](content-guidelines.md).
+This guide covers updating the map without writing code: stops, images, icons, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a stop, see [content-guidelines.md](content-guidelines.md).
 
 ---
 
@@ -28,7 +28,9 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 |---|---|
 | `title`, `subtitle` | Shown in the header |
 | `center`, `zoom` | Starting map view, `[lat, lng]` |
-| `intro` | Paragraph shown at the top of the List view |
+| `intro` | Paragraph shown at the top of the All stops page |
+| `welcome` | The intro (home) screen: `eyebrow` (small line at the top), `text` (the paragraph under the logo), `cta` (the button label) |
+| `mapHint` | The hint card on the map ("Explore the map. Tap a location to get more details.") |
 | `about` | The About page (see below) |
 | `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
 | `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
@@ -51,8 +53,9 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 ```json
 {
   "id": "example-site",             // URL slug: lowercase, hyphens, no spaces. Used in QR codes, so don't change it after printing.
-  "order": 1,                       // Position in the route (1, 2, 3, …)
+  "order": 1,                       // Position in the All stops list and for Previous / Next (not shown)
   "title": "Site name",
+  "icon": "buildings",              // Pin icon: buildings, carpenters, cemetery, masons, memorial, painters, people, or seamstress
   "placeholder": true,              // Shows the "PLACEHOLDER CONTENT" badge. Set to false once the content is verified.
   "lat": 35.9050, "lng": -79.0469,  // Decimal degrees. In Google Maps, right-click a spot to copy them.
   "era": "Decade or date range",
@@ -62,7 +65,10 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
     "Second paragraph…"
   ],
   "people": [
-    { "name": "Full Name", "description": "One-line description." }
+    { "name": "Full Name", "description": "One-line description.",
+      "image": "images/people/full-name.jpg",   // Square photo for the Key People card (optional; a placeholder portrait is used if empty)
+      "imageAlt": "Portrait of Full Name, about 1890",
+      "link": "https://… (optional: adds a 'Learn more' link)" }
   ],
   "images": [
     { "src": "images/example-site-1.jpg", "alt": "What the image shows, for screen readers",
@@ -79,13 +85,13 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 - `people`, `images`, and `sources` can be empty lists (`[]`). The section is then hidden.
 - The comments (`// …`) in the example above are for explanation only. JSON doesn't allow comments, so leave them out of the real file.
 
-After changing stop order or locations, update the route (below). If any `id` changed, regenerate the QR codes.
+If any `id` changed, regenerate the QR codes.
 
 ---
 
 ## Add images
 
-1. Put the files in `images/`. JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
+1. Put the files in `images/` (photos of people can go in `images/people/`; use square crops for the Key People cards). JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
 2. Reference them in the stop's `images` list as `"src": "images/your-file.jpg"`.
 3. Always fill in `alt`, `caption`, and `credit`. See [content-guidelines.md](content-guidelines.md#images-and-rights) for how to write alt text and confirm image rights.
 4. Use local copies. Don't link to images on other sites.
@@ -96,22 +102,16 @@ The placeholder SVGs (`images/stop-*-?.svg`) can be deleted once real images rep
 
 ---
 
-## Replace the route
+## Map pin icons
 
-`data/route.geojson` holds a single **LineString**, drawn as a dotted line on the map. Coordinates are listed as **`[lng, lat]`** (longitude first) in walking order.
+Each stop's `"icon"` picks its pin. The icons are the team's designs:
 
-The mockup uses straight lines between stops. To regenerate those straight lines after moving stops:
+- `images/icons/source/` holds the icons exactly as delivered. Don't edit these by hand; replace them with new exports from the design file.
+- `images/icons/pins/` holds the pin versions, made by `npm run pins`. They're recolored so the navy parts show on the navy pins, and cropped to a square.
 
-```bash
-npm run route
-```
+**To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, then use `"icon": "<name>"` on a stop. Use `npm run stamp` too if you changed any CSS or JS.
 
-**To draw a real walking path that follows sidewalks**, use either of these free tools:
-
-1. **geojson.io (easiest):** go to <https://geojson.io>, choose the line tool, and click along the sidewalks from Stop 1 to the last stop. Double-click to finish. Then pick **Save → GeoJSON** and replace `data/route.geojson` with the downloaded file.
-2. **Turn-by-turn routing:** plan a walking route on <https://www.openstreetmap.org/directions> (choose "Foot") with each stop as a waypoint. Export the route as GPX, convert it at <https://geojson.io> (**Open → File**, then **Save → GeoJSON**), and replace the file.
-
-The app accepts either a single Feature or a FeatureCollection with LineString or MultiLineString geometry. Don't run `npm run route` after drawing a real path, because it would overwrite it.
+The current assignments are by kind of place: memorial for the Unsung Founders Memorial, buildings for Steele Building and Lenoir Hall, people for the Pit, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each stop's history.
 
 ---
 

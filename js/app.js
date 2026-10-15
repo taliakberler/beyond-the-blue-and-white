@@ -1,28 +1,34 @@
 /* Beyond the Blue and White — multimedia digital map.
  * Plain JavaScript + Leaflet. All content comes from data/stops.json and data/route.geojson.
- * Deep links: index.html#stop=<id> zooms to that stop and opens its panel.
+ * Screens: splash (while loading) → intro/home → map, plus All stops and About.
+ * Deep links: index.html#stop=<id> skips the intro, zooms to that stop, and opens it; #about opens About.
  */
 (function () {
   'use strict';
 
   var DATA_URL = 'data/stops.json';
-  var ROUTE_URL = 'data/route.geojson';
   var DESKTOP_QUERY = window.matchMedia('(min-width: 900px)');
   var STOP_ZOOM = 18;
+  var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
+  var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
+  var ICON_DIR = 'images/icons/pins/';
   var BUILDING_PAGE_LIMIT = 10;     // max pages fetched from the ArcGIS layer
   var BUILDING_TIMEOUT_MS = 15000;
 
   var $ = function (id) { return document.getElementById(id); };
   var els = {
-    title: $('tour-title'), subtitle: $('tour-subtitle'), intro: $('tour-intro'),
+    header: document.querySelector('.app-header'), splash: $('splash'),
+    intro: $('tour-intro'),
+    introView: $('intro-view'), introEyebrow: $('intro-eyebrow'), introText: $('intro-text'),
+    introCta: $('intro-cta'), introList: $('intro-list'), introAbout: $('intro-about'),
+    homeBtn: $('go-home'), brandHome: $('brand-home'),
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
-    locateBtn: $('locate-btn'),
+    locateBtn: $('locate-btn'), mapHint: $('map-hint'),
     aboutBtn: $('view-about'), aboutView: $('about-view'), aboutBody: $('about-body'),
-    startBtn: $('start-btn'), themeBtn: $('theme-toggle'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
-    panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'),
-    count: $('stop-count'), pTitle: $('panel-title'), pEra: $('panel-era'),
+    panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'), panelTop: document.querySelector('.panel-top'),
+    pName: $('panel-name'), pEra: $('panel-era'),
     gallery: $('gallery'), pSummary: $('panel-summary'), pHistory: $('panel-history'),
     peopleSection: $('people-section'), pPeople: $('panel-people'),
     sourcesSection: $('sources-section'), pSources: $('panel-sources'),
@@ -79,29 +85,13 @@
   function isPlaceholder(stop) { return stop.placeholder === true || /placeholder/i.test(stop.title || ''); }
 
   function setHeaderHeight() {
-    var h = document.querySelector('.app-header').getBoundingClientRect().height;
+    var h = els.header.hidden ? 0 : els.header.getBoundingClientRect().height;
     document.documentElement.style.setProperty('--header-h', Math.round(h) + 'px');
   }
 
-  /* ---------------- Theme ---------------- */
-
-  var THEMES = ['auto', 'light', 'dark'];
-  function applyTheme(t) {
-    if (t === 'auto') document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme', t);
-    els.themeBtn.setAttribute('aria-label', 'Color theme: ' + (t === 'auto' ? 'automatic' : t) + '. Activate to change.');
-    els.themeBtn.title = 'Theme: ' + t;
-  }
-  function initTheme() {
-    var saved = 'auto';
-    try { saved = localStorage.getItem('tour-theme') || 'auto'; } catch (e) { /* storage blocked */ }
-    applyTheme(saved);
-    els.themeBtn.addEventListener('click', function () {
-      var cur = document.documentElement.getAttribute('data-theme') || 'auto';
-      var next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
-      applyTheme(next);
-      try { localStorage.setItem('tour-theme', next); } catch (e) { /* ignore */ }
-    });
+  function iconFor(stop) {
+    var name = String(stop.icon || DEFAULT_ICON).replace(/[^a-z0-9-]/gi, '');
+    return ICON_DIR + name + '.svg';
   }
 
   /* ---------------- Map ---------------- */
@@ -191,14 +181,14 @@
     var bounds = [];
     state.stops.forEach(function (stop, i) {
       var icon = L.divIcon({
-        className: 'stop-marker-wrap',
-        html: '<div class="stop-marker"><span>' + stop.order + '</span></div>',
-        iconSize: [44, 44],
-        iconAnchor: [22, 22]
+        className: 'stop-pin-wrap',
+        html: '<div class="stop-pin"><span class="pin"><img src="' + iconFor(stop) + '" alt=""></span></div>',
+        iconSize: [48, 48],
+        iconAnchor: [24, 24]
       });
       var m = L.marker([stop.lat, stop.lng], {
         icon: icon,
-        title: 'Stop ' + stop.order + ': ' + stop.title,
+        title: stop.title,
         keyboard: true,
         riseOnHover: true
       }).addTo(state.map);
@@ -231,22 +221,6 @@
     if (!node) return;
     node.setAttribute('role', 'button');
     node.setAttribute('aria-label', this.options.title);
-  }
-
-  function loadRoute() {
-    return fetch(ROUTE_URL, { cache: 'no-cache' }).then(function (r) {
-      if (!r.ok) throw new Error('route ' + r.status);
-      return r.json();
-    }).then(function (geo) {
-      L.geoJSON(geo, {
-        interactive: false,
-        style: function () {
-          return { color: getCss('--color-map-marker'), weight: 5, opacity: 0.85, dashArray: '2 10', lineCap: 'round' };
-        }
-      }).addTo(state.map);
-    }).catch(function (err) {
-      console.warn('Route not loaded:', err);
-    });
   }
 
   function getCss(name) {
@@ -360,25 +334,32 @@
     state.stops.forEach(function (stop, i) {
       var li = el('li');
       var btn = el('button', { type: 'button', 'class': 'stop-card' });
-      btn.appendChild(el('span', { 'class': 'num', 'aria-hidden': 'true' }, String(stop.order)));
+      var thumb = el('span', { 'class': 'thumb', 'aria-hidden': 'true' });
+      thumb.appendChild(el('img', { src: iconFor(stop), alt: '' }));
+      btn.appendChild(thumb);
       var body = el('span');
       body.appendChild(el('span', { 'class': 't' }, stop.title));
       if (stop.era) body.appendChild(el('span', { 'class': 'e' }, stop.era));
       if (stop.summary) body.appendChild(el('span', { 'class': 's' }, stop.summary));
-      body.appendChild(el('span', { 'class': 'go' }, 'Open stop ' + stop.order + ' on the map ›'));
+      body.appendChild(el('span', { 'class': 'go' }, 'Open on the map ›'));
       btn.appendChild(body);
-      btn.setAttribute('aria-label', 'Stop ' + stop.order + ': ' + stop.title + '. Open on the map.');
+      btn.setAttribute('aria-label', stop.title + '. Open on the map.');
       btn.addEventListener('click', function () { setView('map'); goToStop(i); });
       li.appendChild(btn);
       els.stopList.appendChild(li);
     });
   }
 
+  // Views: 'intro' (home), 'map', 'list' (All stops), 'about'.
   function setView(which) {
-    var list = which === 'list', about = which === 'about', map = !list && !about;
+    var intro = which === 'intro', list = which === 'list', about = which === 'about';
+    var map = !intro && !list && !about;
+    els.introView.hidden = !intro;
     els.listView.hidden = !list;
     els.aboutView.hidden = !about;
     els.mapView.hidden = !map;
+    els.header.hidden = intro;           // the intro screen is full-screen, like the wireframe
+    setHeaderHeight();
     els.viewListBtn.setAttribute('aria-pressed', String(list));
     els.viewMapBtn.setAttribute('aria-pressed', String(map));
     els.aboutBtn.setAttribute('aria-pressed', String(about));
@@ -390,14 +371,29 @@
     } else if (location.hash === '#about') {
       history.pushState(null, '', location.pathname + location.search);
     }
-    if (map) setTimeout(function () { state.map.invalidateSize(); }, 0);
-    updateStartBtn();
+    if (map) setTimeout(function () { state.map.invalidateSize(); if (state.current === -1 && !state.viewTouched) fitAllStops(); }, 0);
+    if (intro) els.introCta.focus({ preventScroll: true });
+    updateHint();
   }
 
-  function updateStartBtn() {
-    var show = !els.mapView.hidden && state.current === -1;
-    els.startBtn.hidden = !show;
-    document.body.classList.toggle('start-visible', show);
+  // The hint card ("Tap a location…") shows on the map whenever no stop is open.
+  function updateHint() {
+    var show = !els.mapView.hidden && state.current === -1 && !!els.mapHint.textContent;
+    els.mapHint.hidden = !show;
+    document.body.classList.toggle('hint-visible', show);
+    if (show) document.documentElement.style.setProperty('--hint-h', els.mapHint.offsetHeight + 'px');
+  }
+
+  /* ---------------- Intro / home ---------------- */
+
+  function renderIntro() {
+    var w = state.tour.welcome || {};
+    var a = state.tour.about || {};
+    els.introEyebrow.textContent = w.eyebrow || a.tagline || '';
+    els.introEyebrow.hidden = !els.introEyebrow.textContent;
+    els.introText.textContent = w.text || a.description || '';
+    if (w.cta) els.introCta.textContent = w.cta;
+    els.mapHint.textContent = state.tour.mapHint || 'Tap a location on the map to get more details.';
   }
 
   /* ---------------- About ---------------- */
@@ -523,8 +519,7 @@
     var stop = state.stops[i];
     var total = state.stops.length;
 
-    els.count.textContent = 'Stop ' + stop.order + ' of ' + total;
-    els.pTitle.textContent = stop.title;
+    els.pName.textContent = stop.title;
     els.pEra.textContent = stop.era || '';
     els.pEra.hidden = !stop.era;
 
@@ -539,9 +534,21 @@
 
     els.pPeople.textContent = '';
     (stop.people || []).forEach(function (p) {
-      var li = el('li');
-      li.appendChild(el('strong', null, p.name));
-      if (p.description) li.appendChild(el('span', null, p.description));
+      var li = el('li', { 'class': 'person' });
+      var photo = el('img', { 'class': 'person-photo', src: p.image || 'images/person-placeholder.svg', alt: p.imageAlt || (p.image ? 'Portrait of ' + p.name : ''), loading: 'lazy' });
+      photo.addEventListener('error', function () {
+        photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
+      });
+      li.appendChild(photo);
+      var body = el('div');
+      body.appendChild(el('p', { 'class': 'person-name' }, p.name));
+      if (p.description) body.appendChild(el('p', { 'class': 'person-desc' }, p.description));
+      if (p.link) {
+        var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, 'Learn more ›');
+        more.setAttribute('aria-label', 'Learn more about ' + p.name + ' (opens in a new tab)');
+        body.appendChild(more);
+      }
+      li.appendChild(body);
       els.pPeople.appendChild(li);
     });
     els.peopleSection.hidden = !(stop.people && stop.people.length);
@@ -561,24 +568,15 @@
     });
     els.sourcesSection.hidden = !(stop.sources && stop.sources.length);
 
-    var hasPrev = i > 0, hasNext = i < total - 1;
-    els.prevBtn.disabled = !hasPrev;
-    els.prevBtn.setAttribute('aria-label', hasPrev ? 'Previous: stop ' + state.stops[i - 1].order : 'No previous stop');
-    if (hasNext) {
-      var nxt = state.stops[i + 1];
-      els.nextBtn.textContent = 'Next stop ›';
-      els.nextBtn.setAttribute('aria-label', 'Next: stop ' + nxt.order + ', ' + nxt.title);
-      els.directions.textContent = 'Get walking directions to Stop ' + nxt.order;
-      els.directions.href = directionsUrl(nxt);
-      els.directions.setAttribute('aria-label', 'Get walking directions to stop ' + nxt.order + ' (opens your map app)');
-    } else {
-      els.nextBtn.textContent = 'Back to Stop 1';
-      els.nextBtn.setAttribute('aria-label', 'You’ve reached the last stop. Go back to stop 1.');
-      els.directions.textContent = 'Last stop — directions to this site';
-      els.directions.href = directionsUrl(stop);
-      els.directions.setAttribute('aria-label', 'Get walking directions to this stop (opens your map app)');
-    }
-    els.nextBtn.disabled = false;
+    // Previous / Next browse between sites (wrapping around); the sites aren't a set sequence.
+    var prev = state.stops[(i - 1 + total) % total], next = state.stops[(i + 1) % total];
+    var single = total < 2;
+    els.prevBtn.disabled = els.nextBtn.disabled = single;
+    els.prevBtn.setAttribute('aria-label', 'Previous site: ' + prev.title);
+    els.nextBtn.setAttribute('aria-label', 'Next site: ' + next.title);
+    els.directions.textContent = 'Get walking directions here';
+    els.directions.href = directionsUrl(stop);
+    els.directions.setAttribute('aria-label', 'Get walking directions to ' + stop.title + ' (opens your map app)');
 
     els.panelBody.scrollTop = 0;
 
@@ -612,28 +610,44 @@
     if (location.hash !== hash && !opts.fromHash) {
       history.pushState(null, '', hash);
     }
-    openPanel(i);
+    openPanel(i, { expand: !!opts.expand });
     flyToStop(stop);
   }
 
-  function openPanel(i) {
+  // On phones a stop opens as a short preview (title and era); tap it or swipe up for the full story.
+  function setExpanded(exp) {
+    els.panel.classList.toggle('is-expanded', exp);
+    document.body.classList.toggle('panel-expanded', exp && !els.panel.hidden);
+    els.panelExpand.setAttribute('aria-expanded', String(exp));
+    els.panelExpandLabel.textContent = exp ? 'Show less' : 'Show the full story';
+    syncPanelHeight();
+  }
+
+  function syncPanelHeight() {
+    var h = els.panel.hidden || DESKTOP_QUERY.matches ? 0 : els.panel.offsetHeight;
+    document.documentElement.style.setProperty('--panel-h', h + 'px');
+  }
+
+  function openPanel(i, opts) {
+    opts = opts || {};
     var wasOpen = !els.panel.hidden;
     if (!wasOpen) state.lastFocus = document.activeElement;
     state.current = i;
     renderStop(i);
     els.panel.hidden = false;
+    if (!wasOpen) setExpanded(!!opts.expand);
     document.body.classList.add('panel-open');
-    updateStartBtn();
+    syncPanelHeight();
+    updateHint();
     state.map.invalidateSize();
-    if (!wasOpen) els.panelBody.focus({ preventScroll: true });
+    if (!wasOpen) (DESKTOP_QUERY.matches ? els.panelBody : els.panelExpand).focus({ preventScroll: true });
   }
 
   function closePanel(opts) {
     opts = opts || {};
     if (els.panel.hidden) return;
     els.panel.hidden = true;
-    els.panel.classList.remove('is-expanded');
-    els.panelExpand.setAttribute('aria-expanded', 'false');
+    setExpanded(false);
     document.body.classList.remove('panel-open');
     Object.keys(state.markers).forEach(function (id) {
       var node = state.markers[id].getElement();
@@ -641,7 +655,7 @@
     });
     var closedStop = state.stops[state.current];
     state.current = -1;
-    updateStartBtn();
+    updateHint();
     if (!opts.keepHash && location.hash) {
       history.pushState(null, '', location.pathname + location.search);
     }
@@ -655,16 +669,20 @@
 
   function initPanel() {
     els.panelClose.addEventListener('click', function () { closePanel(); });
-    els.prevBtn.addEventListener('click', function () { goToStop(state.current - 1); });
-    els.nextBtn.addEventListener('click', function () {
-      goToStop(state.current < state.stops.length - 1 ? state.current + 1 : 0);
+    els.prevBtn.addEventListener('click', function () { goToStop((state.current - 1 + state.stops.length) % state.stops.length); });
+    els.nextBtn.addEventListener('click', function () { goToStop((state.current + 1) % state.stops.length); });
+    els.panelExpand.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setExpanded(!els.panel.classList.contains('is-expanded'));
+      if (state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, 60);
     });
-    els.panelExpand.addEventListener('click', function () {
-      var exp = els.panel.classList.toggle('is-expanded');
-      els.panelExpand.setAttribute('aria-expanded', String(exp));
-      els.panelExpandLabel.textContent = exp ? 'Collapse panel' : 'Expand panel';
-      if (state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, 260);
+    // Tapping anywhere on the preview (not the close button) opens the full story.
+    els.panelTop.addEventListener('click', function (e) {
+      if (DESKTOP_QUERY.matches || els.panel.classList.contains('is-expanded')) return;
+      if (e.target.closest('#panel-close')) return;
+      setExpanded(true);
     });
+    if ('ResizeObserver' in window) new ResizeObserver(syncPanelHeight).observe(els.panel);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !els.panel.hidden) closePanel();
     });
@@ -676,9 +694,9 @@
       var dy = e.changedTouches[0].clientY - startY;
       startY = null;
       var exp = els.panel.classList.contains('is-expanded');
-      if (dy < -40 && !exp) els.panelExpand.click();
-      else if (dy > 40 && exp) els.panelExpand.click();
-      else if (dy > 60 && !exp) closePanel();
+      if (dy < -40 && !exp) setExpanded(true);
+      else if (dy > 40 && exp) setExpanded(false);
+      else if (dy > 40 && !exp) closePanel();
     });
   }
 
@@ -691,7 +709,7 @@
 
   function handleHash() {
     if (location.hash === '#about') { if (els.aboutView.hidden) setView('about'); return; }
-    if (!els.aboutView.hidden) setView('map');
+    if (!els.aboutView.hidden || !els.introView.hidden) setView('map');
     var id = stopIdFromHash();
     if (!id) { closePanel({ keepHash: true, silent: true }); return; }
     var i = state.stops.findIndex(function (s) { return s.id === id; });
@@ -701,12 +719,21 @@
       return;
     }
     if (els.mapView.hidden) setView('map');
-    goToStop(i, { fromHash: true });
+    // Arriving from a link or QR code: open the full story straight away.
+    goToStop(i, { fromHash: true, expand: true });
   }
 
   /* ---------------- Boot ---------------- */
 
+  // Fade the splash out, then remove it entirely (even if the browser never finishes the fade).
+  function hideSplash() {
+    document.body.classList.remove('is-loading');
+    setTimeout(function () { els.splash.hidden = true; }, 600);
+  }
+
   function fail(msg, opts) {
+    hideSplash();
+    els.header.hidden = false;
     var main = document.getElementById('main');
     main.textContent = '';
     var box = el('div', { 'class': 'list-inner', role: 'alert' });
@@ -721,8 +748,8 @@
   }
 
   function boot() {
-    setHeaderHeight();
-    initTheme();
+    var started = Date.now();
+    var deepLink = /stop=|#about/.test(location.hash);
 
     if (typeof L === 'undefined') { fail('The map library didn’t load. Please check your connection and reload.'); return; }
 
@@ -736,13 +763,11 @@
       if (!state.stops.length) throw new Error('No stops in data/stops.json');
       dataLoaded = true;
 
-      if (state.tour.title) { els.title.textContent = state.tour.title; document.title = state.tour.title + ' — A Digital Map'; }
-      if (state.tour.subtitle) els.subtitle.textContent = state.tour.subtitle;
-      els.startBtn.setAttribute('aria-label', 'Start exploring at stop ' + state.stops[0].order + ', ' + state.stops[0].title);
+      if (state.tour.title) document.title = state.tour.title + ' — A Digital Map';
+      renderIntro();
 
       initMap();
       addMarkers();
-      loadRoute();
       optional(loadBuildings, 'Building layer');
       initLocate();
       initPanel();
@@ -750,13 +775,21 @@
       optional(renderAbout, 'About page');
 
       els.viewMapBtn.addEventListener('click', function () { setView('map'); });
-      els.viewListBtn.addEventListener('click', function () { setView('list'); });
+      els.viewListBtn.addEventListener('click', function () { setView(els.listView.hidden ? 'list' : 'map'); });
       els.aboutBtn.addEventListener('click', function () { setView(els.aboutView.hidden ? 'about' : 'map'); });
-      els.startBtn.addEventListener('click', function () { goToStop(0); });
+      els.homeBtn.addEventListener('click', function () { setView('intro'); });
+      els.brandHome.addEventListener('click', function () { setView('intro'); });
+      els.introCta.addEventListener('click', function () { setView('map'); });
+      els.introList.addEventListener('click', function () { setView('list'); });
+      els.introAbout.addEventListener('click', function () { setView('about'); });
       window.addEventListener('hashchange', handleHash);
 
-      if (stopIdFromHash() || location.hash === '#about') handleHash();
-      else { fitAllStops(); updateStartBtn(); }
+      // Deep links (QR codes, shared links) go straight to their stop; the home page starts at the intro.
+      if (stopIdFromHash() || location.hash === '#about') { setView('map'); handleHash(); }
+      else setView('intro');
+
+      // Fade out the splash once everything is ready (briefly held on the home page so it reads as a splash).
+      setTimeout(hideSplash, deepLink ? 0 : Math.max(0, SPLASH_MIN_MS - (Date.now() - started)));
     }).catch(function (err) {
       console.error(err);
       if (dataLoaded) {
