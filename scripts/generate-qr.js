@@ -88,7 +88,7 @@ const writeQR = (name, url) => QRCode.toFile(path.join(outDir, name), url, {
 </style>
 </head>
 <body>
-<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per site. Print at 100% scale. Codes point to <code>${esc(BASE_URL)}</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or stop IDs.</div>
+<div class="help">One sign per page (US Letter). The first page is a whole-map sign (for flyers, entrances, and promotion); the rest are one per site. Print at 100% scale. Codes point to <code>${esc(BASE_URL)}</code> — regenerate with <code>npm run qr</code> after changing BASE_URL or site IDs.</div>
 ${homeCard}
 ${cards}
 </body>

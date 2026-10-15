@@ -25,9 +25,9 @@
       "streetsOpacity": 0.38,
       "attribution": "Illustrated map: Beyond the Blue and White team"
     },
-    "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each stop, and the resources it offers.",
+    "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each site, and the resources it offers.",
     "welcome": {
-      "eyebrow": "Every stop has a story.",
+      "eyebrow": "Every site has a story.",
       "text": "An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.",
       "cta": "Explore the map"
     },
@@ -46,6 +46,7 @@
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME"
     },
+    "placesLayer": "data/places.geojson",
     "campusBoundary": {
       "sourceUrl": "https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16",
       "where": "BROADAREAS = 'Central Campus'",
@@ -54,7 +55,7 @@
       "label": "Campus boundary"
     },
     "about": {
-      "tagline": "Every stop has a story.",
+      "tagline": "Every site has a story.",
       "description": "An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.",
       "context": "Beyond the Blue and White was created at the Visual Discovery Conference 2026 at UNC Chapel Hill.",
       "prompt": "Highlight Black history at UNC Chapel Hill.",
@@ -122,7 +123,7 @@
       "credits": [
         "Map illustration by the Beyond the Blue and White team.",
         "Surrounding streets © OpenStreetMap contributors.",
-        "Building names from UNC Chapel Hill's public GIS data.",
+        "Building and campus place names from UNC Chapel Hill's public GIS data and OpenStreetMap.",
         "Map software: Leaflet."
       ],
       "links": [

@@ -924,3 +924,25 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - Phone (375px) and desktop (1280px): no horizontal overflow; one column on phones, two on wide screens; no console errors.
 - "The Pit ›" link opens the Pit's story; Back returns to `#people`; header, home-screen, and About navigation still work.
+
+## 2026-10-14 — Campus place names, site labels on pins, "site" instead of "stop"
+
+**Directed by:** Talia Berler (asked for an invisible layer of campus space and feature names "so we can add the names later", names on hover for the map's locations, and replacing "stop" now that this is a map and not a tour; chose "site")
+
+### What changed
+- **Campus place names:** new `data/places.geojson` (53 places: McCorkle Place, Polk Place, the Pit, the Old Well, Unsung Founders Memorial, Caldwell Monument, memorial gardens, Coker Arboretum, Old Chapel Hill Cemetery, and more). Invisible on the map; hover or tap shows the name, like buildings. Built by the new `scripts/build-places.js` (`npm run places`) from UNC's Features/MapServer layers 11, 14, and 15 and, for the cemetery, OpenStreetMap. Turned on with `tour.placesLayer` in `data/stops.json`.
+- **Site names on pins:** hovering over a pin, or tabbing to it, shows the site's name in a navy label. This replaces the browser's own slow hover tip.
+- **"Stop" → "site"** everywhere visitors see it: the All sites button, page heading, and home-screen link; "Close site details"; error and offline messages; "Every site has a story." (home screen, About tagline, README heading); the placeholder intro. The docs use "site" too.
+- **Leftover wording:** three location messages still said "follow the numbered stops" from before numbering was removed. They now say visitors can still explore every site on the map.
+- About page credit: "Building and campus place names from UNC Chapel Hill's public GIS data and OpenStreetMap."
+
+### Decisions and reasons
+- **Decision:** save the place names as a file in the repository instead of loading UNC's server on every visit. **Why:** the team can rename, remove, and add places by editing one file; UNC's raw names need tidying; and it's faster and doesn't depend on UNC's server. The script refuses to overwrite the file (unless `--force`) so hand edits aren't lost.
+- **Decision:** leave out UNC entries with generic or planning names ("gargoyle", "fountain", "Remnant Forest"…); keep UNC's spelling otherwise. **Why:** labels should be names people use; correcting names we can't verify (for example "Newborn" vs. "Mewborn" Aycock) is for the team.
+- **Decision:** stacking order: lawns and gardens under buildings, monuments above them, smaller areas over larger ones. **Why:** every spot shows its most specific name.
+- **Decision:** "site", not "location", "place", or "landmark". **Why:** fits memorials, buildings, and the cemetery; short for buttons; "location" clashes with "Show where I am", "place" with McCorkle and Polk Place.
+- **Decision:** keep `stops.json`, `#stop=`, and other internal names. **Why:** visitors never see them, and changing `#stop=` would break printed QR codes.
+
+### Verified
+- Map loads 35 areas and 18 points; hovering the McCorkle lawn shows "McCorkle Place"; hovering a pin shows its site name; clicking a pin opens the site and closes the label; no console errors.
+- Pins have no browser `title` tip and are still announced by name.

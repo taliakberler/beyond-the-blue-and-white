@@ -11,7 +11,7 @@
   <link rel="preload" href="fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/lato-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=ec929f11">
-  <link rel="stylesheet" href="css/styles.css?v=c9600973">
+  <link rel="stylesheet" href="css/styles.css?v=f2cdedd0">
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#main">Skip to map content</a>
@@ -30,9 +30,9 @@
     </h1>
     <nav class="header-nav" aria-label="Main">
       <button type="button" id="view-map" class="nav-link" aria-pressed="true">Map</button>
-      <button type="button" id="view-list" class="nav-link" aria-pressed="false" aria-label="All stops">
+      <button type="button" id="view-list" class="nav-link" aria-pressed="false" aria-label="All sites">
         <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="4.5" cy="6" r="1.6" fill="currentColor"/><circle cx="4.5" cy="12" r="1.6" fill="currentColor"/><circle cx="4.5" cy="18" r="1.6" fill="currentColor"/></svg>
-        <span class="nav-text" aria-hidden="true">All stops</span>
+        <span class="nav-text" aria-hidden="true">All sites</span>
       </button>
       <button type="button" id="view-people" class="nav-link" aria-pressed="false" aria-label="People">
         <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.8 19.5c.6-3.6 3-5.6 6.2-5.6s5.6 2 6.2 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.8 14.3c1.9.7 3.1 2.4 3.5 5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -59,7 +59,7 @@
         <p id="intro-text" class="intro-text"></p>
         <button type="button" id="intro-cta" class="cta">Explore the map</button>
         <p class="intro-links">
-          <button type="button" id="intro-list" class="text-link">See all stops</button>
+          <button type="button" id="intro-list" class="text-link">See all sites</button>
           <span aria-hidden="true">·</span>
           <button type="button" id="intro-people" class="text-link">People</button>
           <span aria-hidden="true">·</span>
@@ -85,7 +85,7 @@
 
     <section id="list-view" class="view page-view" aria-labelledby="list-heading" hidden>
       <div class="page-inner">
-        <h2 id="list-heading">All stops</h2>
+        <h2 id="list-heading">All sites</h2>
         <p id="tour-intro" class="page-intro"></p>
         <ol id="stop-list" class="stop-list"></ol>
       </div>
@@ -113,7 +113,7 @@
         <span class="handle-bar" aria-hidden="true"></span>
         <span class="visually-hidden" id="panel-expand-label">Show the full story</span>
       </button>
-      <button type="button" id="panel-close" class="close-btn" aria-label="Close stop details">
+      <button type="button" id="panel-close" class="close-btn" aria-label="Close site details">
         <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
       <h2 id="panel-title" class="panel-title">
@@ -138,7 +138,7 @@
         <ol id="panel-sources" class="sources"></ol>
       </section>
 
-      <nav class="panel-nav" aria-label="Stop navigation">
+      <nav class="panel-nav" aria-label="Site navigation">
         <a id="directions-link" class="directions" href="#" target="_blank" rel="noopener">Get walking directions</a>
         <div class="prev-next">
           <button type="button" id="prev-btn" class="nav-btn">‹ Previous</button>
@@ -151,10 +151,10 @@
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
   <noscript>
-    <p class="noscript">This map needs JavaScript to show the stops.</p>
+    <p class="noscript">This map needs JavaScript to show the sites.</p>
   </noscript>
 
   <script src="js/vendor/leaflet/leaflet.js?v=5a640ff8"></script>
-  <script src="js/app.js?v=ad6ba8f9"></script>
+  <script src="js/app.js?v=083038aa"></script>
 </body>
 </html>

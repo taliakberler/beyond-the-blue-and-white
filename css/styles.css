@@ -306,10 +306,14 @@ main { flex: 1; position: relative; min-height: 0; }
 
 /* Building info tooltip (hover or tap a building) */
 /* The building shapes are invisible tap targets; never show a focus ring that would reveal them. */
-.leaflet-buildings-pane path:focus, .leaflet-buildings-pane path:focus-visible { outline: none; }
+.leaflet-buildings-pane path:focus, .leaflet-buildings-pane path:focus-visible,
+.leaflet-placeAreas-pane path:focus, .leaflet-placeAreas-pane path:focus-visible,
+.leaflet-placePoints-pane path:focus, .leaflet-placePoints-pane path:focus-visible { outline: none; }
 .leaflet-tooltip { background: var(--navy); color: var(--fog); border: 1px solid var(--navy-3); box-shadow: var(--shadow); }
 .leaflet-tooltip-top::before { border-top-color: var(--navy); }
 .building-tip strong { display: block; font-size: var(--fs-small); }
+/* Site name over a pin (hover or keyboard focus) */
+.site-label { font-weight: 700; font-size: var(--fs-small); padding: 4px 10px; }
 .building-tip span { font-size: var(--fs-xs); color: var(--fog-muted); }
 
 /* ---------- All stops (list) ---------- */

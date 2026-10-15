@@ -47,6 +47,17 @@ A campus map like this is well within normal use. If traffic ever grows very lar
 
 The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`, `nameField`). Remove that block to turn it off.
 
+### Campus place names: UNC Chapel Hill GIS and OpenStreetMap
+
+| | |
+|---|---|
+| **What it does** | Names of campus spaces and features (McCorkle Place, Polk Place, the Pit, the Old Well, monuments, memorial gardens, Old Chapel Hill Cemetery). Like the buildings, they're **never drawn**: hovering or tapping shows the name. |
+| **Where the map reads it** | `data/places.geojson`, a file in this repository (set by `tour.placesLayer` in `data/stops.json`). The map doesn't contact UNC or OpenStreetMap for these at all. |
+| **How the file was made** | `scripts/build-places.js` (`npm run places`), run 2026-10-14. It downloaded, within the map area: UNC's `Features/MapServer` layers 11 (Historic Features, points), 14 (Memorial Garden), and 15 (Landmark Space) from `https://gismaps.unc.edu/arcgis/rest/services/`, plus named cemeteries from OpenStreetMap through the Overpass API. It left out generic labels ("gargoyle", "fountain", "time capsule"…) and planning designations ("Remnant Forest", "Rock Outcropping"), and joined numbered pieces of one place ("Kenan Woods3" → "Kenan Woods"). |
+| **Result** | 53 places: 18 points and 35 areas |
+| **Licenses** | UNC data: published by UNC Chapel Hill as a public map service (confirm attribution preferences, as for buildings). The cemetery outline: © OpenStreetMap contributors, under the [Open Database License](https://www.openstreetmap.org/copyright), which the map's existing OpenStreetMap credit covers. |
+| **Editing** | The file is meant to be edited by hand from now on; see [editing-guide.md](editing-guide.md#campus-place-names). The script won't overwrite it unless run with `--force`. |
+
 ### Fonts: Gasoek One, Oswald, Lato
 
 | Typeface | Role | Designer / copyright | License |
@@ -77,7 +88,7 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`
 
 | | |
 |---|---|
-| **What it does** | The site's basemap: the project team's own illustration of central campus, placed on real-world coordinates so stops and "You are here" line up with it |
+| **What it does** | The site's basemap: the project team's own illustration of central campus, placed on real-world coordinates so sites and "You are here" line up with it |
 | **Where it lives** | `tiles/team-map/{z}/{x}/{y}.png`: 99 web-map tiles for zooms 14–18, built by `npm run team-map` from a PNG export of the team's Illustrator file. The export itself isn't in the repository. |
 | **Settings** | `tour.basemap` in `data/stops.json` (tile path, bounds, zoom range, street opacity, credit), and `scripts/team-map.json` for building the tiles |
 | **Credit** | "Illustrated map: Beyond the Blue and White team", shown in the map's credit line |
@@ -120,13 +131,13 @@ These tools run on a team member's computer to prepare files. They aren't part o
 
 | | |
 |---|---|
-| **What it does** | `scripts/generate-qr.js` uses it to create one PNG QR code per stop, plus the printable `qr/sheet.html` |
+| **What it does** | `scripts/generate-qr.js` uses it to create one PNG QR code per site, plus the printable `qr/sheet.html` |
 | **Version** | 1.5.4 |
 | **License** | MIT |
 | **Source** | <https://github.com/soldair/node-qrcode> |
 | **Settings** | Error correction level Q (about 25% of the code can be damaged and still scan), 4-module quiet zone, 1200×1200px, black on white |
 
-The codes are **static**: each stop's web address is encoded directly in the image. No QR-code service, redirect, or tracking is involved, so the codes keep working as long as the website address does.
+The codes are **static**: each site's web address is encoded directly in the image. No QR-code service, redirect, or tracking is involved, so the codes keep working as long as the website address does.
 
 ### Turf (npm packages): geometry tools
 
@@ -181,8 +192,8 @@ The site's code, scripts, and documentation were drafted with help from Claude C
 - [ ] Leaflet license file kept in `js/vendor/leaflet/LICENSE`
 - [ ] Font license files kept in `fonts/`
 - [ ] Every image has a `credit` that matches the holding repository's requirements
-- [ ] Every stop lists its `sources`
-- [ ] Confirmed attribution preferences for the UNC GIS building layer
+- [ ] Every site lists its `sources`
+- [ ] Confirmed attribution preferences for the UNC GIS building layer and campus place names
 - [ ] Credit for the illustrated map's designers added (the map credit currently says "Beyond the Blue and White team")
 - [x] Credits for the project team, coaches, and community advisors added (the About page and the README)
 - [ ] Team members' roles added (in `tour.about.team` in `data/stops.json`)

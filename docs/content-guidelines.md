@@ -2,17 +2,17 @@
 
 > **Draft:** a starting point for the project team to revise. These are working standards, not final editorial policy.
 
-*Beyond the Blue and White* presents Black history at UNC Chapel Hill: the sites, events, and people significant to that history around campus. Visitors will treat what they read at a stop as the record of that place, so every stop must be accurate, sourced, and written with care for the people it describes.
+*Beyond the Blue and White* presents Black history at UNC Chapel Hill: the sites, events, and people significant to that history around campus. Visitors will treat what they read at a site as the record of that place, so every site must be accurate, sourced, and written with care for the people it describes.
 
 ---
 
 ## Core principles
 
-1. **Verify everything.** Every factual claim (names, dates, places, events, quotations) should trace back to a source listed in that stop's `sources`. If a claim can't be sourced, leave it out or clearly mark it as uncertain or contested.
-2. **Center people, not only buildings.** A stop exists because of what people did, endured, or built there. Name them wherever the record allows, and describe them as full people, not only in relation to the University.
+1. **Verify everything.** Every factual claim (names, dates, places, events, quotations) should trace back to a source listed in that site's `sources`. If a claim can't be sourced, leave it out or clearly mark it as uncertain or contested.
+2. **Center people, not only buildings.** A site exists because of what people did, endured, or built there. Name them wherever the record allows, and describe them as full people, not only in relation to the University.
 3. **Name who acted.** Prefer active voice that says who made decisions and who carried them out ("the trustees voted to…"), rather than phrasing that hides responsibility ("it was decided…").
 4. **Show uncertainty honestly.** Archival records about Black life at Southern institutions are often incomplete, or were written by people who didn't value those lives. Say what is known, what isn't, and where the gaps come from.
-5. **Hand off to the full story.** Each stop is a short introduction. Sources and links should point visitors to deeper reading.
+5. **Hand off to the full story.** Each site is a short introduction. Sources and links should point visitors to deeper reading.
 6. **No AI-generated history.** Historical text, names, dates, and citations must be researched and written by people. AI tools may help with formatting or code, but not with historical content.
 
 ---
@@ -57,13 +57,13 @@
 
 ## Review before publishing
 
-Before a stop goes live:
+Before a site goes live:
 
 1. **Fact check:** a second person checks every claim against the cited sources.
 2. **Subject review:** where possible, invite review from historians of the topic and from descendants or community members connected to the people and events described.
 3. **Accessibility check:** every image has alt text, captions make sense on their own, and the text reads clearly on a phone.
-4. **Placeholder check:** set `"placeholder": false` on the stop so the badge disappears, and replace the placeholder text and images.
-5. **Log it:** add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) noting the stop was added and who reviewed it.
+4. **Placeholder check:** set `"placeholder": false` on the site so the badge disappears, and replace the placeholder text and images.
+5. **Log it:** add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) noting the site was added and who reviewed it.
 
 ## Corrections
 
@@ -71,6 +71,6 @@ Errors will happen. When one is reported:
 
 - Fix it in `data/stops.json`.
 - Record the correction, the date, and the source that prompted it in [PROCESS_LOG.md](../PROCESS_LOG.md).
-- If a stop's `id` must change, regenerate and reprint that stop's QR sign.
+- If a site's `id` must change, regenerate and reprint that site's QR sign.
 
 Consider adding a "Report a correction" contact (an email address or form link) to the map once there's an owner to receive reports.

@@ -1,6 +1,6 @@
 # Editing guide
 
-This guide covers updating the map without writing code: stops, images, icons, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a stop, see [content-guidelines.md](content-guidelines.md).
+This guide covers updating the map without writing code: sites, images, icons, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a site, see [content-guidelines.md](content-guidelines.md).
 
 ---
 
@@ -18,7 +18,7 @@ You can also edit files directly on GitHub (open a file, click the pencil icon, 
 
 ---
 
-## Edit the stops
+## Edit the sites
 
 All of the map's content and settings live in **`data/stops.json`**. Keep the quotes, commas, and brackets intact. If the site shows "The map couldn't load" after an edit, paste the file into <https://jsonlint.com> to find the typo.
 
@@ -28,10 +28,10 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 |---|---|
 | `title`, `subtitle` | Shown in the header |
 | `center`, `zoom` | Starting map view, `[lat, lng]` |
-| `intro` | Paragraph shown at the top of the All stops page |
+| `intro` | Paragraph shown at the top of the All sites page |
 | `welcome` | The intro (home) screen: `eyebrow` (small line at the top), `text` (the paragraph under the logo), `cta` (the button label) |
 | `mapHint` | The hint card on the map ("Explore the map. Tap a location to get more details.") |
-| `iconLabels` | The name shown for each icon in the map key, for example `"buildings": "Building"`. The key lists the icons in this order, but only those actually used by a stop. |
+| `iconLabels` | The name shown for each icon in the map key, for example `"buildings": "Building"`. The key lists the icons in this order, but only those actually used by a site. |
 | `about` | The About page (see below) |
 | `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
 | `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
@@ -48,7 +48,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 | `credits` | Short lines crediting the map, data, and software |
 | `links` | `{ "title": "…", "url": "…" }`, shown at the end of the credits |
 
-### Each stop (`"stops": [ … ]`)
+### Each site (`"stops": [ … ]`)
 
 ```json
 {
@@ -81,10 +81,10 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 }
 ```
 
-- **Add a stop:** copy an existing stop block, paste it after a comma, and give it a new `id` and `order`.
-- **Placeholder badge:** stops with `"placeholder": true` show a yellow "PLACEHOLDER CONTENT" badge. Change it to `false` (or delete the line) once the stop's content has been verified. A stop whose title contains the word "PLACEHOLDER" also shows the badge.
+- **Add a site:** copy an existing site block, paste it after a comma, and give it a new `id` and `order`.
+- **Placeholder badge:** sites with `"placeholder": true` show a yellow "PLACEHOLDER CONTENT" badge. Change it to `false` (or delete the line) once the site's content has been verified. A site whose title contains the word "PLACEHOLDER" also shows the badge.
 - `people`, `images`, and `sources` can be empty lists (`[]`). The section is then hidden.
-- Everyone in a stop's `people` list also appears on the site's **People** page, linked back to that stop. Spell a person's name exactly the same way at every stop that mentions them, so they're listed once with links to each site.
+- Everyone in a site's `people` list also appears on the map's **People** page, linked back to that site. Spell a person's name exactly the same way at every site that mentions them, so they're listed once with links to each site.
 - The comments (`// …`) in the example above are for explanation only. JSON doesn't allow comments, so leave them out of the real file.
 
 If any `id` changed, regenerate the QR codes.
@@ -94,7 +94,7 @@ If any `id` changed, regenerate the QR codes.
 ## Add images
 
 1. Put the files in `images/<stop-id>/` (for example `images/the-pit/hero.jpg`); photos of people go in `images/people/`. Resize to about 1200px on the long edge and save as JPEG (quality about 80) with metadata removed. Gallery images are always shown whole, never cropped, so any shape works. Key People photos are shown as squares, with the crop kept near the top so faces stay in frame. JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
-2. Reference them in the stop's `images` list as `"src": "images/your-file.jpg"`.
+2. Reference them in the site's `images` list as `"src": "images/your-file.jpg"`.
 3. Always fill in `alt`, `caption`, and `credit`. See [content-guidelines.md](content-guidelines.md#images-and-rights) for how to write alt text and confirm image rights.
 4. Use local copies. Don't link to images on other sites.
 5. Add `"permission": "pending"` to the image (or `"imagePermission": "pending"` for a person's photo) and add a row to [image-permissions.md](image-permissions.md). Change it to `"confirmed"` once the holder has given permission.
@@ -107,14 +107,38 @@ The placeholder SVGs (`images/stop-*-?.svg`) can be deleted once real images rep
 
 ## Map pin icons
 
-Each stop's `"icon"` picks its pin. The icons are the team's designs:
+Each site's `"icon"` picks its pin. The icons are the team's designs:
 
 - `images/icons/source/` holds the icons exactly as delivered. Don't edit these by hand; replace them with new exports from the design file.
 - `images/icons/pins/` holds the pin versions, made by `npm run pins`. They're recolored so the navy parts show on the navy pins, and cropped to a square.
 
-**To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, add its display name to `tour.iconLabels` (for the map key), then use `"icon": "<name>"` on a stop. Use `npm run stamp` too if you changed any CSS or JS.
+**To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, add its display name to `tour.iconLabels` (for the map key), then use `"icon": "<name>"` on a site. Use `npm run stamp` too if you changed any CSS or JS.
 
-The current assignments (the Pit's memorial icon was chosen by the team): memorial for the Unsung Founders Memorial and the Pit, buildings for Steele Building and Lenoir Hall, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, people, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each stop's history.
+The current assignments (the Pit's memorial icon was chosen by the team): memorial for the Unsung Founders Memorial and the Pit, buildings for Steele Building and Lenoir Hall, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, people, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each site's history.
+
+---
+
+## Campus place names
+
+`data/places.geojson` holds the names that appear when visitors hover over or tap campus spaces and features that aren't buildings: lawns and quads (McCorkle Place, Polk Place), the Pit, the Old Well, monuments, memorial gardens, and Old Chapel Hill Cemetery. Nothing is drawn; only the name shows.
+
+Each place is one entry in `"features"`:
+
+```json
+{
+ "type": "Feature",
+ "properties": { "name": "Old Well", "kind": "feature", "source": "UNC Historic Features" },
+ "geometry": { "type": "Point", "coordinates": [-79.0512, 35.9121] }
+}
+```
+
+- **Rename a place:** change `"name"`.
+- **Remove a place:** delete its whole `{ … }` entry (and the comma before or after it).
+- **Add a place:** the easiest way is [geojson.io](https://geojson.io). Open `data/places.geojson` there, draw a point (for a small feature like a plaque) or a shape (for a lawn or plaza), set its `name` property, then save the file back here. Use `"kind": "feature"` for points and `"area"` for shapes, and a `"source"` saying where the place and its name came from.
+- **Coordinates are longitude first**, then latitude (the opposite of `stops.json`).
+- Areas inside other areas work: the smaller one shows its name on top. Buildings always show their own name over a lawn, and monuments show theirs over a building.
+
+`npm run places` built this file from UNC's and OpenStreetMap's data (see [software-and-credits.md](software-and-credits.md)). Running it again would replace your edits, so it refuses unless you add `-- --force`.
 
 ---
 
@@ -160,8 +184,8 @@ Other settings in `scripts/team-map.json`:
 
 There are two kinds of QR code:
 
-- **Whole map:** `qr/map.png` points to `<BASE_URL>/`, the home page with every stop on the map. Use it on flyers, posters, social media, entrance signs, and other promotion.
-- **Each stop:** `qr/<stop-id>.png` points to `<BASE_URL>/index.html#stop=<id>`. Use these on the sign at each site.
+- **Whole map:** `qr/map.png` points to `<BASE_URL>/`, the home page with every site on the map. Use it on flyers, posters, social media, entrance signs, and other promotion.
+- **Each site:** `qr/<stop-id>.png` points to `<BASE_URL>/index.html#stop=<id>`. Use these on the sign at each site.
 
 **BASE_URL is set in one place:** `scripts/qr-config.json`.
 
@@ -186,14 +210,14 @@ npm run qr
 This writes:
 
 - `qr/map.png`: the whole-map code.
-- `qr/<stop-id>.png`: one code per stop.
-- `qr/sheet.html`: a printable page with one sign per US Letter page. The first page is a "Scan to explore the map" sign with the whole-map code. The rest are one per stop (stop number, title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
+- `qr/<stop-id>.png`: one code per site.
+- `qr/sheet.html`: a printable page with one sign per US Letter page. The first page is a "Scan to explore the map" sign with the whole-map code. The rest are one per site (title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
 
 All codes are 1200×1200 PNGs with error correction level Q (holds up to scuffs on outdoor signs).
 
 You can also override the URL for a single run without editing the config file: `BASE_URL=https://example.org/map npm run qr`.
 
-The codes are **static**: the URL is encoded directly in the image, with no redirect service. Once signs are printed, **don't change a stop's `id` or the BASE_URL**, or the printed codes will stop working. Test-scan every printed sign before installing it.
+The codes are **static**: the URL is encoded directly in the image, with no redirect service. Once signs are printed, **don't change a site's `id` or the BASE_URL**, or the printed codes will stop working. Test-scan every printed sign before installing it.
 
 ---
 
@@ -227,4 +251,4 @@ This updates the stamps, so visitors' browsers fetch the new files instead of mi
 
 ## Record your changes
 
-When you make a meaningful change (new stops, a design update, a code fix), add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) describing what changed and why.
+When you make a meaningful change (new sites, a design update, a code fix), add an entry to [PROCESS_LOG.md](../PROCESS_LOG.md) describing what changed and why.

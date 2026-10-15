@@ -2,7 +2,7 @@
   "name": "beyond-the-blue-and-white",
   "version": "0.1.0",
   "private": true,
-  "description": "Mobile-first historical walking tour (static site) \u2014 UNC Chapel Hill mockup",
+  "description": "Mobile-first historical walking tour (static site) — UNC Chapel Hill mockup",
   "scripts": {
     "qr": "node scripts/generate-qr.js",
     "placeholders": "node scripts/make-placeholders.js",
@@ -10,7 +10,8 @@
     "boundary": "node scripts/build-campus-boundary.js",
     "team-map": "node scripts/build-team-map-tiles.js",
     "stamp": "node scripts/stamp-assets.js",
-    "pins": "node scripts/build-pin-icons.js"
+    "pins": "node scripts/build-pin-icons.js",
+    "places": "node scripts/build-places.js"
   },
   "devDependencies": {
     "@turf/buffer": "7.4.0",

@@ -12,7 +12,7 @@ All of the map's content comes from two data files:
 
 | File | Contents |
 |---|---|
-| `data/stops.json` | Site settings (title, map center, basemap, building layer, About page) and every stop's text, images, people, and sources |
+| `data/stops.json` | Site settings (title, map center, basemap, building layer, About page) and every site's text, images, people, and sources |
 
 Changing those files changes the map, with no code edits needed.
 
@@ -25,26 +25,28 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 ### Splash and intro (home)
 
 - A navy **splash screen** with the logo appears while the map's data loads.
-- On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, a coral **Explore the map** button, and links to **See all stops** and **About this project**. The wording is `tour.welcome` in `data/stops.json`.
-- **Stop links and QR codes skip the intro** and open their stop directly. The splash is skipped for them too, so visitors standing at a site get there as fast as possible.
+- On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, a coral **Explore the map** button, and links to **See all sites** and **About this project**. The wording is `tour.welcome` in `data/stops.json`.
+- **Site links and QR codes skip the intro** and open their site directly. The splash is skipped for them too, so visitors standing at a site get there as fast as possible.
 - The **Home** button (⌂) or the logo in the header returns to the intro.
 
 ### Map
 
 - **The team's illustrated campus map** as the basemap, with nearby streets shown faintly around it.
-- **Icon pins** for each stop, using the team's icons (memorial, buildings, people, cemetery, and so on), on navy circles. There's no route line and no numbering: the sites can be explored in any order.
-- A **hint card** at the bottom ("Explore the map. Tap a location to get more details.") whenever no stop is open, with a **map key** showing what each pin icon means. The key lists only the icons currently used by a stop, so it grows automatically when new icons are assigned.
+- **Icon pins** for each site, using the team's icons (memorial, buildings, people, cemetery, and so on), on navy circles. There's no route line and no numbering: the sites can be explored in any order.
+- A **hint card** at the bottom ("Explore the map. Tap a location to get more details.") whenever no site is open, with a **map key** showing what each pin icon means. The key lists only the icons currently used by a site, so it grows automatically when new icons are assigned.
+- **Site names on the pins:** hovering over a pin (or tabbing to it with the keyboard) shows the site's name. On phones, tapping a pin opens its preview, which shows the name.
 - **Building names on hover or tap:** UNC's building footprints are invisible. Hovering (desktop) or tapping (phones) a building shows its name.
+- **Campus place names on hover or tap:** the same for lawns, plazas, monuments, memorial gardens, and the cemetery (for example McCorkle Place, Polk Place, the Old Well), from `data/places.geojson`. A building shows its own name even inside a lawn, and a monument shows its name over a building. See [editing-guide.md](editing-guide.md#campus-place-names) to rename or add places.
 - A round **"Show where I am"** button (top-right), which shows the visitor's position as a coral dot with an accuracy circle.
-- A **compass** and a **scale bar** (meters and feet) in the bottom-left corner. On phones they move up above the hint card or the stop preview, so nothing overlaps.
+- A **compass** and a **scale bar** (meters and feet) in the bottom-left corner. On phones they move up above the hint card or the site preview, so nothing overlaps.
 - **Zooming:** pinch on phones; zoom buttons appear on wider screens.
 
-### Stop preview and full story
+### Site preview and full story
 
-- **Tapping a pin on a phone** opens a short navy **preview** at the bottom: the site's name (for example "STEELE BUILDING") and its era. The map stays visible, with the stop centered above it.
+- **Tapping a pin on a phone** opens a short navy **preview** at the bottom: the site's name (for example "STEELE BUILDING") and its era. The map stays visible, with the site centered above it.
 - **Tap the preview, swipe it up, or press its handle** to open the **full story**, which fills the screen below the header. Swiping down returns to the preview, and swiping down again (or ⊗) closes it.
-- **Arriving from a stop link or QR code** opens the full story straight away.
-- **On desktop**, stops open as a 420px side panel with the full story.
+- **Arriving from a site link or QR code** opens the full story straight away.
+- **On desktop**, sites open as a 420px side panel with the full story.
 - The full story contains, in order:
   1. a swipeable **image gallery** with captions and credits
   2. the summary and history
@@ -54,15 +56,15 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
   Previous and Next wrap around, so every site is reachable from every other.
 
-### All stops
+### All sites
 
-The **All stops** button (⋮≡ on phones) shows every stop in order as a card (pin icon and number, name, era, summary). Tapping a card opens that stop on the map.
+The **All sites** button (⋮≡ on phones) shows every site in order as a card (pin icon, name, era, summary). Tapping a card opens that site on the map.
 
 ### People page
 
 The **People** button (two figures on phones, or the address `…/#people`) lists every person featured in any site's **Key people**, alphabetical by last name. Each card shows the same photo, name, description, and credit as on the site, plus **Featured at:** with a link to each site that mentions them. Following a link opens that site's full story on the map, and **Back** returns to the People page.
 
-The page builds itself from the stops' `people` lists, so nothing extra needs editing. A person listed at more than one site (matched by exactly the same name) appears once, with a link to each site.
+The page builds itself from the sites' `people` lists, so nothing extra needs editing. A person listed at more than one site (matched by exactly the same name) appears once, with a link to each site.
 
 ### About page
 
@@ -77,18 +79,18 @@ Everything on it comes from `tour.about` in `data/stops.json`.
 
 ## Deep links and QR codes
 
-The People and About pages have their own addresses, `…/index.html#people` and `…/index.html#about`, and every stop has one too:
+The People and About pages have their own addresses, `…/index.html#people` and `…/index.html#about`, and every site has one too:
 
 ```
 https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=<stop-id>
 ```
 
-Each stop's QR code encodes this address. When the page opens with `#stop=…`, it zooms to that stop and opens its panel.
+Each site's QR code encodes this address. When the page opens with `#stop=…`, it zooms to that site and opens its panel.
 
 - The part after `#` never reaches the server, so this works on any static host.
-- Moving between stops updates the address, so the phone's **Back** button returns to the previous stop, and any stop's address can be copied and shared.
+- Moving between sites updates the address, so the phone's **Back** button returns to the previous site, and any site's address can be copied and shared.
 - Closing the panel removes the `#stop=` part.
-- An unknown or mistyped stop id shows the List view with the message "That stop wasn't found."
+- An unknown or mistyped site id shows the List view with the message "That site wasn't found."
 
 ---
 
@@ -103,6 +105,7 @@ index.html
      ├─ draw map: faded OpenStreetMap streets + illustrated-map tiles (tiles/team-map)
      ├─ draw icon pins (images/icons/pins)
      ├─ fetch UNC building layer (optional, in background) → invisible hover/tap targets
+     ├─ fetch data/places.geojson (optional) → invisible hover/tap targets for named campus places
      ├─ build List view
      └─ if the address has #stop=…, open that stop; otherwise fit all stops on screen
 ```
@@ -119,12 +122,12 @@ All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the s
 
 | Area | What's built in |
 |---|---|
-| **Keyboard** | Every control is reachable with Tab. Stop pins can be focused and opened with Enter or Space; on the map, the amber focus ring has a navy surround so it shows against the light illustration. Escape closes the stop panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
-| **Focus** | A thick orange focus ring on every focused element. Opening a stop moves focus into its panel; closing returns focus to that stop's marker. |
-| **Screen readers** | Pins are announced as buttons ("Stop 3: Lenoir Hall"). The splash announces "Loading the map…". The header's Map, All stops, and About buttons report which is active (`aria-pressed`). The stop sheet's handle reports whether the full story is open (`aria-expanded`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
+| **Keyboard** | Every control is reachable with Tab. Site pins can be focused and opened with Enter or Space; on the map, the amber focus ring has a navy surround so it shows against the light illustration. Escape closes the site panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
+| **Focus** | A thick orange focus ring on every focused element. Opening a site moves focus into its panel; closing returns focus to that site's marker. |
+| **Screen readers** | Pins are announced as buttons with the site's name ("Lenoir Hall"). The splash announces "Loading the map…". The header's Map, All sites, and About buttons report which is active (`aria-pressed`). The site sheet's handle reports whether the full story is open (`aria-expanded`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
 | **Images** | Every image has alt text from `stops.json`, and images that fail to load are replaced by a labeled text box. |
 | **Text** | 17px base size in `rem` units, so it follows browser text-size settings. Zooming the page isn't blocked. |
-| **Color** | All text/background pairs meet WCAG 2.1 AA contrast ([measurements](design-and-styles.md#measured-contrast)). The coral buttons pass at the large-text level, so their labels are always large and bold. Information is never conveyed by color alone: the active stop is also enlarged and named in the sheet. |
+| **Color** | All text/background pairs meet WCAG 2.1 AA contrast ([measurements](design-and-styles.md#measured-contrast)). The coral buttons pass at the large-text level, so their labels are always large and bold. Information is never conveyed by color alone: the active site is also enlarged and named in the sheet. |
 | **Motion** | Animations are switched off when the device's "reduce motion" setting is on. |
 | **Touch** | All tap targets are at least 44×44px. |
 
@@ -136,13 +139,14 @@ These were checked by hand and with scripted tests in a browser (see [PROCESS_LO
 
 | Situation | What the visitor sees |
 |---|---|
-| Map tiles fail to load (weak signal, offline) | "Map tiles couldn't load — you may be offline. The stop list and stop details still work." with a **Show list** button |
+| Map tiles fail to load (weak signal, offline) | "Map tiles couldn't load — you may be offline. The list of sites and their stories still work." with a **Show list** button |
 | Phone goes offline or comes back | A short notice in each case |
 | An image fails to load | A gray box: "Image couldn't load — you may be offline." |
-| Location permission denied | "Location permission was denied. That's OK — follow the numbered stops, or allow location in your browser settings…" |
+| Location permission denied | "Location permission was denied. That's OK — you can still explore every site on the map, or allow location in your browser settings…" |
 | Location times out or is unavailable | A friendly message suggesting trying again in an open area |
 | Visitor is far from campus | Their location is still shown, with a note that they appear to be away from campus |
 | Building layer unavailable | Building names don't appear on hover or tap; nothing else changes |
+| `data/places.geojson` missing or broken | Place names don't appear on hover or tap; nothing else changes |
 | Map data can't load | A full-page message explaining the problem, with a Reload button |
 
 ---

@@ -113,6 +113,12 @@
     map.getPane('art').style.zIndex = 250;       // illustrated map: above the faded streets (200)
     map.createPane('buildings');
     map.getPane('buildings').style.zIndex = 350; // invisible hover targets: below routes (400) and markers (600)
+    // Named campus places (data/places.geojson), also invisible: lawns and gardens sit under the
+    // buildings, so a building inside McCorkle Place still shows its own name; monuments sit above.
+    map.createPane('placeAreas');
+    map.getPane('placeAreas').style.zIndex = 340;
+    map.createPane('placePoints');
+    map.getPane('placePoints').style.zIndex = 360;
 
     var OSM_CREDIT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     var bm = state.tour.basemap || {};
@@ -162,7 +168,7 @@
       tileErrors++;
       if (!warned && tileErrors >= 3) {
         warned = true;
-        toast('Map tiles couldn’t load — you may be offline. The stop list and stop details still work.', {
+        toast('Map tiles couldn’t load — you may be offline. The list of sites and their stories still work.', {
           duration: 9000,
           action: { label: 'Show list', run: function () { setView('list'); } }
         });
@@ -173,7 +179,7 @@
       if (layer) layer.on('tileerror', onTileError).on('load', onTileLoad);
     });
 
-    window.addEventListener('offline', function () { toast('You’re offline. Saved stop text still works; map tiles and images may not load.'); });
+    window.addEventListener('offline', function () { toast('You’re offline. Site stories already loaded still work; map tiles and images may not load.'); });
     window.addEventListener('online', function () { toast('Back online.', { duration: 2500 }); });
 
     // Keep the map sized correctly when the viewport or panel changes.
@@ -200,17 +206,22 @@
       });
       var m = L.marker([stop.lat, stop.lng], {
         icon: icon,
-        title: stop.title,
+        siteName: stop.title,   // read by labelMarker (not Leaflet's "title", which adds a slow browser tooltip)
         keyboard: true,
         riseOnHover: true
       }).addTo(state.map);
-      m.on('click', function () { goToStop(i, { fromMap: true }); });
+      // The site's name, shown on hover and on keyboard focus. On phones, tapping opens the preview
+      // (which shows the name), so the label is closed straight away there.
+      m.bindTooltip(stop.title, { direction: 'top', offset: [0, -2], className: 'site-label' });
+      m.on('click', function () { m.closeTooltip(); goToStop(i, { fromMap: true }); });
       m.on('add', labelMarker);
       labelMarker.call(m);
       // Enter / Space opens the stop (don't rely on Leaflet's keypress handling).
       m.getElement().addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStop(i, { fromMap: true }); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); m.closeTooltip(); goToStop(i, { fromMap: true }); }
       });
+      m.getElement().addEventListener('focus', function () { m.openTooltip(); });
+      m.getElement().addEventListener('blur', function () { m.closeTooltip(); });
       state.markers[stop.id] = m;
       bounds.push([stop.lat, stop.lng]);
     });
@@ -232,7 +243,7 @@
     var node = this.getElement && this.getElement();
     if (!node) return;
     node.setAttribute('role', 'button');
-    node.setAttribute('aria-label', this.options.title);
+    node.setAttribute('aria-label', this.options.siteName);
   }
 
   function getCss(name) {
@@ -289,12 +300,57 @@
     });
   }
 
+  /* ---------------- Named campus places (invisible; name on hover or tap) ---------------- */
+
+  // data/places.geojson: lawns, plazas, monuments, memorial gardens, the cemetery. Built once by
+  // scripts/build-places.js from UNC's and OpenStreetMap's data, then edited by hand.
+  function loadPlaces() {
+    var url = state.tour.placesLayer;
+    if (!url) return;
+    fetch(url, { cache: 'no-cache' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (geo) {
+      var invisible = { stroke: false, fill: true, fillColor: '#000', fillOpacity: 0 };
+      function bind(f, layer) {
+        var name = f.properties && f.properties.name;
+        if (!name) return;
+        var box = el('div', { 'class': 'building-tip' });
+        box.appendChild(el('strong', null, String(name)));
+        layer.bindTooltip(box, { sticky: true, direction: 'top', offset: [0, -6] });
+        layer.on('click', function (e) { layer.openTooltip(e.latlng); });
+      }
+      var isPoint = function (f) { return f.geometry && /Point$/.test(f.geometry.type); };
+      var feats = geo.features || [];
+      // Areas, largest first, so a small garden inside a big lawn is on top and gets the hover.
+      var areas = feats.filter(function (f) { return !isPoint(f); });
+      areas.sort(function (a, b) { return roughArea(b) - roughArea(a); });
+      L.geoJSON({ type: 'FeatureCollection', features: areas }, {
+        pane: 'placeAreas', style: function () { return invisible; }, onEachFeature: bind
+      }).addTo(state.map);
+      // Monuments and other points: an invisible circle about a fingertip wide.
+      L.geoJSON({ type: 'FeatureCollection', features: feats.filter(isPoint) }, {
+        pane: 'placePoints',
+        pointToLayer: function (f, latlng) { return L.circleMarker(latlng, L.extend({ radius: 12, pane: 'placePoints' }, invisible)); },
+        onEachFeature: bind
+      }).addTo(state.map);
+    }).catch(function (err) {
+      console.warn('Places layer not loaded:', err);  // the map works fine without it
+    });
+  }
+
+  // Size of a polygon's bounding box, for stacking order only.
+  function roughArea(f) {
+    var b = L.geoJSON(f).getBounds();
+    return (b.getNorth() - b.getSouth()) * (b.getEast() - b.getWest());
+  }
+
   /* ---------------- Geolocation ---------------- */
 
   function initLocate() {
     els.locateBtn.addEventListener('click', function () {
       if (!('geolocation' in navigator)) {
-        toast('Your browser can’t share your location. You can still follow the numbered stops.');
+        toast('Your browser can’t share your location. You can still explore every site on the map.');
         return;
       }
       if (!window.isSecureContext) {
@@ -326,10 +382,10 @@
       }, function (err) {
         els.locateBtn.removeAttribute('aria-busy');
         var msg = err.code === 1
-          ? 'Location permission was denied. That’s OK — follow the numbered stops, or allow location in your browser settings to see where you are.'
+          ? 'Location permission was denied. That’s OK — you can still explore every site on the map, or allow location in your browser settings to see where you are.'
           : err.code === 3
             ? 'Finding your location took too long. Try again in an open area.'
-            : 'Your location isn’t available right now. You can still follow the numbered stops.';
+            : 'Your location isn’t available right now. You can still explore every site on the map.';
         toast(msg, { duration: 9000 });
       }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
     });
@@ -798,7 +854,7 @@
     if (!id) { closePanel({ keepHash: true, silent: true }); return; }
     var i = state.stops.findIndex(function (s) { return s.id === id; });
     if (i === -1) {
-      toast('That stop wasn’t found. Here are all the stops instead.');
+      toast('That site wasn’t found. Here are all the sites instead.');
       setView('list');
       return;
     }
@@ -853,6 +909,7 @@
       initMap();
       addMarkers();
       optional(loadBuildings, 'Building layer');
+      optional(loadPlaces, 'Places layer');
       initLocate();
       initPanel();
       renderList();
