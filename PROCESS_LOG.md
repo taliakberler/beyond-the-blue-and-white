@@ -997,3 +997,19 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - Chrome (preview): both videos play; with the fallback background temporarily red, no red showed; tapping skips; no console errors.
 - Every frame of the new backdrop decodes to the same color as the animation's first frame.
+
+## 2026-10-15 — Splash: one canvas, so the navy matches in every browser
+
+**Directed by:** Talia Berler (Firefox, after a hard refresh: the navy beside the animation still didn't match; screenshot)
+
+### What changed
+- The splash paints each frame of the animation onto one full-screen canvas and fills the space around it with a color read from that same canvas. The backdrop video (`media/splash-backdrop.mp4`) and `scripts/make-splash-backdrop.swift` are removed.
+
+### Decisions and reasons
+- **Finding:** Talia's screenshot showed the backdrop playing but in a different shade, rgb(21, 47, 83) beside the video vs. rgb(19, 41, 75) inside. Firefox on macOS can hand a large video to the system to draw while drawing other content itself, and the two paths handle color differently. So any approach with two separately drawn surfaces (CSS color or second video) can mismatch.
+- **Decision:** one canvas. **Why:** everything visible during the animation comes from one surface, so the colors can't diverge, whatever the browser does.
+- **Decision:** the fill is re-read a few times a second from a plain strip at the top of the frame (most common color). **Why:** measuring the canvas showed the video's own navy changes slightly after the first half-second (20,40,70 → 19,41,72), so a color read once drifted off.
+- **Fallback:** if the canvas can't be used (or animation frames are paused, as in a hidden tab), the plain video shows underneath as before.
+
+### Verified
+- Firefox (Playwright) and Google Chrome, 1280×800 and 375×812: canvas pixels and on-screen pixels beside and inside the frame identical (Firefox 19,41,72; Chrome 19,41,74) at 3 s and 5.6 s. Tapping skips; no errors.

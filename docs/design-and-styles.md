@@ -163,7 +163,7 @@ Key dimensions:
 
 - The splash fades out over 0.45 s, the map glides (0.6 s) to each site, and the active pin enlarges.
 - With **reduce motion** turned on in the device settings, all transitions are switched off and the opening animation is replaced by the still logo.
-- Browsers display video colors differently from page colors, and differently from each other, so the opening animation's navy never exactly matches any CSS color (in Chrome it shows a shade bluer than `--navy`; other browsers differ again). So the space around the video is filled with `media/splash-backdrop.mp4`: the video's own plain-navy first frame, held for one second, looped, and stretched to fill the screen. It goes through the same video color handling, so it matches in every browser. `#122e54` underneath is only a fallback. The video's edges also fade very slightly, to hide a 1px darker border in the file.
+- Browsers display video colors differently from page colors, and differently from each other, so the opening animation's navy never exactly matches any CSS color (in Chrome it shows a shade bluer than `--navy`; other browsers differ again). Firefox on Macs even draws two videos in different shades. So each frame of the animation is painted onto one full-screen canvas, and the space around it is filled with a color read from that same canvas (the most common color in a thin plain strip along the top of the frame, re-read a few times a second because the video's navy drifts very slightly as it plays). It's all one surface, so it matches in every browser. The file's 1px darker border is trimmed off. If the canvas can't be used, the plain video shows instead, on `#122e54` with slightly faded edges.
 
 ---
 

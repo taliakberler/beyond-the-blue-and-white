@@ -124,11 +124,11 @@ button { font: inherit; color: inherit; }
 .splash-logo { width: min(64vw, 300px); height: auto; }
 /* The team's opening animation (home page only; see playSplashVideo in app.js). It's always shown
    whole (never cropped, so none of the names in it are cut off), centered on its own navy. */
-/* The space around the video is filled by .splash-backdrop (a plain-navy frame of the video itself),
-   because browsers display video colors differently from page colors. #122e54 is only a close
-   fallback in case the backdrop doesn't load. */
+/* While the animation plays, .splash-canvas (on top of the video) paints each frame plus the space
+   around it in one surface, so the navy always matches (see playSplashVideo in app.js). The video
+   underneath only shows if the canvas can't be used. #122e54 is a close fallback for that case. */
 .splash.has-video { background: #122e54; cursor: pointer; }
-.splash-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.splash-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .splash.has-video .splash-logo { visibility: hidden; }
 /* Sized to the video's 9:16 frame and centered. Its outer edge fades out very slightly, to hide a
    1px darker border in the file and any small color difference between browsers. */

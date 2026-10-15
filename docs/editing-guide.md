@@ -126,13 +126,9 @@ The home page's splash plays `media/splash.mp4`. To use a new version, export it
 swift scripts/encode-video.swift "path/to/Splash.mp4" media/splash.mp4 720 1280 1400000
 ```
 
-The numbers are the width, height (for a portrait 9:16 video), and bitrate (1.4 Mbps). Use the MP4 export as the source; the encoder can't read Apple Animation-format MOV files. Then remake the backdrop (the plain-navy frame that fills the space around the video; see [design-and-styles.md](design-and-styles.md#motion)). The new video's very first frame must be plain background, with nothing else on it:
+The numbers are the width, height (for a portrait 9:16 video), and bitrate (1.4 Mbps). Use the MP4 export as the source; the encoder can't read Apple Animation-format MOV files. Then run `npm run stamp` and check the splash in a browser.
 
-```bash
-swift scripts/make-splash-backdrop.swift media/splash.mp4 media/splash-backdrop.mp4
-```
-
-Finally, run `npm run stamp` and check the splash in a browser.
+The space around the video is filled automatically with the video's own background color (see [design-and-styles.md](design-and-styles.md#motion)). That color is read from a thin strip along the top of the frame, so keep the top ~1.5% of a new video plain background.
 
 To turn the animation off, set `SPLASH_VIDEO` to `''` at the top of `js/app.js`.
 

@@ -11,7 +11,6 @@
   var STOP_ZOOM = 18;
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   var SPLASH_VIDEO = 'media/splash.mp4';
-  var SPLASH_BACKDROP = 'media/splash-backdrop.mp4';  // the video's plain-navy first frame, held for 1 s and looped behind it
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
   var SPLASH_VIDEO_MAX_MS = 20000;   // safety cap, in case the video never reports that it ended
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
@@ -897,7 +896,7 @@
     var saveData = navigator.connection && navigator.connection.saveData;
     if (reduce || saveData || !SPLASH_VIDEO) { finish(); return; }
 
-    // Safari decides whether a video may autoplay when its file is set, so each one is muted (the
+    // Safari decides whether a video may autoplay when its file is set, so it's muted (the
     // property and the attribute) BEFORE it gets its src, and only played once it's on the page.
     function silentVideo(cls, src, loop) {
       var v = el('video', { 'class': cls, playsinline: '', 'webkit-playsinline': '', preload: 'auto', 'aria-hidden': 'true' });
@@ -908,29 +907,68 @@
       return v;
     }
     var video = silentVideo('splash-video', SPLASH_VIDEO);
-    // Browsers show a video's colors differently from page colors (and differently from each other),
-    // so a CSS background never quite matches the video's navy. Instead, the space around the video
-    // is filled with a frame of the video itself, which always matches.
-    var backdrop = silentVideo('splash-backdrop', SPLASH_BACKDROP, true);
     els.splash.classList.add('has-video');
     els.splash.insertBefore(video, els.splash.firstChild);
-    els.splash.insertBefore(backdrop, video);
-    var bp = backdrop.play();
-    if (bp && bp.catch) bp.catch(function () {});   // if it can't play, the CSS navy behind it shows instead
+
+    // Browsers display video colors differently from page colors, and some (Firefox on Macs) even
+    // draw two videos in different shades, so nothing placed beside the video reliably matches its
+    // navy. Instead, each frame is painted onto one full-screen canvas, and the space around it is
+    // filled with a color sampled from that same canvas, so it's one surface and always matches.
+    // If the canvas can't be used, the video itself still shows underneath.
+    var canvas = el('canvas', { 'class': 'splash-canvas', 'aria-hidden': 'true' });
+    var ctx = canvas.getContext && canvas.getContext('2d');
+    var fill = null, frames = 0;
+    var CROP = 2;   // the video file has a 1px darker border; leave it out
+    // The fill is the most common color in a thin strip along the top of the frame (plain navy,
+    // above the names), as drawn on this canvas. It's re-sampled a few times a second because the
+    // video's navy drifts very slightly as it plays.
+    function sampleFill(dx, dy, dw, dh) {
+      var y0 = Math.round(dy + dh * 0.003), rows = Math.max(1, Math.round(dh * 0.012));
+      var d = ctx.getImageData(Math.round(dx), y0, Math.round(dw), rows).data;
+      var counts = {}, best = null;
+      for (var i = 0; i < d.length; i += 4 * 3) {
+        var key = d[i] + ',' + d[i + 1] + ',' + d[i + 2];
+        counts[key] = (counts[key] || 0) + 1;
+        if (!best || counts[key] > counts[best]) best = key;
+      }
+      return 'rgb(' + best + ')';
+    }
+    function paint() {
+      if (finished || !canvas.isConnected) return;
+      var vw = video.videoWidth, vh = video.videoHeight;
+      if (vw && video.readyState >= 2) {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var W = Math.round(window.innerWidth * dpr), H = Math.round(window.innerHeight * dpr);
+        if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+        var sw = vw - 2 * CROP, sh = vh - 2 * CROP;
+        var k = Math.min(W / sw, H / sh), dw = sw * k, dh = sh * k, dx = (W - dw) / 2, dy = (H - dh) / 2;
+        ctx.drawImage(video, CROP, CROP, sw, sh, dx, dy, dw, dh);
+        if (!fill || frames++ % 10 === 0) {
+          try { fill = sampleFill(dx, dy, dw, dh); }
+          catch (e) { canvas.remove(); return; }   // can't read pixels: show the plain video instead
+        }
+        // Paint only the space around the frame, so the frame itself isn't covered.
+        ctx.fillStyle = fill;
+        if (dx > 0) { ctx.fillRect(0, 0, Math.ceil(dx), H); ctx.fillRect(Math.floor(dx + dw), 0, W, H); }
+        if (dy > 0) { ctx.fillRect(0, 0, W, Math.ceil(dy)); ctx.fillRect(0, Math.floor(dy + dh), W, H); }
+      }
+      window.requestAnimationFrame(paint);
+    }
+    if (ctx) {
+      els.splash.insertBefore(canvas, video.nextSibling);
+      window.requestAnimationFrame(paint);
+    }
 
     // If it can't play (autoplay blocked, e.g. iPhone Low Power Mode, or the file fails),
     // fall back to the still logo and carry on as if there were no video.
     function fallBack() {
       if (finished) return;
-      video.remove(); backdrop.remove();
+      video.remove(); canvas.remove();
       els.splash.classList.remove('has-video');
       finish();
     }
     var startTimer = setTimeout(fallBack, SPLASH_VIDEO_START_MS);
-    video.addEventListener('playing', function () {
-      clearTimeout(startTimer);
-      if (backdrop.paused) { var r = backdrop.play(); if (r && r.catch) r.catch(function () {}); }  // try again now that video is allowed
-    }, { once: true });
+    video.addEventListener('playing', function () { clearTimeout(startTimer); }, { once: true });
     video.addEventListener('error', fallBack);
     video.addEventListener('ended', finish);
     setTimeout(finish, SPLASH_VIDEO_MAX_MS);
