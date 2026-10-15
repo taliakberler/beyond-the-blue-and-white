@@ -1,7 +1,7 @@
 {
   "tour": {
-    "title": "Beyond the White and Blue",
-    "subtitle": "A walking tour of Black history at UNC Chapel Hill",
+    "title": "Beyond the Blue and White",
+    "subtitle": "A digital map of Black history at UNC Chapel Hill",
     "campus": "UNC Chapel Hill",
     "center": [
       35.912003,
@@ -23,9 +23,9 @@
       "minNativeZoom": 14,
       "maxNativeZoom": 18,
       "streetsOpacity": 0.38,
-      "attribution": "Illustrated map: Beyond the White and Blue team"
+      "attribution": "Illustrated map: Beyond the Blue and White team"
     },
-    "intro": "PLACEHOLDER introduction — replace with a short welcome to the tour, its theme, and roughly how long the walk takes.",
+    "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each stop, and the resources it offers.",
     "buildingLayer": {
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
       "nameField": "BUILDINGNAME",
@@ -37,6 +37,85 @@
       "closeGapsMeters": 15,
       "file": "data/campus-boundary.geojson",
       "label": "Campus boundary"
+    },
+    "about": {
+      "tagline": "Every stop has a story.",
+      "description": "An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.",
+      "context": "Beyond the Blue and White was created at the Visual Discovery Conference 2026 at UNC Chapel Hill.",
+      "prompt": "Highlight Black history at UNC Chapel Hill.",
+      "team": [
+        {
+          "name": "Talia Berler",
+          "role": ""
+        },
+        {
+          "name": "Cayla Quintero",
+          "role": ""
+        },
+        {
+          "name": "Trinity Gill",
+          "role": ""
+        },
+        {
+          "name": "Gwyneth Shoemaker",
+          "role": ""
+        },
+        {
+          "name": "Jori Husted",
+          "role": ""
+        },
+        {
+          "name": "Andrea Perez",
+          "role": ""
+        },
+        {
+          "name": "Victor Morgan",
+          "role": ""
+        },
+        {
+          "name": "Leticia Oteng",
+          "role": ""
+        },
+        {
+          "name": "Andie Day",
+          "role": ""
+        }
+      ],
+      "coaches": [
+        {
+          "name": "Adonis Durado",
+          "role": ""
+        },
+        {
+          "name": "Randy Stano",
+          "role": ""
+        }
+      ],
+      "advisors": {
+        "description": "From Chapel Hill, who advised the team on the history of Black labor and community here.",
+        "people": [
+          {
+            "name": "Samuel Scarborough",
+            "role": ""
+          },
+          {
+            "name": "Nicholas Graham",
+            "role": ""
+          }
+        ]
+      },
+      "credits": [
+        "Map illustration by the Beyond the Blue and White team.",
+        "Surrounding streets © OpenStreetMap contributors.",
+        "Building names from UNC Chapel Hill's public GIS data.",
+        "Map software: Leaflet."
+      ],
+      "links": [
+        {
+          "title": "Project code, documentation, and process log",
+          "url": "https://github.com/taliakberler/beyond-the-blue-and-white"
+        }
+      ]
     }
   },
   "stops": [

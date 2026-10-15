@@ -199,6 +199,7 @@ button { font: inherit; color: inherit; }
   background: transparent; color: inherit; cursor: pointer;
 }
 .app-header .icon-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.app-header .icon-btn[aria-pressed="true"] { background: var(--color-header-text); color: var(--color-header-bg); }
 
 /* ---------- Views ---------- */
 main { flex: 1; position: relative; min-height: 0; }
@@ -209,8 +210,31 @@ main { flex: 1; position: relative; min-height: 0; }
 /* Basemap: the team's illustrated map over faded OpenStreetMap streets.
    The map keeps its light illustration in dark mode too; only the interface around it changes. */
 .faded-streets { filter: grayscale(1) contrast(0.85) brightness(1.08); }
-/* Overlap street tiles by 1px so the browser never leaves hairline gaps between them. */
-.faded-streets img.leaflet-tile { width: 257px !important; height: 257px !important; }
+/* Hide tile seams. Browsers soften each tile image's edges slightly, which leaves hairline
+   lines where tiles meet. "plus-lighter" adds the two softened edges back up to a solid join;
+   everywhere else (no overlap) it has no effect. Each layer is its own stacking context. */
+.leaflet-art-pane img.leaflet-tile,
+.faded-streets img.leaflet-tile { mix-blend-mode: plus-lighter; }
+.leaflet-art-pane, .faded-streets { isolation: isolate; }
+
+/* Compass and scale (bottom-left of the map). They sit on the light map in both themes. */
+.map-compass { width: 44px; height: 44px; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3)); }
+.map-compass svg { display: block; }
+.compass-face { fill: #ffffff; stroke: var(--color-map-marker); stroke-width: 1.5; }
+.compass-north { fill: var(--color-map-marker); }
+.compass-south { fill: #b9c9d8; }
+.compass-pin { fill: #ffffff; stroke: var(--color-map-marker); stroke-width: 1; }
+.compass-n { font: 700 9px var(--font-heading); fill: var(--color-map-marker); }
+.leaflet-control-scale-line {
+  font: 700 11px/1.3 var(--font-body);
+  color: var(--color-map-marker);
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid var(--color-map-marker); border-top: 0;
+  padding: 1px 6px;
+}
+.leaflet-control-scale-line:not(:first-child) { border-top: 2px solid var(--color-map-marker); border-bottom: 0; margin-top: -2px; }
+.leaflet-left .leaflet-control-scale { margin-left: 12px; }
+.leaflet-left .map-compass { margin-left: 12px; }
 
 /* Building info tooltip (hover or tap a building) */
 /* The building shapes are invisible tap targets; never show a focus ring that would reveal them. */
@@ -288,7 +312,7 @@ main { flex: 1; position: relative; min-height: 0; }
 }
 
 /* ---------- List view ---------- */
-#list-view { overflow-y: auto; background: var(--color-bg); }
+#list-view, #about-view { overflow-y: auto; background: var(--color-bg); }
 .list-inner { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
 .list-inner h2 { font-size: var(--fs-h2); }
 .intro { color: var(--color-text-muted); }
@@ -312,6 +336,31 @@ main { flex: 1; position: relative; min-height: 0; }
 .stop-card .e { display: block; color: var(--color-text-muted); font-size: var(--fs-small); margin-top: 2px; }
 .stop-card .s { display: block; margin-top: 6px; font-size: var(--fs-small); }
 .stop-card .go { display: inline-block; margin-top: 8px; color: var(--color-primary); font-weight: 700; font-size: var(--fs-small); }
+
+/* ---------- About view ---------- */
+.about h2 { font-size: var(--fs-h2); }
+.about-tagline { margin: 12px 0 4px; font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: var(--color-primary); }
+.about h3 { font-size: var(--fs-h3); margin: 0 0 8px; }
+.about-card {
+  margin: 20px 0; padding: 16px;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+}
+.about-card p { margin: 0 0 8px; }
+.about-card p:last-child { margin-bottom: 0; }
+.about-group { margin: 24px 0; }
+.about-note { margin: -2px 0 10px; color: var(--color-text-muted); font-size: var(--fs-small); }
+.credit-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.credit-list li {
+  padding: 10px 12px; min-height: var(--tap);
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px;
+}
+.credit-name { display: block; font-weight: 700; }
+.credit-role { display: block; font-size: var(--fs-small); color: var(--color-text-muted); }
+.about-credits { margin: 0; padding-left: 1.2em; font-size: var(--fs-small); }
+.about-credits li { margin-bottom: 6px; }
 
 /* ---------- Stop panel: bottom sheet on phones ---------- */
 .panel {
@@ -444,8 +493,17 @@ main { flex: 1; position: relative; min-height: 0; }
 
 .noscript { padding: 24px; text-align: center; }
 
-/* Keep the OSM attribution visible above the bottom sheet on phones. */
+/* Keep the OSM attribution, compass, and scale visible above the bottom sheet on phones. */
 body.panel-open .leaflet-bottom { bottom: 58dvh; }
+
+/* Narrow screens: keep the credit line to the right of the compass and scale, and lift the
+   compass and scale above the "Start exploring" button when it's showing. */
+@media (max-width: 640px) {
+  .leaflet-control-attribution { max-width: calc(100vw - 150px); font-size: 11px; line-height: 1.35; }
+  /* the button sits above the two-line credit line; the compass and scale sit above the button */
+  .start-btn { bottom: max(56px, calc(env(safe-area-inset-bottom) + 50px)); }
+  body.start-visible:not(.panel-open) .leaflet-bottom.leaflet-left { bottom: 112px; }
+}
 
 /* ---------- Desktop: side panel ---------- */
 @media (min-width: 900px) {
@@ -471,6 +529,7 @@ body.panel-open .leaflet-bottom { bottom: 58dvh; }
 /* Narrow phones: tighten the header. */
 @media (max-width: 420px) {
   .app-header { padding-left: 12px; padding-right: 8px; gap: 6px; }
+  .brand h1 { font-size: 1rem; }
   .seg { min-width: 54px; padding: 0 10px; }
   .subtitle { display: none; }
 }

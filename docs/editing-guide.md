@@ -1,6 +1,6 @@
 # Editing guide
 
-This guide covers updating the tour without writing code: stops, images, the route, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a stop, see [content-guidelines.md](content-guidelines.md).
+This guide covers updating the map without writing code: stops, images, the route, QR codes, and publishing. For what each feature does, see [site-overview.md](site-overview.md). For standards on what goes *into* a stop, see [content-guidelines.md](content-guidelines.md).
 
 ---
 
@@ -20,7 +20,7 @@ You can also edit files directly on GitHub (open a file, click the pencil icon, 
 
 ## Edit the stops
 
-All tour content and settings live in **`data/stops.json`**. Keep the quotes, commas, and brackets intact. If the site shows "The tour couldn't load" after an edit, paste the file into <https://jsonlint.com> to find the typo.
+All of the map's content and settings live in **`data/stops.json`**. Keep the quotes, commas, and brackets intact. If the site shows "The map couldn't load" after an edit, paste the file into <https://jsonlint.com> to find the typo.
 
 ### Tour settings (`"tour"`)
 
@@ -29,10 +29,22 @@ All tour content and settings live in **`data/stops.json`**. Keep the quotes, co
 | `title`, `subtitle` | Shown in the header |
 | `center`, `zoom` | Starting map view, `[lat, lng]` |
 | `intro` | Paragraph shown at the top of the List view |
+| `about` | The About page (see below) |
 | `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
 | `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
 | `buildingLayer.yearField` | Attribute shown as "Built …" under the name (`YEARBUILT` for UNC's layer) |
 | `basemap` | The illustrated map: `tiles` (tile path), `bounds` (its real-world corners), `minNativeZoom` / `maxNativeZoom` (zooms the tiles were built for), `streetsOpacity` (how faint the surrounding streets are), and `attribution` (credit line) |
+
+### The About page (`"tour"` → `"about"`)
+
+| Field | What it does |
+|---|---|
+| `tagline`, `description` | The project's tagline and one-paragraph description, shown at the top |
+| `context`, `prompt` | Where the project was made, and the team's prompt |
+| `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…" }`. Leave `role` as `""` until roles are decided; it appears under the name once filled in. |
+| `advisors` | `description` (who they are and how they helped) and `people` (same format as `team`) |
+| `credits` | Short lines crediting the map, data, and software |
+| `links` | `{ "title": "…", "url": "…" }`, shown at the end of the credits |
 
 ### Each stop (`"stops": [ … ]`)
 
@@ -105,7 +117,7 @@ The app accepts either a single Feature or a FeatureCollection with LineString o
 
 ## Update the campus boundary (comparison page only)
 
-The campus boundary is **no longer shown on the tour**. It's only used by the basemap comparison page in `tools/`. The outline is a pre-built file, `data/campus-boundary.geojson`, made from UNC's campus-boundary parcels. To rebuild it (for example, after UNC updates its data), run this after `npm install`:
+The campus boundary is **no longer shown on the map**. It's only used by the basemap comparison page in `tools/`. The outline is a pre-built file, `data/campus-boundary.geojson`, made from UNC's campus-boundary parcels. To rebuild it (for example, after UNC updates its data), run this after `npm install`:
 
 ```bash
 npm run boundary
@@ -122,7 +134,7 @@ The settings are in `data/stops.json` under `tour.campusBoundary`:
 
 ---
 
-## Update the team's illustrated map (the tour's basemap)
+## Update the team's illustrated map (the site's basemap)
 
 The illustrated map is served as map tiles in `tiles/team-map/`, built from a PNG export of the Illustrator file. To update it after editing the art:
 
@@ -145,13 +157,13 @@ Other settings in `scripts/team-map.json`:
 
 There are two kinds of QR code:
 
-- **Whole tour:** `qr/tour.png` points to `<BASE_URL>/`, the home page with every stop on the map. Use it on flyers, posters, social media, entrance signs, and other promotion.
+- **Whole map:** `qr/map.png` points to `<BASE_URL>/`, the home page with every stop on the map. Use it on flyers, posters, social media, entrance signs, and other promotion.
 - **Each stop:** `qr/<stop-id>.png` points to `<BASE_URL>/index.html#stop=<id>`. Use these on the sign at each site.
 
 **BASE_URL is set in one place:** `scripts/qr-config.json`.
 
 ```json
-{ "BASE_URL": "https://taliakberler.github.io/beyond-the-white-and-blue" }
+{ "BASE_URL": "https://taliakberler.github.io/beyond-the-blue-and-white" }
 ```
 
 If the site moves (to a custom domain, a different repo name, or a university server), change this value and regenerate the codes.
@@ -170,13 +182,13 @@ npm run qr
 
 This writes:
 
-- `qr/tour.png`: the whole-tour code.
+- `qr/map.png`: the whole-map code.
 - `qr/<stop-id>.png`: one code per stop.
-- `qr/sheet.html`: a printable page with one sign per US Letter page. The first page is a "Scan to start the tour" sign with the whole-tour code. The rest are one per stop (stop number, title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
+- `qr/sheet.html`: a printable page with one sign per US Letter page. The first page is a "Scan to explore the map" sign with the whole-map code. The rest are one per stop (stop number, title, QR code, and a "scan me" line). Open it in a browser and print at 100% scale.
 
 All codes are 1200×1200 PNGs with error correction level Q (holds up to scuffs on outdoor signs).
 
-You can also override the URL for a single run without editing the config file: `BASE_URL=https://example.org/tour npm run qr`.
+You can also override the URL for a single run without editing the config file: `BASE_URL=https://example.org/map npm run qr`.
 
 The codes are **static**: the URL is encoded directly in the image, with no redirect service. Once signs are printed, **don't change a stop's `id` or the BASE_URL**, or the printed codes will stop working. Test-scan every printed sign before installing it.
 
@@ -184,7 +196,7 @@ The codes are **static**: the URL is encoded directly in the image, with no redi
 
 ## Publish (GitHub Pages)
 
-GitHub Pages is already enabled for this repository, serving the `main` branch from the root folder. Any commit pushed to `main` goes live at **https://taliakberler.github.io/beyond-the-white-and-blue/** within a minute or two. The app re-checks its data files on every load, so visitors see updates without clearing their cache.
+GitHub Pages is already enabled for this repository, serving the `main` branch from the root folder. Any commit pushed to `main` goes live at **https://taliakberler.github.io/beyond-the-blue-and-white/** within a minute or two. The app re-checks its data files on every load, so visitors see updates without clearing their cache.
 
 To set this up from scratch (for example, on a fork or a new repo):
 
@@ -206,7 +218,7 @@ The links to `css/styles.css` and `js/app.js` in `index.html` carry a version st
 npm run stamp
 ```
 
-This updates the stamps, so visitors' browsers fetch the new files instead of mixing a new page with an old cached script. Mixing them can break the tour until the browser's cache expires (up to 10 minutes on GitHub Pages). Content edits to `data/stops.json` don't need this, because the app always checks for the latest data.
+This updates the stamps, so visitors' browsers fetch the new files instead of mixing a new page with an old cached script. Mixing them can break the map until the browser's cache expires (up to 10 minutes on GitHub Pages). Content edits to `data/stops.json` don't need this, because the app always checks for the latest data.
 
 ---
 

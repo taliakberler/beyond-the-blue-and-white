@@ -2,7 +2,7 @@
 
 > **Draft:** a starting point for the project team to revise. These are working standards, not final editorial policy.
 
-*Beyond the White and Blue* presents Black history at UNC Chapel Hill: the sites, events, and people significant to that history around campus. Visitors will treat what they read at a stop as the record of that place, so every stop must be accurate, sourced, and written with care for the people it describes.
+*Beyond the Blue and White* presents Black history at UNC Chapel Hill: the sites, events, and people significant to that history around campus. Visitors will treat what they read at a stop as the record of that place, so every stop must be accurate, sourced, and written with care for the people it describes.
 
 ---
 
@@ -73,4 +73,4 @@ Errors will happen. When one is reported:
 - Record the correction, the date, and the source that prompted it in [PROCESS_LOG.md](../PROCESS_LOG.md).
 - If a stop's `id` must change, regenerate and reprint that stop's QR sign.
 
-Consider adding a "Report a correction" contact (an email address or form link) to the tour once there's an owner to receive reports.
+Consider adding a "Report a correction" contact (an email address or form link) to the map once there's an owner to receive reports.

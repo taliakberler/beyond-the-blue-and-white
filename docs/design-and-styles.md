@@ -79,8 +79,8 @@ Every pair passes AA, and most pass AAA (7:1).
 
 | Role | Typeface | Weight | Where it's used |
 |---|---|---|---|
-| **Logo** | [Gasoek One](https://fonts.google.com/specimen/Gasoek+One) | Regular (400, the only weight) | Tour name in the header; tour name at the top of each printed QR sign |
-| **Headers** | [Oswald](https://fonts.google.com/specimen/Oswald) | Bold (700) | Stop titles, section headings ("Key people", "Sources", "Tour stops"), list-card titles, numbers in map markers and list cards, stop titles and numbers on QR signs |
+| **Logo** | [Gasoek One](https://fonts.google.com/specimen/Gasoek+One) | Regular (400, the only weight) | Site name in the header; site name at the top of each printed QR sign |
+| **Headers** | [Oswald](https://fonts.google.com/specimen/Oswald) | Bold (700) | Stop titles, section headings ("Key people", "Sources", "All stops"), list-card titles, numbers in map markers and list cards, stop titles and numbers on QR signs |
 | **Body copy** | [Lato](https://fonts.google.com/specimen/Lato) | Regular (400) | All running text: summaries, history, captions, credits, people, sources, buttons, and messages |
 | *Body emphasis* | Lato | Bold (700) | Bold text within body copy and buttons (the summary line, people's names, button labels). Included so bold text uses Lato's real bold face rather than a browser-generated imitation. |
 
@@ -148,13 +148,15 @@ The site respects the iPhone notch and home-indicator areas (`env(safe-area-inse
 
 | Component | Notes |
 |---|---|
-| **Header** | Dark bar with the tour title, subtitle, a Map/List switch (pill-shaped toggle), and a theme button |
+| **Header** | Dark bar with the site name, subtitle, a Map/List switch (pill-shaped toggle), an About button (ⓘ), and a theme button |
 | **Stop markers** | 36px numbered circles inside a 44px tap area, with a white ring and drop shadow so they stand out against the map. The active stop turns accent orange and enlarges slightly. |
 | **Route line** | 5px dotted line in the primary color, drawn beneath the markers |
 | **Basemap** | The team's illustrated campus map (tiles) over OpenStreetMap streets that are grayscale and 38% opaque on the illustration's blue. The illustration's edge follows its drawing and fades softly into the streets. |
 | **Building info** | Invisible building footprints from UNC. Hovering (desktop) or tapping (phones) a building shows a tooltip with its name in bold and "Built YEAR" below. No outline or focus ring is ever drawn, because the footprints don't align exactly with the illustration. |
 | **Map button** | White pill button ("You are here") in the top-right corner |
-| **"Start the tour" button** | Large pill at the bottom of the map, shown only when no stop is open |
+| **"Start exploring" button** | Large pill at the bottom of the map, shown only when no stop is open; opens Stop 1 |
+| **Compass and scale** | Bottom-left of the map: a north-pointing compass above a scale bar in meters and feet. Both keep their light styling in dark mode, since they sit on the light map. On phones they rise above the "Start exploring" button and the stop panel so nothing overlaps. |
+| **About page** | Opened with the ⓘ button or the `#about` link: the project's tagline and description, the conference and team prompt, and credits for the team, coaches, and community advisors (two columns of name cards on phones, more on wider screens) |
 | **Stop panel** | Stop count → title → era → image gallery → summary (bold) → history → key people (shaded boxes) → sources (numbered list) → pinned navigation |
 | **Image gallery** | Full-width 4:3 images that swipe sideways and snap into place, with previous/next buttons and an "1 / 2" counter below |
 | **Messages (toasts)** | Dark rounded bar just below the header, announced to screen readers. Messages disappear after 6–9 seconds. |

@@ -3,29 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Beyond the White and Blue — Walking Tour</title>
-  <meta name="description" content="A free, self-guided walking tour of Black history at UNC Chapel Hill: the sites, events, and people significant to that history across campus.">
+  <title>Beyond the Blue and White — A Digital Map</title>
+  <meta name="description" content="A free multimedia digital map of Black history at UNC Chapel Hill, with the sites, events, and people significant to that history across campus, and resources for learning more.">
   <meta name="theme-color" content="#1f2933" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#12161b" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b5c8a'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b5c8a'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
   <link rel="preload" href="fonts/gasoek-one-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=ec929f11">
-  <link rel="stylesheet" href="css/styles.css?v=df3d009b">
+  <link rel="stylesheet" href="css/styles.css?v=8d9aefdd">
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to tour content</a>
+  <a class="skip-link" href="#main">Skip to map content</a>
 
   <header class="app-header">
     <div class="brand">
-      <h1 id="tour-title">Beyond the White and Blue</h1>
-      <p id="tour-subtitle" class="subtitle">A walking tour of Black history at UNC Chapel Hill</p>
+      <h1 id="tour-title">Beyond the Blue and White</h1>
+      <p id="tour-subtitle" class="subtitle">A digital map of Black history at UNC Chapel Hill</p>
     </div>
     <div class="header-actions">
       <div class="view-switch" role="group" aria-label="Choose view">
         <button type="button" id="view-map" class="seg" aria-pressed="true">Map</button>
         <button type="button" id="view-list" class="seg" aria-pressed="false">List</button>
       </div>
+      <button type="button" id="view-about" class="icon-btn" aria-pressed="false" aria-label="About this project" title="About">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+      </button>
       <button type="button" id="theme-toggle" class="icon-btn" aria-label="Color theme: automatic">
         <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
       </button>
@@ -33,8 +36,8 @@
   </header>
 
   <main id="main">
-    <section id="map-view" class="view" aria-label="Tour map">
-      <div id="map" role="application" aria-label="Map of tour stops. Tab to reach numbered stop markers; press Enter to open a stop."></div>
+    <section id="map-view" class="view" aria-label="Map">
+      <div id="map" role="application" aria-label="Map of stops. Tab to reach numbered stop markers; press Enter to open a stop."></div>
 
       <div class="map-tools">
         <button type="button" id="locate-btn" class="tool-btn">
@@ -43,14 +46,21 @@
         </button>
       </div>
 
-      <button type="button" id="start-btn" class="start-btn" hidden>Start the tour at Stop 1</button>
+      <button type="button" id="start-btn" class="start-btn" hidden>Start exploring</button>
     </section>
 
     <section id="list-view" class="view" aria-labelledby="list-heading" hidden>
       <div class="list-inner">
-        <h2 id="list-heading">Tour stops</h2>
+        <h2 id="list-heading">All stops</h2>
         <p id="tour-intro" class="intro"></p>
         <ol id="stop-list" class="stop-list"></ol>
+      </div>
+    </section>
+
+    <section id="about-view" class="view" aria-labelledby="about-heading" hidden>
+      <div class="list-inner about">
+        <h2 id="about-heading">About this project</h2>
+        <div id="about-body"></div>
       </div>
     </section>
   </main>
@@ -89,7 +99,7 @@
       </section>
     </div>
 
-    <nav class="panel-nav" aria-label="Tour navigation">
+    <nav class="panel-nav" aria-label="Stop navigation">
       <a id="directions-link" class="directions" href="#" target="_blank" rel="noopener">Get walking directions</a>
       <div class="prev-next">
         <button type="button" id="prev-btn" class="nav-btn">‹ Previous</button>
@@ -101,10 +111,10 @@
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
   <noscript>
-    <p class="noscript">This tour needs JavaScript to show the map and stops.</p>
+    <p class="noscript">This map needs JavaScript to show the stops.</p>
   </noscript>
 
   <script src="js/vendor/leaflet/leaflet.js?v=5a640ff8"></script>
-  <script src="js/app.js?v=71ee66bf"></script>
+  <script src="js/app.js?v=dd65e20f"></script>
 </body>
 </html>

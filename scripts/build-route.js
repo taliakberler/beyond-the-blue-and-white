@@ -12,7 +12,7 @@ const route = {
   type: 'FeatureCollection',
   features: [{
     type: 'Feature',
-    properties: { name: 'Tour route (straight-line placeholder)' },
+    properties: { name: 'Route between stops (straight-line placeholder)' },
     geometry: { type: 'LineString', coordinates: ordered.map(s => [s.lng, s.lat]) }
   }]
 };

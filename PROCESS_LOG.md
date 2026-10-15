@@ -583,3 +583,98 @@ Implemented by Claude Code.
 - New stamped page: loads normally, with 5 markers and the illustrated map.
 - Old cached page with the new script: also loads normally.
 
+---
+
+## 2026-10-14 — New name, digital-map framing, About page, compass and scale, seamless tiles, asset review
+
+**Directed by:** project team. Implemented by Claude Code.
+
+### Name
+- **The project is now "Beyond the Blue and White"** (previously "Beyond the White and Blue"), matching the team's logo, icon files, and wireframes. The team chose this wording. The logo itself reads "Beyond the Blue & White"; text on the site uses "and".
+- Updated the site title, page title, header, subtitle, map credit line, QR sign sheet, README, and docs. Earlier entries in this log keep the old name, as a record.
+- **Not renamed:** the GitHub repository and web address (`…/beyond-the-white-and-blue`). Renaming them would break existing links and any QR codes already shared.
+
+### From "walking tour" to "multimedia digital map"
+- **Decision (team):** the project is no longer framed as a walking tour, but as a multimedia digital map with resources and related information.
+- **Site text:**
+  - The page title is now "Beyond the Blue and White — A Digital Map".
+  - The subtitle is now "A digital map of Black history at UNC Chapel Hill".
+  - "Start the tour at Stop 1" became **"Start exploring"**.
+  - "Tour stops" became "All stops".
+  - Error and status messages refer to "the map".
+  - The placeholder intro was reworded.
+- **Docs and QR signs:** tour wording replaced throughout. The whole-site QR code file was renamed from `qr/tour.png` to **`qr/map.png`** (its address is unchanged), and its sign now reads "Scan with your phone camera to explore the map".
+- **Kept:** stop numbers, "Stop 3 of 5", Previous / Next, and "Get walking directions". These still help people move between sites, and the team's wireframes use "Stop #". The settings section in `data/stops.json` is still named `"tour"`; renaming it would add risk without changing anything visitors see.
+
+### Seamless map tiles
+- **Problem (team):** the edges of map tiles were faintly visible as straight lines across the map.
+- **Cause:** browsers soften each tile image's edges slightly, leaving hairline seams where tiles meet. Leaflet 1.9.4 already uses `mix-blend-mode: plus-lighter` on tiles to fix this. But the illustrated map's tiles sit in a separate pane, so they were blending into the street layer beneath instead of only with each other.
+- **Fix (`css/styles.css`):** the illustrated-map pane and the faded-streets layer now each use `isolation: isolate`, so the softened edges of neighboring tiles add back up to a solid join within their own layer. The earlier 1-pixel overlap workaround for street tiles was removed, since it also slightly stretched those tiles.
+- **Verified:** at zoom 16 and 18 on a 2x screen, and at 700px and 1280px window widths, no seams were visible at tile boundaries in full-resolution captures.
+
+### Compass and scale
+- **`js/app.js`:**
+  - Leaflet's scale bar (meters and feet, up to 110 px wide) in the bottom-left corner
+  - a custom north-pointing compass above it (SVG, 44 px, announced to screen readers as "north is at the top of the map")
+- **`css/styles.css`:** styles for both, in the map-symbol colors, so they look the same on the light map in light and dark mode.
+- **Responsive behavior:**
+  - On screens 640 px wide or narrower, the map's credit line is limited to the space right of the compass and scale.
+  - The "Start exploring" button sits above the credit line, and the compass and scale rise above the button while it's showing.
+  - When a stop's bottom sheet is open on a phone, they move up above it.
+- **Verified:** at 375 px, 700 px, and 1280 px, measured element positions showed no overlaps between the compass, the scale, the button, and the credit line. With a stop open on a phone, both sit above the sheet.
+
+### About page and credits
+- **New About page:** the **ⓘ** button in the header, or the `#about` address. It shows:
+  - the team's tagline and description
+  - the project's context ("created at the Visual Discovery Conference 2026 at UNC Chapel Hill")
+  - the team's prompt ("Highlight Black history at UNC Chapel Hill")
+  - credits for the team, coaches, and community advisors
+  - map and software credits, and a link to the repository
+- **Content** is stored in `tour.about` in `data/stops.json` so it can be edited without code. Each person has a `role` field, left empty until the team adds roles.
+- **People credited:**
+  - **Team:** Talia Berler, Cayla Quintero, Trinity Gill, Gwyneth Shoemaker, Jori Husted, Andrea Perez, Victor Morgan, Leticia Oteng, Andie Day
+  - **Coaches:** Adonis Durado, Randy Stano
+  - **Community advisors** (from Chapel Hill, who advised the team on the history of Black labor and community there): Samuel Scarborough, Nicholas Graham
+- **README:** new "Project context" and "Team and credits" sections with the same names.
+- **Docs:** the About page is documented in the site overview, design doc, and editing guide (including the `about` fields).
+- **Verified:** at 375 px, the ⓘ button opens the About page (and sets `#about`), closes any open stop, and shows all 13 names in five sections. Map and List return to the map.
+
+### Asset review (logos, fonts, icons, wireframe)
+The team supplied logo files and fonts, map-pin icons, and a UI wireframe for upcoming design work. Each file was checked for corruption and quality. **Nothing is corrupted**, but a few issues were found:
+
+| Asset | Result |
+|---|---|
+| **Logo SVGs** (6: horizontal and stacked, in Carolina Blue, Franklin Fog, and Navy) | Valid; fully vector (text outlined, no embedded images or fonts); transparent backgrounds. Colors: `#4b9cd3`, `#11294b`, `#eceded`. **Best choice for the website.** |
+| **Logo PNGs** (6) | Valid, 300 dpi. ⚠ **`BTBB_horizontal_NAVY.png` is an exact copy of `BTBB_stacked_NAVY.png`** (the stacked logo), so there's no correct horizontal navy PNG. ⚠ **None of the logo PNGs has a transparent background,** so white rectangles show beside the shorter bars of the stacked logos on any colored background. |
+| **Logo `.ai` files** (6) | All open and render correctly. The horizontal navy `.ai` is the right (horizontal) layout, so a correct PNG can be re-exported from it. |
+| **`~ai-81d1a9c9-….tmp`** in Logo Files | An Illustrator temporary or autosave file, not an asset. It can be deleted from the shared folder. |
+| **Logo fonts** (Gasoek One; Lato in 10 styles; Oswald, variable and 6 static weights) | All 18 files are valid, with complete Latin character sets including curly quotes, dashes, and accented letters. Licenses (SIL OFL) are included. They're the same families and versions the site already uses. Note: `Lato-Thin.ttf` names itself "Lato Hairline" internally (as in that Lato release), so it appears under that name in font menus. |
+| **Icon SVGs** (8: Buildings, Carpenters, Cemetery, Masons, Memorial, Painters, People, Seamstress) | Valid and fully vector, on a consistent 595×517 artboard; the icons fill 86–88% of its height. Colors: `#87aed0` and `#172849`. Note: the icon navy (`#172849`) is slightly different from the logo navy (`#11294b`). The four hand-tool icons are tall and narrow, so they'll look narrower than the others at pin size. |
+| **Icon PNGs** (8) | Valid, high resolution (about 2480×2156), with transparency; they match the SVGs |
+| **Icons `.ai`** | Opens and renders; 8 artboards, one per icon |
+| **Wireframe** (`1.webp`) | Valid image, 2000×1194 |
+
+The assets haven't been added to the repository yet. They'll be brought in as the wireframe's design is implemented.
+
+---
+
+## 2026-10-14 — Repository renamed; QR codes regenerated
+
+**Directed by:** project team. Implemented by Claude Code.
+
+### What changed
+- **GitHub repository renamed** from `taliakberler/beyond-the-white-and-blue` to **`taliakberler/beyond-the-blue-and-white`**, to match the project's name.
+- **New site address:** **https://taliakberler.github.io/beyond-the-blue-and-white/**. GitHub Pages moved to it automatically.
+- **Local git remote** updated to the new repository address.
+- **References updated** to the new name and address: README, `package.json` and `package-lock.json`, the editing guide, site overview, software and credits doc, `scripts/qr-config.json` (`BASE_URL`), and the About page's repository link in `data/stops.json`.
+- **QR codes regenerated:** `qr/map.png` and the five stop codes, plus `qr/sheet.html`, now point to the new address.
+
+### Decisions and reasons
+- **Decision:** rename now, before any signs are printed. **Why:** GitHub forwards old **repository** links to the new name, but it doesn't forward **GitHub Pages** sites. The old site address now returns "404 Not Found", so every QR code had to be regenerated. Doing this before printing means no physical signs are affected.
+- **Note:** earlier entries in this log still mention the old repository name and site address, as a record. Links to the old site address in those entries no longer work.
+- **Note:** the local working folder on the developer's computer is still named `beyond-the-white-and-blue`. That doesn't affect GitHub or the site.
+
+### Verified
+- All six QR codes were decoded with jsQR and point to `https://taliakberler.github.io/beyond-the-blue-and-white/…`.
+- The new site address and its `data/stops.json` return 200 (OK), and the old site address returns 404.
+

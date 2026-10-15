@@ -1,6 +1,6 @@
 # Site overview
 
-How *Beyond the White and Blue* works: what visitors see, how the pieces fit together, and the site's known limits. For editing instructions, see [editing-guide.md](editing-guide.md).
+How *Beyond the Blue and White* works: what visitors see, how the pieces fit together, and the site's known limits. For editing instructions, see [editing-guide.md](editing-guide.md).
 
 ---
 
@@ -8,14 +8,14 @@ How *Beyond the White and Blue* works: what visitors see, how the pieces fit tog
 
 A single web page (`index.html`) that runs entirely in the visitor's browser. There is **no server-side code, database, login, or build step**. GitHub Pages simply serves the files as they are in the repository. This keeps the site free to host, easy to maintain, and easy to move to another host later (for example, a University web server).
 
-All tour content comes from two data files:
+All of the map's content comes from two data files:
 
 | File | Contents |
 |---|---|
-| `data/stops.json` | Tour settings (title, map center, basemap, building layer) and every stop's text, images, people, and sources |
+| `data/stops.json` | Site settings (title, map center, basemap, building layer, About page) and every stop's text, images, people, and sources |
 | `data/route.geojson` | The walking path, as a GeoJSON LineString |
 
-Changing those files changes the tour, with no code edits needed.
+Changing those files changes the map, with no code edits needed.
 
 ---
 
@@ -27,8 +27,9 @@ Changing those files changes the tour, with no code edits needed.
 - **The team's illustrated campus map** as the basemap, with nearby streets shown faintly around it.
 - **Building names on hover or tap:** UNC's building footprints are invisible. Hovering (desktop) or tapping (phones) a building shows its name and year built.
 - A **"You are here"** button that shows the visitor's position as an orange dot with an accuracy circle.
-- A **"Start the tour at Stop 1"** button when no stop is open.
+- A **"Start exploring"** button when no stop is open, which opens Stop 1.
 - Zoom buttons and map credits.
+- A **compass** (north is always up) and a **scale bar** in meters and feet, in the bottom-left corner. On phones they move up above the "Start exploring" button and the stop panel, so nothing overlaps.
 
 ### Stop panel
 
@@ -52,14 +53,23 @@ Opens when a visitor taps a marker, scans a QR code, or picks a stop from the li
 
 The **Map / List** switch in the header shows every stop in route order as a card (number, title, era, summary). Tapping a card opens that stop on the map.
 
+### About page
+
+The **ⓘ** button in the header (or the address `…/#about`) opens the About page:
+- the project's tagline and description
+- where it was made (the Visual Discovery Conference 2026 at UNC Chapel Hill) and the team's prompt (highlight Black history at UNC Chapel Hill)
+- credits for the team, coaches, and community advisors, then the map and software credits and a link to the project's code and documentation
+
+Everything on it comes from `tour.about` in `data/stops.json`. Pressing ⓘ again, or Map or List, leaves the About page.
+
 ---
 
 ## Deep links and QR codes
 
-Every stop has its own address:
+The About page has its own address, `…/index.html#about`, and every stop has one too:
 
 ```
-https://taliakberler.github.io/beyond-the-white-and-blue/index.html#stop=<stop-id>
+https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=<stop-id>
 ```
 
 Each stop's QR code encodes this address. When the page opens with `#stop=…`, it zooms to that stop and opens its panel.
@@ -88,7 +98,7 @@ index.html
 ```
 
 - If `stops.json` can't load, the page shows a clear error message instead of a blank screen.
-- If the route or building layer can't load, the tour works without them.
+- If the route or building layer can't load, the map works without them.
 - Data files are fetched with `cache: 'no-cache'`: the browser checks with the server for a newer version on every visit, so content updates appear right away instead of after the browser's cache expires. Leaflet and the images are cached normally.
 
 All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the site works at the root of a domain or inside any subfolder.
@@ -123,7 +133,7 @@ These were checked by hand and with scripted tests in a browser (see [PROCESS_LO
 | Location times out or is unavailable | A friendly message suggesting trying again in an open area |
 | Visitor is far from campus | Their location is still shown, with a note that they appear to be away from campus |
 | Building layer unavailable | Building names don't appear on hover or tap; nothing else changes |
-| Tour data can't load | A full-page message explaining the problem |
+| Map data can't load | A full-page message explaining the problem, with a Reload button |
 
 ---
 

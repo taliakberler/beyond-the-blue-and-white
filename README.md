@@ -1,10 +1,10 @@
-# Beyond the White and Blue
+# Beyond the Blue and White
 
 ### Every stop has a story.
 
 An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.
 
-🔗 Live site: **https://taliakberler.github.io/beyond-the-white-and-blue/**
+🔗 Live site: **https://taliakberler.github.io/beyond-the-blue-and-white/**
 
 > *Project framing is a work in progress.*
 
@@ -49,17 +49,17 @@ So the experience feels cohesive, even when the histories vary.
 - **Well sourced.** Every stop lists its sources and image credits so visitors can keep learning and check the record themselves.
 - **Inclusive.** It's built to be readable outdoors and usable with screen readers, keyboards, and larger text.
 
-## How the tour works
+## How the map works
 
-1. A visitor scans the **QR code** on a sign at a tour stop.
-2. The tour opens on their phone, **zoomed to that site**, with its history, images, key people, and sources.
+1. A visitor scans the **QR code** on a sign at one of the sites, or opens the map from a link.
+2. The map opens on their phone, **zoomed to that site**, with its history, images, key people, sources, and links to related resources.
 3. They can follow the numbered **walking route** to the next stop, get walking directions in their phone's map app, or browse **all stops** in a list.
 
 Visitors don't have to start at Stop 1. Every sign is a way in.
 
 ## Current status
 
-> **This is a working mockup.** The tour's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet, and the walking order is **provisional** until the route is decided. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
+> **This is a working mockup.** The map's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet, and the walking order is **provisional** until the route is decided. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
 
 The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.md](PROCESS_LOG.md) for why, and [docs/content-guidelines.md](docs/content-guidelines.md) for how real content should be prepared.
 
@@ -67,9 +67,9 @@ The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.m
 
 | Document | What it covers |
 |---|---|
-| [docs/site-overview.md](docs/site-overview.md) | How the site works: pages, features, data flow, deep links, accessibility, offline behavior, known limits |
+| [docs/site-overview.md](docs/site-overview.md) | How the site works: pages (map, list, About), features, data flow, deep links, accessibility, offline behavior, known limits |
 | [docs/editing-guide.md](docs/editing-guide.md) | Step-by-step guide to editing stops, adding images, changing the route, generating QR codes, and deploying |
-| [docs/content-guidelines.md](docs/content-guidelines.md) | Standards for researching, writing, sourcing, and crediting tour content |
+| [docs/content-guidelines.md](docs/content-guidelines.md) | Standards for researching, writing, sourcing, and crediting the map's content |
 | [docs/design-and-styles.md](docs/design-and-styles.md) | Color tokens, typography, layout, dark mode, contrast measurements, and how to apply brand colors |
 | [docs/software-and-credits.md](docs/software-and-credits.md) | Every library, map service, and data source used, with licenses and required credits |
 | [PROCESS_LOG.md](PROCESS_LOG.md) | Dated record of every decision and code change, kept for publication |
@@ -84,7 +84,7 @@ python3 -m http.server 8080
 
 Then open <http://localhost:8080/>.
 
-- **Edit tour content:** change `data/stops.json` (see the [editing guide](docs/editing-guide.md)).
+- **Edit the map's content:** change `data/stops.json` (see the [editing guide](docs/editing-guide.md)).
 - **Generate QR codes:** run `npm install` once, then `npm run qr`.
 - **Publish:** push to `main`. GitHub Pages redeploys automatically.
 
@@ -96,7 +96,7 @@ css/styles.css         All styles; colors are CSS variables
 fonts/                 Brand typefaces (self-hosted, with licenses)
 js/app.js              App logic
 js/vendor/leaflet/     Leaflet map library (bundled copy)
-data/stops.json        All tour content and settings
+data/stops.json        All map content and settings
 data/route.geojson     The walking route
 tiles/team-map/        The team's illustrated campus map, as web-map tiles (the site's basemap)
 images/                Stop images
@@ -106,7 +106,36 @@ docs/                  Project documentation
 PROCESS_LOG.md         Record of decisions and changes
 ```
 
-## Credits
+## Project context
+
+*Beyond the Blue and White* was created at the **Visual Discovery Conference 2026** at UNC Chapel Hill. Our team's prompt was to **highlight Black history at UNC Chapel Hill**.
+
+## Team and credits
+
+*Roles to be added.*
+
+**Team**
+- Talia Berler
+- Cayla Quintero
+- Trinity Gill
+- Gwyneth Shoemaker
+- Jori Husted
+- Andrea Perez
+- Victor Morgan
+- Leticia Oteng
+- Andie Day
+
+**Coaches**
+- Adonis Durado
+- Randy Stano
+
+**Community advisors:** from Chapel Hill, they advised us on the history of Black labor and community here.
+- Samuel Scarborough
+- Nicholas Graham
+
+The same credits appear on the site's About page (the ⓘ button, or [`#about`](https://taliakberler.github.io/beyond-the-blue-and-white/#about)). To add roles or names, edit `tour.about` in `data/stops.json`.
+
+### Map and software
 
 The campus map is the project team's own illustration. Surrounding streets are © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, and building names come from UNC Chapel Hill's public GIS service. Mapping is by [Leaflet](https://leafletjs.com). The full list of software and licenses is in [docs/software-and-credits.md](docs/software-and-credits.md).
 

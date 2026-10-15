@@ -1,4 +1,4 @@
-/* Beyond the White and Blue — walking tour app.
+/* Beyond the Blue and White — multimedia digital map.
  * Plain JavaScript + Leaflet. All content comes from data/stops.json and data/route.geojson.
  * Deep links: index.html#stop=<id> zooms to that stop and opens its panel.
  */
@@ -18,6 +18,7 @@
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
     locateBtn: $('locate-btn'),
+    aboutBtn: $('view-about'), aboutView: $('about-view'), aboutBody: $('about-body'),
     startBtn: $('start-btn'), themeBtn: $('theme-toggle'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'),
@@ -135,6 +136,28 @@
     }
     map.setMaxZoom(20);
 
+    // Bottom-left: scale bar (metres and feet), with a north-pointing compass above it.
+    // (Leaflet stacks bottom-corner controls upward, so the scale is added first.)
+    L.control.scale({ position: 'bottomleft', maxWidth: 110, metric: true, imperial: true }).addTo(map);
+    var Compass = L.Control.extend({
+      options: { position: 'bottomleft' },
+      onAdd: function () {
+        var c = L.DomUtil.create('div', 'map-compass');
+        c.setAttribute('role', 'img');
+        c.setAttribute('aria-label', 'Compass: north is at the top of the map');
+        c.innerHTML = '<svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true" focusable="false">' +
+          '<circle cx="22" cy="22" r="20" class="compass-face"/>' +
+          '<path d="M22 9 27 24h-10Z" class="compass-north"/>' +
+          '<path d="M22 37 17 24h10Z" class="compass-south"/>' +
+          '<circle cx="22" cy="24" r="2" class="compass-pin"/>' +
+          '<text x="22" y="8.2" text-anchor="middle" class="compass-n">N</text>' +
+          '</svg>';
+        L.DomEvent.disableClickPropagation(c);
+        return c;
+      }
+    });
+    new Compass().addTo(map);
+
     var tileErrors = 0, warned = false;
     function onTileError() {
       tileErrors++;
@@ -158,7 +181,7 @@
     window.addEventListener('resize', function () {
       setHeaderHeight();
       map.invalidateSize();
-      // Re-fit the tour overview (e.g. after rotating a phone) unless the visitor has moved the map.
+      // Re-fit the overview (e.g. after rotating a phone) unless the visitor has moved the map.
       if (state.current === -1 && !state.viewTouched && state.bounds) fitAllStops();
     });
     map.on('dragstart zoomstart', function () { if (!state.fitting) state.viewTouched = true; });
@@ -279,7 +302,7 @@
         }
       }).addTo(state.map);
     }).catch(function (err) {
-      console.warn('Building layer not loaded:', err);  // the tour works fine without it
+      console.warn('Building layer not loaded:', err);  // the map works fine without it
     });
   }
 
@@ -292,7 +315,7 @@
         return;
       }
       if (!window.isSecureContext) {
-        toast('Location only works when the tour is opened over https.');
+        toast('Location only works when the map is opened over https.');
         return;
       }
       els.locateBtn.setAttribute('aria-busy', 'true');
@@ -352,22 +375,82 @@
   }
 
   function setView(which) {
-    var list = which === 'list';
+    var list = which === 'list', about = which === 'about', map = !list && !about;
     els.listView.hidden = !list;
-    els.mapView.hidden = list;
+    els.aboutView.hidden = !about;
+    els.mapView.hidden = !map;
     els.viewListBtn.setAttribute('aria-pressed', String(list));
-    els.viewMapBtn.setAttribute('aria-pressed', String(!list));
-    if (list) {
-      closePanel({ keepHash: false, silent: true });
-      els.listView.scrollTop = 0;
-    } else {
-      setTimeout(function () { state.map.invalidateSize(); }, 0);
+    els.viewMapBtn.setAttribute('aria-pressed', String(map));
+    els.aboutBtn.setAttribute('aria-pressed', String(about));
+    if (!map) closePanel({ keepHash: false, silent: true });
+    if (list) els.listView.scrollTop = 0;
+    if (about) {
+      els.aboutView.scrollTop = 0;
+      if (location.hash !== '#about') history.pushState(null, '', '#about');
+    } else if (location.hash === '#about') {
+      history.pushState(null, '', location.pathname + location.search);
     }
+    if (map) setTimeout(function () { state.map.invalidateSize(); }, 0);
     updateStartBtn();
   }
 
   function updateStartBtn() {
-    els.startBtn.hidden = !(els.listView.hidden && state.current === -1);
+    var show = !els.mapView.hidden && state.current === -1;
+    els.startBtn.hidden = !show;
+    document.body.classList.toggle('start-visible', show);
+  }
+
+  /* ---------------- About ---------------- */
+
+  function renderAbout() {
+    var a = state.tour.about || {};
+    var box = els.aboutBody;
+    box.textContent = '';
+    if (a.tagline) box.appendChild(el('p', { 'class': 'about-tagline' }, a.tagline));
+    if (a.description) box.appendChild(el('p', { 'class': 'intro' }, a.description));
+    if (a.context || a.prompt) {
+      var ctx = el('section', { 'class': 'about-card', 'aria-labelledby': 'about-context' });
+      ctx.appendChild(el('h3', { id: 'about-context' }, 'The project'));
+      if (a.context) ctx.appendChild(el('p', null, a.context));
+      if (a.prompt) {
+        var p = el('p');
+        p.appendChild(el('strong', null, 'Our team’s prompt: '));
+        p.appendChild(document.createTextNode(a.prompt));
+        ctx.appendChild(p);
+      }
+      box.appendChild(ctx);
+    }
+    function group(id, title, people, note) {
+      if (!people || !people.length) return;
+      var sec = el('section', { 'class': 'about-group', 'aria-labelledby': id });
+      sec.appendChild(el('h3', { id: id }, title));
+      if (note) sec.appendChild(el('p', { 'class': 'about-note' }, note));
+      var ul = el('ul', { 'class': 'credit-list' });
+      people.forEach(function (person) {
+        var li = el('li');
+        li.appendChild(el('span', { 'class': 'credit-name' }, person.name || String(person)));
+        if (person.role) li.appendChild(el('span', { 'class': 'credit-role' }, person.role));
+        ul.appendChild(li);
+      });
+      sec.appendChild(ul);
+      box.appendChild(sec);
+    }
+    group('about-team', 'Team', a.team);
+    group('about-coaches', 'Coaches', a.coaches);
+    if (a.advisors) group('about-advisors', 'Community advisors', a.advisors.people, a.advisors.description);
+    if ((a.credits && a.credits.length) || (a.links && a.links.length)) {
+      var cr = el('section', { 'class': 'about-group', 'aria-labelledby': 'about-credits' });
+      cr.appendChild(el('h3', { id: 'about-credits' }, 'Credits'));
+      var ul = el('ul', { 'class': 'about-credits' });
+      (a.credits || []).forEach(function (c) { ul.appendChild(el('li', null, c)); });
+      (a.links || []).forEach(function (l) {
+        var li = el('li');
+        li.appendChild(el('a', { href: l.url, target: '_blank', rel: 'noopener' }, l.title || l.url));
+        ul.appendChild(li);
+      });
+      cr.appendChild(ul);
+      box.appendChild(cr);
+    }
   }
 
   /* ---------------- Stop panel ---------------- */
@@ -607,15 +690,17 @@
   }
 
   function handleHash() {
+    if (location.hash === '#about') { if (els.aboutView.hidden) setView('about'); return; }
+    if (!els.aboutView.hidden) setView('map');
     var id = stopIdFromHash();
     if (!id) { closePanel({ keepHash: true, silent: true }); return; }
     var i = state.stops.findIndex(function (s) { return s.id === id; });
     if (i === -1) {
-      toast('That stop wasn’t found. Here’s the full tour instead.');
+      toast('That stop wasn’t found. Here are all the stops instead.');
       setView('list');
       return;
     }
-    if (!els.listView.hidden) setView('map');
+    if (els.mapView.hidden) setView('map');
     goToStop(i, { fromHash: true });
   }
 
@@ -625,7 +710,7 @@
     var main = document.getElementById('main');
     main.textContent = '';
     var box = el('div', { 'class': 'list-inner', role: 'alert' });
-    box.appendChild(el('h2', null, 'The tour couldn’t load'));
+    box.appendChild(el('h2', null, 'The map couldn’t load'));
     box.appendChild(el('p', null, msg));
     if (opts && opts.reload) {
       var btn = el('button', { type: 'button', 'class': 'nav-btn primary' }, 'Reload');
@@ -651,9 +736,9 @@
       if (!state.stops.length) throw new Error('No stops in data/stops.json');
       dataLoaded = true;
 
-      if (state.tour.title) { els.title.textContent = state.tour.title; document.title = state.tour.title + ' — Walking Tour'; }
+      if (state.tour.title) { els.title.textContent = state.tour.title; document.title = state.tour.title + ' — A Digital Map'; }
       if (state.tour.subtitle) els.subtitle.textContent = state.tour.subtitle;
-      els.startBtn.textContent = 'Start the tour at Stop ' + state.stops[0].order;
+      els.startBtn.setAttribute('aria-label', 'Start exploring at stop ' + state.stops[0].order + ', ' + state.stops[0].title);
 
       initMap();
       addMarkers();
@@ -662,27 +747,29 @@
       initLocate();
       initPanel();
       renderList();
+      optional(renderAbout, 'About page');
 
       els.viewMapBtn.addEventListener('click', function () { setView('map'); });
       els.viewListBtn.addEventListener('click', function () { setView('list'); });
+      els.aboutBtn.addEventListener('click', function () { setView(els.aboutView.hidden ? 'about' : 'map'); });
       els.startBtn.addEventListener('click', function () { goToStop(0); });
       window.addEventListener('hashchange', handleHash);
 
-      if (stopIdFromHash()) handleHash();
+      if (stopIdFromHash() || location.hash === '#about') handleHash();
       else { fitAllStops(); updateStartBtn(); }
     }).catch(function (err) {
       console.error(err);
       if (dataLoaded) {
         // The data arrived but starting the map failed — most often a page and a script from
         // different versions of the site cached together. A fresh reload fixes it.
-        fail('Something went wrong starting the tour. Please reload the page.', { reload: true });
+        fail('Something went wrong starting the map. Please reload the page.', { reload: true });
       } else {
-        fail('We couldn’t load the tour data (data/stops.json). Check your connection and reload. If you opened this file directly from your computer, run it from a local web server instead — see the README.', { reload: true });
+        fail('We couldn’t load the map’s data (data/stops.json). Check your connection and reload. If you opened this file directly from your computer, run it from a local web server instead — see the README.', { reload: true });
       }
     });
   }
 
-  // Runs an optional feature so that, if it breaks, the rest of the tour still works.
+  // Runs an optional feature so that, if it breaks, the rest of the map still works.
   function optional(fn, name) {
     try { fn(); } catch (e) { console.warn(name + ' failed:', e); }
   }
