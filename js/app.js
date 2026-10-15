@@ -571,6 +571,7 @@
       var body = el('div');
       body.appendChild(el('p', { 'class': 'person-name' }, p.name));
       if (p.description) body.appendChild(el('p', { 'class': 'person-desc' }, p.description));
+      if (p.imageCredit) body.appendChild(el('p', { 'class': 'person-credit' }, 'Credit: ' + p.imageCredit));
       if (p.link) {
         var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, 'Learn more ›');
         more.setAttribute('aria-label', 'Learn more about ' + p.name + ' (opens in a new tab)');

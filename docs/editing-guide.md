@@ -68,6 +68,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
     { "name": "Full Name", "description": "One-line description.",
       "image": "images/people/full-name.jpg",   // Square photo for the Key People card (optional; a placeholder portrait is used if empty)
       "imageAlt": "Portrait of Full Name, about 1890",
+      "imageCredit": "Archive, collection, item ID (shown under the description)",
       "link": "https://… (optional: adds a 'Learn more' link)" }
   ],
   "images": [
@@ -91,10 +92,11 @@ If any `id` changed, regenerate the QR codes.
 
 ## Add images
 
-1. Put the files in `images/` (photos of people can go in `images/people/`; use square crops for the Key People cards). JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
+1. Put the files in `images/<stop-id>/` (for example `images/the-pit/hero.jpg`); photos of people go in `images/people/`. Resize to about 1200px on the long edge and save as JPEG (quality about 80) with metadata removed. Gallery images are always shown whole, never cropped, so any shape works. Key People photos are shown as squares, with the crop kept near the top so faces stay in frame. JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
 2. Reference them in the stop's `images` list as `"src": "images/your-file.jpg"`.
 3. Always fill in `alt`, `caption`, and `credit`. See [content-guidelines.md](content-guidelines.md#images-and-rights) for how to write alt text and confirm image rights.
 4. Use local copies. Don't link to images on other sites.
+5. Add `"permission": "pending"` to the image (or `"imagePermission": "pending"` for a person's photo) and add a row to [image-permissions.md](image-permissions.md). Change it to `"confirmed"` once the holder has given permission.
 
 If an image fails to load (for example, when offline), the app shows an "Image couldn't load" box instead.
 

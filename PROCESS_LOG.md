@@ -846,3 +846,62 @@ At 375px:
 - **Longer key:** the five stops were temporarily given five different icons, and the page was reloaded. The key wrapped to two rows (a 147px card), and the compass and scale moved up above it, with no overlaps. The real icon assignments were then restored.
 - At 1280px, the key fits on one line in the centered card.
 
+---
+
+## 2026-10-14 — First real photos added to the stops
+
+**Directed by:** project team (supplied ten images and asked for them to be placed at their sites and in the right sections, using their file titles). Implemented by Claude Code.
+
+### How the images were matched
+The pasted images arrived without file names, so the originals were found in the team's Downloads folder and matched by pixel dimensions and content. The leading number in each title matches the team's site numbering: 2 = Lenoir Hall, 3 = the Pit, 5 = Steele Building.
+
+| Original file title | Placed at | Section |
+|---|---|---|
+| `unsung-founders.jpeg` | Unsung Founders Memorial | Gallery |
+| `5_SteeleBuilding_HeroImage.jpg` | Steele Building | Gallery (first: hero image) |
+| `2_Strike leaders Mary Smith (L) and Elizabeth Brooks (middle) stand with a young man during the 1969 UNC food workers' strike.webp` | Lenoir Hall | Gallery |
+| `2_Lenoir Hall_StudentsSupportFoodWorkers_Source_VirtualMuseum.jpeg` | Lenoir Hall | Gallery |
+| `3_ThePit_HeroImage.jpg` | The Pit | Gallery (first: hero image) |
+| `3_James-Cates-memorial,-at-the-Pit-on-UNC-Chapel-Hill’s-campus_Theassembly.jpg` | The Pit | Gallery |
+| `3_modern-day tribute to James Cates in the Pit_photo courtesy_JamesCates_Remembrance Coalition.jpg` | The Pit | Gallery |
+| `3_MemorialJamesCates.jpg` | The Pit | Gallery |
+| `3_JamesCates_YearbookPhoto_Photo via the Town of Chapel Hill.jpg` | The Pit | **Key People:** James Cates |
+| `Folder_0498_Caldwell_Wilson_18411898_Scan_3.jpg` | Old Chapel Hill Cemetery | **Key People:** Wilson Swain Caldwell |
+
+### What changed
+- **New image folders:**
+  - `images/unsung-founders-memorial/`, `images/steele-building/`, `images/lenoir-hall/`, and `images/the-pit/`
+  - `images/people/`, for portraits
+- **Image processing:** each image was resized to at most 1200px on its long edge, saved as JPEG at quality 80, and turned upright using its orientation data. **All metadata was removed** (for example camera details and any GPS location). The files are 14–332 KB each.
+- **`data/stops.json`:**
+  - the galleries for the Unsung Founders Memorial, Steele Building, Lenoir Hall, and the Pit now use these photos
+  - **Captions come only from the file titles**, and alt text describes what's visible in each image
+  - **Credits** use the source named in the file title (The Assembly, Virtual Museum, the James Cates Remembrance Coalition, the Town of Chapel Hill); where none is named, the credit reads **"needs confirmation"**
+  - the Pit's and Old Chapel Hill Cemetery's placeholder people became **James Cates** and **Wilson Swain Caldwell**, with their portraits. Their descriptions are still placeholders, so no historical claims were added.
+  - Old Chapel Hill Cemetery keeps its placeholder gallery images (no photo of the site was supplied)
+- **Removed** the placeholder images `images/stop-1…4-a/b.svg`, which are no longer used. `npm run placeholders` now only regenerates placeholders that a stop still references.
+- **`js/app.js`:** Key People cards show a new optional **`imageCredit`** ("Credit: …").
+- **`css/styles.css`:**
+  - Gallery images are shown **whole** (`object-fit: contain` on dark navy) instead of cropped to fill the 4:3 frame.
+  - Key People photos crop toward the top, so faces stay in frame.
+  - The person credit text measures 5.0:1 against the sky-blue card.
+- **Docs:** the editing guide (image folders, sizes, `imageCredit`) and the design doc (gallery behavior, the person credit).
+
+### Decisions and reasons
+- **Decision:** put the two portraits on Key People cards rather than in galleries. **Why:** they're portraits of individuals, and the team's draft copy (`docs/drafts/stop-copy-draft.md`, from the language session) lists James Cates under the Pit and Wilson Swain Caldwell under Old Chapel Hill Cemetery.
+- **Decision:** never crop gallery images. **Why:** cropping can remove context from an archival photo or change its meaning. For example, the 1969 strike photo is tall and narrow, and a 4:3 crop would have cut off the people.
+- **Decision:** use the file titles as captions, and say "needs confirmation" where a title gives no source. **Why:** the guidelines require a credit for every image and allow no invented details.
+- **Decision:** order the Pit's gallery as hero image, the newspaper photo, the tribute, then the memorial plaque. **Why:** the present-day photo introduces the site, followed by the historical image and the later remembrances.
+
+### Still needed (team)
+- **Permission to publish (tracked in `docs/image-permissions.md`; every photo is marked `"permission": "pending"` in `data/stops.json`)** each image from its holder: The Assembly, Virtual Museum, the James Cates Remembrance Coalition, the Town of Chapel Hill, the archive holding the Caldwell scan (Folder 0498), and whoever took the hero photos. The site is public.
+- **Full citations** for every credit marked "needs confirmation" or "from the file name".
+- **A photo of Old Chapel Hill Cemetery**, and Key People for the other three sites.
+
+### Verified
+- All 12 image paths referenced in `stops.json` exist and are served with HTTP 200.
+- At 375px:
+  - Lenoir Hall's gallery shows the 1969 strike photo whole, with its title as the caption.
+  - The Pit's gallery has 4 images with no broken-image fallbacks.
+  - The James Cates card shows the yearbook photo and its credit.
+

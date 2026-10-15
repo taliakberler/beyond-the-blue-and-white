@@ -395,11 +395,12 @@ main { flex: 1; position: relative; min-height: 0; }
   display: grid; grid-template-columns: 92px 1fr; gap: 12px;
   padding: 10px; background: var(--sky); color: var(--navy); border-radius: 4px;
 }
-.person-photo { width: 92px; height: 92px; object-fit: cover; border-radius: 2px; }
+.person-photo { width: 92px; height: 92px; object-fit: cover; object-position: 50% 20%; border-radius: 2px; }  /* portraits: keep the face in frame */
 .person .img-fallback { width: 92px; height: 92px; aspect-ratio: auto; padding: 4px; font-size: 11px; }
 .person-name { margin: 2px 0 0; font-weight: 700; font-size: var(--fs-small); line-height: 1.25; text-transform: uppercase; }
 .person-name::after { content: ""; display: block; width: 44px; height: 3px; margin: 6px 0; background: var(--fog); }
 .person-desc { margin: 0; font-size: var(--fs-xs); line-height: 1.45; }
+.person-credit { margin: 6px 0 0; font-size: 0.75rem; line-height: 1.35; color: #24385c; }
 .person-more { display: inline-flex; align-items: center; min-height: 32px; margin-top: 4px; color: var(--navy); font-size: var(--fs-xs); font-weight: 700; }
 
 .sources { padding-left: 1.3em; margin: 0; font-size: var(--fs-xs); color: var(--fog-muted); }
@@ -410,7 +411,9 @@ main { flex: 1; position: relative; min-height: 0; }
 .gallery-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
 .gallery-track::-webkit-scrollbar { display: none; }
 .gallery-track figure { flex: 0 0 100%; margin: 0; scroll-snap-align: start; }
-.gallery-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #d9d9d9; }
+/* Images are shown whole (never cropped): cropping an archival photo can change what it shows.
+   Portrait and odd-shaped images sit centered in the 4:3 frame on a dark background. */
+.gallery-img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #0f1c35; }
 .img-fallback {
   width: 100%; aspect-ratio: 4 / 3;
   display: grid; place-items: center; text-align: center; padding: 16px;

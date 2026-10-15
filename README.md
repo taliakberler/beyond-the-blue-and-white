@@ -59,7 +59,7 @@ Visitors don't have to start at Stop 1. Every sign is a way in.
 
 ## Current status
 
-> **This is a working mockup.** The map's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text and images are still placeholders**, with no historical content yet. Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
+> **This is a working mockup.** The map's five sites are in place: the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery. Their **text is still placeholder**, with no historical content yet. The first real photos are in place, but **permission to publish them hasn't been confirmed yet** (see [docs/image-permissions.md](docs/image-permissions.md)). Each stop shows a "PLACEHOLDER CONTENT" badge until its content has been researched, verified, and reviewed.
 
 The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.md](PROCESS_LOG.md) for why, and [docs/content-guidelines.md](docs/content-guidelines.md) for how real content should be prepared.
 
@@ -72,6 +72,7 @@ The placeholder text deliberately makes no historical claims. See [PROCESS_LOG.m
 | [docs/content-guidelines.md](docs/content-guidelines.md) | Standards for researching, writing, sourcing, and crediting the map's content |
 | [docs/design-and-styles.md](docs/design-and-styles.md) | The wireframe-based design: color tokens, typography, screens, components, logos and icons, and contrast measurements |
 | [docs/software-and-credits.md](docs/software-and-credits.md) | Every library, map service, and data source used, with licenses and required credits |
+| [docs/image-permissions.md](docs/image-permissions.md) | **Permission to publish each photo: not yet confirmed.** Checklist of every image, its holder, and its status |
 | [PROCESS_LOG.md](PROCESS_LOG.md) | Dated record of every decision and code change, kept for publication |
 
 ## Quick start

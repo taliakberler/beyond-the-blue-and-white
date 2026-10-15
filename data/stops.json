@@ -166,16 +166,11 @@
       ],
       "images": [
         {
-          "src": "images/stop-1-a.svg",
-          "alt": "Gray placeholder graphic for the Unsung Founders Memorial, image 1",
-          "caption": "Placeholder caption — describe what the image shows.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
-        },
-        {
-          "src": "images/stop-1-b.svg",
-          "alt": "Gray placeholder graphic for the Unsung Founders Memorial, image 2",
-          "caption": "Placeholder caption — second image.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/unsung-founders-memorial/memorial.jpg",
+          "alt": "A round black table resting on the raised hands of many small bronze figures, surrounded by stone seats on a grassy, tree-shaded quad.",
+          "caption": "The Unsung Founders Memorial.",
+          "credit": "Source needs confirmation (file: unsung-founders.jpeg)",
+          "permission": "pending"
         }
       ],
       "sources": [
@@ -209,16 +204,11 @@
       ],
       "images": [
         {
-          "src": "images/stop-2-a.svg",
-          "alt": "Gray placeholder graphic for Steele Building, image 1",
-          "caption": "Placeholder caption — describe what the image shows.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
-        },
-        {
-          "src": "images/stop-2-b.svg",
-          "alt": "Gray placeholder graphic for Steele Building, image 2",
-          "caption": "Placeholder caption — second image.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/steele-building/hero.jpg",
+          "alt": "The red-brick front of the Steele Building, with a hanging sign reading “Steele Building” and a columned entrance.",
+          "caption": "Steele Building today.",
+          "credit": "Photographer needs confirmation (file: 5_SteeleBuilding_HeroImage.jpg)",
+          "permission": "pending"
         }
       ],
       "sources": [
@@ -252,16 +242,18 @@
       ],
       "images": [
         {
-          "src": "images/stop-3-a.svg",
-          "alt": "Gray placeholder graphic for Lenoir Hall, image 1",
-          "caption": "Placeholder caption — describe what the image shows.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/lenoir-hall/strike-leaders-1969.jpg",
+          "alt": "Black-and-white photo of two women and a young man standing at a podium with microphones outdoors; the woman in the middle is speaking.",
+          "caption": "Strike leaders Mary Smith (left) and Elizabeth Brooks (middle) stand with a young man during the 1969 UNC food workers’ strike.",
+          "credit": "Source needs confirmation",
+          "permission": "pending"
         },
         {
-          "src": "images/stop-3-b.svg",
-          "alt": "Gray placeholder graphic for Lenoir Hall, image 2",
-          "caption": "Placeholder caption — second image.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/lenoir-hall/students-support-food-workers.jpg",
+          "alt": "A young Black man in a green jacket speaks into a microphone in front of students sitting on wide stone steps.",
+          "caption": "Students support the food workers.",
+          "credit": "Source: Virtual Museum (from the file name; add the full citation)",
+          "permission": "pending"
         }
       ],
       "sources": [
@@ -286,25 +278,43 @@
       ],
       "people": [
         {
-          "name": "Placeholder Person E",
+          "name": "James Cates",
           "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
+          "image": "images/people/james-cates.jpg",
+          "imageAlt": "Black-and-white yearbook portrait of James Cates in a suit and tie.",
+          "imageCredit": "Photo via the Town of Chapel Hill",
+          "link": "",
+          "imagePermission": "pending"
         }
       ],
       "images": [
         {
-          "src": "images/stop-4-a.svg",
-          "alt": "Gray placeholder graphic for The Pit, image 1",
-          "caption": "Placeholder caption — describe what the image shows.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/the-pit/hero.jpg",
+          "alt": "The Pit today: a sunken brick plaza with trees, tables, and chairs in front of the UNC Student Stores building.",
+          "caption": "The Pit today.",
+          "credit": "Photographer needs confirmation (file: 3_ThePit_HeroImage.jpg)",
+          "permission": "pending"
         },
         {
-          "src": "images/stop-4-b.svg",
-          "alt": "Gray placeholder graphic for The Pit, image 2",
-          "caption": "Placeholder caption — second image.",
-          "credit": "Placeholder credit — archive or photographer, collection, item ID"
+          "src": "images/the-pit/james-cates-memorial-the-assembly.jpg",
+          "alt": "Grainy newspaper photo of a large crowd gathered in the Pit, with campus buildings behind.",
+          "caption": "James Cates memorial at the Pit on UNC-Chapel Hill’s campus.",
+          "credit": "Source: The Assembly (from the file name; add the full citation)",
+          "permission": "pending"
+        },
+        {
+          "src": "images/the-pit/james-cates-tribute.jpg",
+          "alt": "Flowers laid on the bricks in front of a hand-made display headed “Rest in Power James Cates,” with a photo of him and newspaper clippings.",
+          "caption": "Modern-day tribute to James Cates in the Pit.",
+          "credit": "Photo courtesy of the James Cates Remembrance Coalition",
+          "permission": "pending"
+        },
+        {
+          "src": "images/the-pit/james-cates-memorial-plaque.jpg",
+          "alt": "A dark metal memorial marker headed “James Lewis Cates, Jr.” standing on the brick plaza of the Pit.",
+          "caption": "Memorial to James Cates in the Pit.",
+          "credit": "Photographer needs confirmation (file: 3_MemorialJamesCates.jpg)",
+          "permission": "pending"
         }
       ],
       "sources": [
@@ -329,11 +339,13 @@
       ],
       "people": [
         {
-          "name": "Placeholder Person F",
+          "name": "Wilson Swain Caldwell",
           "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
+          "image": "images/people/wilson-caldwell.jpg",
+          "imageAlt": "Black-and-white portrait of an older man with a gray beard, wearing a suit and bow tie.",
+          "imageCredit": "Source needs confirmation (file: Folder_0498_Caldwell_Wilson_18411898_Scan_3.jpg)",
+          "link": "",
+          "imagePermission": "pending"
         }
       ],
       "images": [

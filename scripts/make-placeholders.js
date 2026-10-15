@@ -20,7 +20,10 @@ const svg = (title, n) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
 for (const s of stops) {
   ['a', 'b'].forEach((letter, i) => {
-    const file = path.join(root, 'images', `stop-${s.order}-${letter}.svg`);
+    const rel = `images/stop-${s.order}-${letter}.svg`;
+    // Only (re)write placeholders a stop still uses; stops with real photos are left alone.
+    if (!(s.images || []).some(im => im.src === rel)) return;
+    const file = path.join(root, rel);
     fs.writeFileSync(file, svg(s.title, i + 1));
     console.log('wrote', path.relative(root, file));
   });
