@@ -163,7 +163,7 @@ Used only when building tiles, not by visitors.
 
 ### AVFoundation (macOS): video encoding
 
-`scripts/encode-video.swift` uses Apple's built-in AVFoundation framework to make the web copy of the opening animation (H.264 MP4, 720×1280, 1.4 Mbps, no audio, "fast start" so it plays while downloading). It needs a Mac with Swift (included with Xcode or the Command Line Tools); nothing to install. The team's animation file is credited to the Beyond the Blue and White team, like the logo.
+`scripts/encode-video.swift` uses Apple's built-in AVFoundation framework to make the web copy of the opening animation (H.264 MP4, 720×1280, 1.4 Mbps, no audio, "fast start" so it plays while downloading). `scripts/make-splash-backdrop.swift` copies the video's first frame, without re-encoding, into `media/splash-backdrop.mp4` (1 KB). It needs a Mac with Swift (included with Xcode or the Command Line Tools); nothing to install. The team's animation file is credited to the Beyond the Blue and White team, like the logo.
 
 ### Node.js and npm
 

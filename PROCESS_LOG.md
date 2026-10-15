@@ -965,3 +965,18 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - Phone (375px) and desktop (1280px): plays with no visible edges; tapping, a key press, and the end of the video each open the home screen, with focus on "Explore the map".
 - A site link (`#stop=the-pit`) never creates or downloads the video. No console errors.
+
+## 2026-10-15 — Splash: matching navy beside the video on computers
+
+**Directed by:** Talia Berler (on a computer browser, the navy to the left and right of the animation didn't match it)
+
+### What changed
+- The space around the animation is now filled with `media/splash-backdrop.mp4`: the video's first frame (plain navy), cut out without re-encoding (1 KB) by the new `scripts/make-splash-backdrop.swift`, and stretched to fill the screen behind the video.
+
+### Decisions and reasons
+- **Decision:** fill the background with video, not a CSS color. **Why:** browsers display video colors differently from page colors, and differently from each other. The earlier fix (`#122e54`) matched in Chrome but not in Talia's browser. A frame of the same video goes through the same color handling as the animation, so it matches in any browser. `#122e54` stays underneath as a fallback.
+- **Decision:** only the first frame. **Why:** it's the only completely plain frame; faint names start appearing by 0.04 s, and stretched, they'd show as smudges.
+
+### Verified
+- With the fallback background temporarily set to red, no red showed anywhere on desktop (1280px) or phone (375px). Colors inside and outside the video's edge matched within screenshot-compression noise.
+- Tapping still skips; both videos stop downloading when the splash closes; no console errors.

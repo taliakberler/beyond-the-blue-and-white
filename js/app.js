@@ -11,6 +11,7 @@
   var STOP_ZOOM = 18;
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   var SPLASH_VIDEO = 'media/splash.mp4';
+  var SPLASH_BACKDROP = 'media/splash-backdrop.mp4';  // one plain-navy frame from the video, stretched behind it
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
   var SPLASH_VIDEO_MAX_MS = 20000;   // safety cap, in case the video never reports that it ended
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
@@ -871,11 +872,11 @@
   // Fade the splash out, then remove it entirely (even if the browser never finishes the fade).
   function hideSplash() {
     document.body.classList.remove('is-loading');
-    var video = els.splash.querySelector('video');
+    var videos = els.splash.querySelectorAll('video');
     var hadFocus = els.splash.contains(document.activeElement);
     setTimeout(function () {
       els.splash.hidden = true;
-      if (video) { video.pause(); video.removeAttribute('src'); video.load(); }  // stop downloading it
+      Array.prototype.forEach.call(videos, function (v) { v.pause(); v.removeAttribute('src'); v.load(); });  // stop downloading
     }, 600);
     if (hadFocus && !els.introView.hidden) els.introCta.focus({ preventScroll: true });
   }
@@ -898,14 +899,22 @@
 
     var video = el('video', { 'class': 'splash-video', src: SPLASH_VIDEO, muted: '', playsinline: '', autoplay: '', preload: 'auto', 'aria-hidden': 'true' });
     video.muted = true;               // the property, not just the attribute, is what allows autoplay
+    // Browsers show a video's colors differently from page colors (and differently from each other),
+    // so a CSS background never quite matches the video's navy. Instead, the space around the video
+    // is filled with a frame of the video itself, which always matches.
+    var backdrop = el('video', { 'class': 'splash-backdrop', src: SPLASH_BACKDROP, muted: '', playsinline: '', autoplay: '', preload: 'auto', 'aria-hidden': 'true' });
+    backdrop.muted = true;
+    var bp = backdrop.play();
+    if (bp && bp.catch) bp.catch(function () {});   // if it can't play, the CSS navy behind it shows instead
     els.splash.classList.add('has-video');
     els.splash.insertBefore(video, els.splash.firstChild);
+    els.splash.insertBefore(backdrop, video);
 
     // If it can't play (autoplay blocked, e.g. iPhone Low Power Mode, or the file fails),
     // fall back to the still logo and carry on as if there were no video.
     function fallBack() {
       if (finished) return;
-      video.remove();
+      video.remove(); backdrop.remove();
       els.splash.classList.remove('has-video');
       finish();
     }
