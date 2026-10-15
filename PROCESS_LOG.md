@@ -980,3 +980,20 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - With the fallback background temporarily set to red, no red showed anywhere on desktop (1280px) or phone (375px). Colors inside and outside the video's edge matched within screenshot-compression noise.
 - Tapping still skips; both videos stop downloading when the splash closes; no console errors.
+
+## 2026-10-15 — Splash backdrop: making it play in Safari
+
+**Directed by:** Talia Berler (sent a screenshot: on a computer browser the navy beside the animation still didn't match)
+
+### What changed
+- The backdrop is now a normal 1-second clip of the video's first frame, looped, instead of a one-frame clip. The frame's color data is copied as-is, with the same BT.709 color tags, at a bitrate high enough that every frame decodes to the source color.
+- Both splash videos are now muted before they're given their file and only started once they're on the page. The backdrop tries again as soon as the animation starts.
+
+### Decisions and reasons
+- **Finding:** in Talia's screenshot, the area beside the video was exactly the CSS fallback color, `#122e54`, so the backdrop wasn't showing. Her browser displayed the video's navy as rgb(19, 41, 75), close to the site's navy, whereas Chrome shows it bluer; a single CSS color can't match both.
+- **Why it didn't show (most likely):** Safari decides whether a video may autoplay when its file is set. The backdrop was given its file before being muted and was told to play before it was on the page. A one-frame clip is also an unusual file that some browsers won't display. The page might also have been a cached copy of the version from before the backdrop existed (GitHub Pages lets browsers keep pages for up to 10 minutes).
+- **Testing limit:** Playwright's WebKit (Safari's engine) blocks all autoplay, even a plain muted test page, so it can't reproduce Safari's behavior. Needs checking in Talia's browser after publishing.
+
+### Verified
+- Chrome (preview): both videos play; with the fallback background temporarily red, no red showed; tapping skips; no console errors.
+- Every frame of the new backdrop decodes to the same color as the animation's first frame.

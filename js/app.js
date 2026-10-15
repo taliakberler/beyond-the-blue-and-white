@@ -11,7 +11,7 @@
   var STOP_ZOOM = 18;
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   var SPLASH_VIDEO = 'media/splash.mp4';
-  var SPLASH_BACKDROP = 'media/splash-backdrop.mp4';  // one plain-navy frame from the video, stretched behind it
+  var SPLASH_BACKDROP = 'media/splash-backdrop.mp4';  // the video's plain-navy first frame, held for 1 s and looped behind it
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
   var SPLASH_VIDEO_MAX_MS = 20000;   // safety cap, in case the video never reports that it ended
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
@@ -897,18 +897,26 @@
     var saveData = navigator.connection && navigator.connection.saveData;
     if (reduce || saveData || !SPLASH_VIDEO) { finish(); return; }
 
-    var video = el('video', { 'class': 'splash-video', src: SPLASH_VIDEO, muted: '', playsinline: '', autoplay: '', preload: 'auto', 'aria-hidden': 'true' });
-    video.muted = true;               // the property, not just the attribute, is what allows autoplay
+    // Safari decides whether a video may autoplay when its file is set, so each one is muted (the
+    // property and the attribute) BEFORE it gets its src, and only played once it's on the page.
+    function silentVideo(cls, src, loop) {
+      var v = el('video', { 'class': cls, playsinline: '', 'webkit-playsinline': '', preload: 'auto', 'aria-hidden': 'true' });
+      v.muted = true; v.defaultMuted = true; v.setAttribute('muted', '');
+      v.autoplay = true;
+      if (loop) v.loop = true;
+      v.src = src;
+      return v;
+    }
+    var video = silentVideo('splash-video', SPLASH_VIDEO);
     // Browsers show a video's colors differently from page colors (and differently from each other),
     // so a CSS background never quite matches the video's navy. Instead, the space around the video
     // is filled with a frame of the video itself, which always matches.
-    var backdrop = el('video', { 'class': 'splash-backdrop', src: SPLASH_BACKDROP, muted: '', playsinline: '', autoplay: '', preload: 'auto', 'aria-hidden': 'true' });
-    backdrop.muted = true;
-    var bp = backdrop.play();
-    if (bp && bp.catch) bp.catch(function () {});   // if it can't play, the CSS navy behind it shows instead
+    var backdrop = silentVideo('splash-backdrop', SPLASH_BACKDROP, true);
     els.splash.classList.add('has-video');
     els.splash.insertBefore(video, els.splash.firstChild);
     els.splash.insertBefore(backdrop, video);
+    var bp = backdrop.play();
+    if (bp && bp.catch) bp.catch(function () {});   // if it can't play, the CSS navy behind it shows instead
 
     // If it can't play (autoplay blocked, e.g. iPhone Low Power Mode, or the file fails),
     // fall back to the still logo and carry on as if there were no video.
@@ -919,7 +927,10 @@
       finish();
     }
     var startTimer = setTimeout(fallBack, SPLASH_VIDEO_START_MS);
-    video.addEventListener('playing', function () { clearTimeout(startTimer); }, { once: true });
+    video.addEventListener('playing', function () {
+      clearTimeout(startTimer);
+      if (backdrop.paused) { var r = backdrop.play(); if (r && r.catch) r.catch(function () {}); }  // try again now that video is allowed
+    }, { once: true });
     video.addEventListener('error', fallBack);
     video.addEventListener('ended', finish);
     setTimeout(finish, SPLASH_VIDEO_MAX_MS);
