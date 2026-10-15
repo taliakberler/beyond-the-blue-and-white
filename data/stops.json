@@ -34,8 +34,7 @@
     "mapHint": "Explore the map. Tap a location to get more details.",
     "buildingLayer": {
       "url": "https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0",
-      "nameField": "BUILDINGNAME",
-      "yearField": "YEARBUILT"
+      "nameField": "BUILDINGNAME"
     },
     "campusBoundary": {
       "sourceUrl": "https://gismaps.unc.edu/arcgis/rest/services/basemap/FeatureServer/16",
@@ -55,7 +54,7 @@
           "role": ""
         },
         {
-          "name": "Cayla Quintero",
+          "name": "Andie Day",
           "role": ""
         },
         {
@@ -63,15 +62,7 @@
           "role": ""
         },
         {
-          "name": "Gwyneth Shoemaker",
-          "role": ""
-        },
-        {
           "name": "Jori Husted",
-          "role": ""
-        },
-        {
-          "name": "Andrea Perez",
           "role": ""
         },
         {
@@ -83,7 +74,15 @@
           "role": ""
         },
         {
-          "name": "Andie Day",
+          "name": "Andrea Perez",
+          "role": ""
+        },
+        {
+          "name": "Cayla Quintero",
+          "role": ""
+        },
+        {
+          "name": "Gwyneth Shoemaker",
           "role": ""
         }
       ],
@@ -101,11 +100,11 @@
         "description": "From Chapel Hill, who advised the team on the history of Black labor and community here.",
         "people": [
           {
-            "name": "Samuel Scarborough",
+            "name": "Nicholas Graham",
             "role": ""
           },
           {
-            "name": "Nicholas Graham",
+            "name": "Samuel Scarborough",
             "role": ""
           }
         ]

@@ -792,3 +792,32 @@ At 375px:
 - **`qr/sheet.html`:** regenerated with the new name. The QR codes are unchanged.
 - **`docs/editing-guide.md`:** updated the current icon assignments.
 
+---
+
+## 2026-10-14 — Teardrop pins, compass fix, zoom-button fix, building names only, team order
+
+**Directed by:** project team. Implemented by Claude Code.
+
+### What changed
+1. **Building tooltips** show only the building's name. "Built 19…" was removed, along with the `yearField` setting and the code that requested and displayed it. Only the name field is now downloaded from UNC.
+2. **Pins are upside-down teardrops** instead of circles:
+   - navy with a fog outline, with the icon in the round head
+   - built as a square with three rounded corners, turned 45°
+   - the pin's anchor is at the tip (head center plus 21·√2 ≈ 30px), so **the point marks the site's exact coordinates**
+   - the selected pin gets a coral outline and grows from its tip, so the point stays put
+   - the keyboard focus ring follows the teardrop's shape
+3. **Team members are listed alphabetically by last name** on the About page and in the README: Talia Berler, Andie Day, Trinity Gill, Jori Husted, Victor Morgan, Leticia Oteng, Andrea Perez, Cayla Quintero, Gwyneth Shoemaker. The **community advisors** are sorted the same way (Nicholas Graham, Samuel Scarborough), and the coaches already were (Adonis Durado, Randy Stano). The About page sorts all three lists in code, so names added later in any order still appear alphabetically.
+4. **Compass:** the "N" overlapped the ring. The compass now uses a 48-unit face (ring radius 22.5), with the "N" (8.5px) inside the ring and the needle centered below it, displayed at a fixed 48px. It looks the same at every screen width.
+5. **Zoom buttons:** hovering + or − made the hovered button jump from 30px to 44px, which squeezed the other one so part of its fill was clipped. **Cause:** Leaflet's own `.leaflet-touch .leaflet-bar a` rule (30px) outranked the site's sizing, except while hovering. The site's rule now covers every state (`.leaflet-container .leaflet-bar a`, `:hover`, `:focus`, and `.leaflet-touch`), so both buttons stay 44×44px.
+
+6. **Fix: the `#about` link opened the map instead of the About page.** The wireframe update (commit `1985ee7`) introduced this. On startup the app switched to the map view before handling the link, and that switch cleared `#about` from the address. Startup now opens About directly for `#about`, and still opens the map for stop links and the intro for the home page.
+
+### Verified
+- `…/index.html#about` opens the About page and keeps `#about` in the address. Going from there to a stop link and back with the browser's Back button returns to About. The home page still opens the intro, and `#stop=lenoir-hall` still opens that stop's full story.
+- At 375px, the pins render as teardrops with the icons in their heads, and all icon images load. In a close-up, the compass's "N" sits clear of the ring.
+- At 1280px:
+  - With the real mouse hovering +, both zoom buttons measure 44×44px, and neither is clipped.
+  - Hovering Davis Library shows "Davis Library" only.
+  - About lists the team in last-name order.
+  - The selected pin (the Pit) has the coral outline and a 1.15× scale.
+

@@ -115,24 +115,24 @@ PROCESS_LOG.md         Record of decisions and changes
 
 *Roles to be added.*
 
-**Team**
+**Team** (alphabetical by last name)
 - Talia Berler
-- Cayla Quintero
+- Andie Day
 - Trinity Gill
-- Gwyneth Shoemaker
 - Jori Husted
-- Andrea Perez
 - Victor Morgan
 - Leticia Oteng
-- Andie Day
+- Andrea Perez
+- Cayla Quintero
+- Gwyneth Shoemaker
 
-**Coaches**
+**Coaches** (alphabetical by last name)
 - Adonis Durado
 - Randy Stano
 
-**Community advisors:** from Chapel Hill, they advised us on the history of Black labor and community here.
-- Samuel Scarborough
+**Community advisors** (alphabetical by last name): from Chapel Hill, they advised us on the history of Black labor and community here.
 - Nicholas Graham
+- Samuel Scarborough
 
 The same credits appear on the site's About page (the ⓘ button, or [`#about`](https://taliakberler.github.io/beyond-the-blue-and-white/#about)). To add roles or names, edit `tour.about` in `data/stops.json`.
 

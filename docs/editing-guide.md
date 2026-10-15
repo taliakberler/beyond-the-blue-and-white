@@ -34,7 +34,6 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 | `about` | The About page (see below) |
 | `buildingLayer.url` | Optional ArcGIS layer (ends in `/FeatureServer/N` or `/MapServer/N`). The footprints are never drawn; hovering or tapping a building shows its info. Delete the whole `buildingLayer` block to turn it off. |
 | `buildingLayer.nameField` | Attribute shown as the building's name on hover or tap (`BUILDINGNAME` for UNC's layer) |
-| `buildingLayer.yearField` | Attribute shown as "Built …" under the name (`YEARBUILT` for UNC's layer) |
 | `basemap` | The illustrated map: `tiles` (tile path), `bounds` (its real-world corners), `minNativeZoom` / `maxNativeZoom` (zooms the tiles were built for), `streetsOpacity` (how faint the surrounding streets are), and `attribution` (credit line) |
 
 ### The About page (`"tour"` → `"about"`)

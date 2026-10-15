@@ -204,11 +204,16 @@ main { flex: 1; position: relative; min-height: 0; }
 
 /* Leaflet controls in the brand style */
 .leaflet-bar { border: 0 !important; box-shadow: var(--shadow) !important; border-radius: 999px !important; overflow: hidden; }
-.leaflet-bar a, .leaflet-bar a:hover {
+/* Zoom buttons: the same size in every state. Leaflet's own ".leaflet-touch .leaflet-bar a" rule
+   (30px) is overridden here with equal-or-higher specificity, so hovering never resizes a button. */
+.leaflet-container .leaflet-bar a,
+.leaflet-container .leaflet-bar a:hover,
+.leaflet-container .leaflet-bar a:focus,
+.leaflet-touch .leaflet-bar a {
   width: var(--tap); height: var(--tap); line-height: var(--tap); font-size: 22px;
   background: var(--navy); color: var(--fog); border-bottom-color: var(--navy-3);
 }
-.leaflet-bar a:hover { background: var(--navy-3); }
+.leaflet-container .leaflet-bar a:hover { background: var(--navy-3); }
 .leaflet-bar a.leaflet-disabled { background: var(--navy); color: #6f7f98; }
 .leaflet-control-attribution { font-size: 12px; background: rgba(236, 237, 237, 0.88) !important; color: var(--navy); }
 .leaflet-control-attribution a { color: var(--logo-navy); }
@@ -225,21 +230,29 @@ main { flex: 1; position: relative; min-height: 0; }
 .map-tools :focus-visible, .leaflet-control-container :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; box-shadow: 0 0 0 7px var(--navy); }
 .round-btn[aria-busy="true"] { cursor: progress; opacity: 0.8; }
 
-/* Pins: the team's icons on navy circles */
+/* Pins: upside-down teardrops (navy, fog outline) with the team's icon in the round head.
+   The teardrop is a square with three rounded corners, turned 45° so the sharp corner points down. */
 .stop-pin-wrap { background: none; border: 0; }
 .stop-pin-wrap:focus-visible { outline: none; }
-.stop-pin { position: relative; width: 48px; height: 48px; display: grid; place-items: center; }
+.stop-pin {
+  position: relative; width: 48px; height: 56px;
+  transform-origin: 50% 54px;                       /* grow from the tip, which stays on the spot */
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+}
 .stop-pin .pin {
-  width: 44px; height: 44px; border-radius: 50%;
-  display: grid; place-items: center;
+  position: absolute; left: 3px; top: 3px;
+  width: 42px; height: 42px;
+  border-radius: 50% 50% 0 50%;
   background: var(--color-map-marker);
   border: 3px solid var(--color-map-ring);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transform: rotate(45deg);
+  transition: border-color 0.15s ease;
 }
-.stop-pin .pin img { width: 30px; height: 30px; }
-.stop-pin-wrap:focus-visible .pin { outline: 3px solid var(--color-focus); outline-offset: 2px; box-shadow: 0 0 0 7px var(--navy); }
-.stop-pin-wrap.is-active .pin { border-color: var(--color-map-active); transform: scale(1.18); }
+.stop-pin .pin-icon { position: absolute; left: 10px; top: 10px; width: 28px; height: 28px; }
+.stop-pin-wrap:focus-visible .pin { box-shadow: 0 0 0 3px var(--color-focus), 0 0 0 7px var(--navy); }
+.stop-pin-wrap.is-active .pin { border-color: var(--color-map-active); }
+.stop-pin-wrap.is-active .stop-pin { transform: scale(1.15); }
 
 .you-are-here {
   width: 22px; height: 22px; border-radius: 50%;
@@ -261,13 +274,13 @@ main { flex: 1; position: relative; min-height: 0; }
 }
 
 /* Compass and scale (bottom-left). They sit on the light map. */
-.map-compass { width: 44px; height: 44px; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3)); }
+.map-compass { width: 48px; height: 48px; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3)); }
 .map-compass svg { display: block; }
-.compass-face { fill: var(--fog); stroke: var(--navy); stroke-width: 1.5; }
+.compass-face { fill: var(--fog); stroke: var(--navy); stroke-width: 1.5; }  /* r 22.5 + half the stroke = 23.25, inside the 48-unit box */
 .compass-north { fill: var(--navy); }
 .compass-south { fill: var(--sky); }
 .compass-pin { fill: var(--fog); stroke: var(--navy); stroke-width: 1; }
-.compass-n { font: 700 9px var(--font-heading); fill: var(--navy); }
+.compass-n { font: 700 8.5px var(--font-heading); fill: var(--navy); }
 .leaflet-control-scale-line {
   font: 700 11px/1.3 var(--font-body);
   color: var(--navy);

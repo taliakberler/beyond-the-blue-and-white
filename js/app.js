@@ -135,12 +135,13 @@
         var c = L.DomUtil.create('div', 'map-compass');
         c.setAttribute('role', 'img');
         c.setAttribute('aria-label', 'Compass: north is at the top of the map');
-        c.innerHTML = '<svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true" focusable="false">' +
-          '<circle cx="22" cy="22" r="20" class="compass-face"/>' +
-          '<path d="M22 9 27 24h-10Z" class="compass-north"/>' +
-          '<path d="M22 37 17 24h10Z" class="compass-south"/>' +
-          '<circle cx="22" cy="24" r="2" class="compass-pin"/>' +
-          '<text x="22" y="8.2" text-anchor="middle" class="compass-n">N</text>' +
+        // 48-unit face: the "N" sits inside the ring, above a needle centered on the face.
+        c.innerHTML = '<svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">' +
+          '<circle cx="24" cy="24" r="22.5" class="compass-face"/>' +
+          '<text x="24" y="14.5" text-anchor="middle" class="compass-n">N</text>' +
+          '<path d="M24 17 28 27.5h-8Z" class="compass-north"/>' +
+          '<path d="M24 38 20 27.5h8Z" class="compass-south"/>' +
+          '<circle cx="24" cy="27.5" r="1.8" class="compass-pin"/>' +
           '</svg>';
         L.DomEvent.disableClickPropagation(c);
         return c;
@@ -182,9 +183,12 @@
     state.stops.forEach(function (stop, i) {
       var icon = L.divIcon({
         className: 'stop-pin-wrap',
-        html: '<div class="stop-pin"><span class="pin"><img src="' + iconFor(stop) + '" alt=""></span></div>',
-        iconSize: [48, 48],
-        iconAnchor: [24, 24]
+        // Upside-down teardrop: the icon sits in the round head; the point marks the exact spot.
+        html: '<div class="stop-pin"><span class="pin" aria-hidden="true"></span>' +
+              '<img class="pin-icon" src="' + iconFor(stop) + '" alt=""></div>',
+        iconSize: [48, 56],
+        iconAnchor: [24, 54],     // the tip of the teardrop: head centre (24,24) + 21·√2 ≈ 30px
+        tooltipAnchor: [0, -50]
       });
       var m = L.marker([stop.lat, stop.lng], {
         icon: icon,
@@ -230,16 +234,14 @@
   /* ---------------- Optional ArcGIS building layer (invisible; info on hover or tap) ---------------- */
 
   // UNC's building footprints don't line up exactly with the illustrated map, so they are never drawn.
-  // They are kept as invisible targets: hovering (desktop) or tapping (phones) a building shows its
-  // name and, when available, the year it was built.
+  // They are kept as invisible targets: hovering (desktop) or tapping (phones) a building shows its name.
   function loadBuildings() {
     var cfg = state.tour.buildingLayer;
     var base = cfg && (typeof cfg === 'string' ? cfg : cfg.url);
     if (!base) return;
     base = base.replace(/\/+$/, '').replace(/\/query$/, '');
     var nameField = (cfg && cfg.nameField) || 'name';
-    var yearField = (cfg && cfg.yearField) || null;
-    var fields = [nameField].concat(yearField ? [yearField] : []).join(',');
+    var fields = nameField;
 
     var features = [];
     function page(offset, n) {
@@ -270,7 +272,6 @@
           if (!p[nameField]) return;
           var box = el('div', { 'class': 'building-tip' });
           box.appendChild(el('strong', null, String(p[nameField])));
-          if (yearField && p[yearField]) box.appendChild(el('span', null, 'Built ' + p[yearField]));
           layer.bindTooltip(box, { sticky: true, direction: 'top', offset: [0, -6] });
           layer.on('click', function (e) { layer.openTooltip(e.latlng); });
         }
@@ -431,9 +432,15 @@
       sec.appendChild(ul);
       box.appendChild(sec);
     }
-    group('about-team', 'Team', a.team);
-    group('about-coaches', 'Coaches', a.coaches);
-    if (a.advisors) group('about-advisors', 'Community advisors', a.advisors.people, a.advisors.description);
+    // Everyone is listed alphabetically by last name, whatever order they're entered in.
+    var byLastName = function (x, y) {
+      var lx = String(x.name || '').trim().split(/\s+/).pop().toLowerCase();
+      var ly = String(y.name || '').trim().split(/\s+/).pop().toLowerCase();
+      return lx < ly ? -1 : lx > ly ? 1 : String(x.name).localeCompare(String(y.name));
+    };
+    group('about-team', 'Team', (a.team || []).slice().sort(byLastName));
+    group('about-coaches', 'Coaches', (a.coaches || []).slice().sort(byLastName));
+    if (a.advisors) group('about-advisors', 'Community advisors', (a.advisors.people || []).slice().sort(byLastName), a.advisors.description);
     if ((a.credits && a.credits.length) || (a.links && a.links.length)) {
       var cr = el('section', { 'class': 'about-group', 'aria-labelledby': 'about-credits' });
       cr.appendChild(el('h3', { id: 'about-credits' }, 'Credits'));
@@ -785,7 +792,8 @@
       window.addEventListener('hashchange', handleHash);
 
       // Deep links (QR codes, shared links) go straight to their stop; the home page starts at the intro.
-      if (stopIdFromHash() || location.hash === '#about') { setView('map'); handleHash(); }
+      if (location.hash === '#about') setView('about');
+      else if (stopIdFromHash()) { setView('map'); handleHash(); }
       else setView('intro');
 
       // Fade out the splash once everything is ready (briefly held on the home page so it reads as a splash).

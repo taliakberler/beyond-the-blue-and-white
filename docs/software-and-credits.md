@@ -37,7 +37,7 @@ A campus map like this is well within normal use. If traffic ever grows very lar
 
 | | |
 |---|---|
-| **What it does** | Supplies each campus building's footprint, name, and year built. The footprints are **never drawn**, because they don't align exactly with the illustrated map. They're invisible targets: hovering (desktop) or tapping (phones) a building shows its name and year built. |
+| **What it does** | Supplies each campus building's footprint and name. The footprints are **never drawn**, because they don't align exactly with the illustrated map. They're invisible targets: hovering (desktop) or tapping (phones) a building shows its name. |
 | **Service** | `https://gismaps.unc.edu/arcgis/rest/services/BuildingFeatures/FeatureServer/0` (ArcGIS REST FeatureServer) |
 | **Request used** | `…/query?where=1%3D1&outFields=*&outSR=4326&f=geojson`, which asks for all buildings as GeoJSON in standard latitude/longitude |
 | **Data observed (2026-10-13)** | 577 building polygons. The server returns up to 1,000 per request, so one request covers the whole layer (the app pages through larger layers automatically). The building name comes from the `BUILDINGNAME` field. |
@@ -45,7 +45,7 @@ A campus map like this is well within normal use. If traffic ever grows very lar
 | **Terms** | Published by UNC Chapel Hill as a public map service. Check with UNC Facilities/GIS about attribution preferences before the public launch. |
 | **If it's unavailable** | Building names simply don't appear, and the rest of the map works normally |
 
-The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`, `nameField`, `yearField`). Remove that block to turn it off.
+The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`, `nameField`). Remove that block to turn it off.
 
 ### Fonts: Gasoek One, Oswald, Lato
 
