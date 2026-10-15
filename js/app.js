@@ -10,6 +10,9 @@
   var DESKTOP_QUERY = window.matchMedia('(min-width: 900px)');
   var STOP_ZOOM = 18;
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
+  var SPLASH_VIDEO = 'media/splash.mp4';
+  var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
+  var SPLASH_VIDEO_MAX_MS = 20000;   // safety cap, in case the video never reports that it ended
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
   var ICON_DIR = 'images/icons/pins/';
   var BUILDING_PAGE_LIMIT = 10;     // max pages fetched from the ArcGIS layer
@@ -868,7 +871,55 @@
   // Fade the splash out, then remove it entirely (even if the browser never finishes the fade).
   function hideSplash() {
     document.body.classList.remove('is-loading');
-    setTimeout(function () { els.splash.hidden = true; }, 600);
+    var video = els.splash.querySelector('video');
+    var hadFocus = els.splash.contains(document.activeElement);
+    setTimeout(function () {
+      els.splash.hidden = true;
+      if (video) { video.pause(); video.removeAttribute('src'); video.load(); }  // stop downloading it
+    }, 600);
+    if (hadFocus && !els.introView.hidden) els.introCta.focus({ preventScroll: true });
+  }
+
+  // The team's splash animation, on the home page only. Visitors arriving from a site link or
+  // QR code never see it (or download it), and neither do visitors who've asked their device for
+  // reduced motion or to save data. Tapping or clicking anywhere, or pressing Escape, Enter, or Space, ends it.
+  // Calls done() when it has ended or been skipped, or right away if it doesn't play.
+  function playSplashVideo(done) {
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      document.removeEventListener('keydown', onKey);
+      done();
+    }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (reduce || saveData || !SPLASH_VIDEO) { finish(); return; }
+
+    var video = el('video', { 'class': 'splash-video', src: SPLASH_VIDEO, muted: '', playsinline: '', autoplay: '', preload: 'auto', 'aria-hidden': 'true' });
+    video.muted = true;               // the property, not just the attribute, is what allows autoplay
+    els.splash.classList.add('has-video');
+    els.splash.insertBefore(video, els.splash.firstChild);
+
+    // If it can't play (autoplay blocked, e.g. iPhone Low Power Mode, or the file fails),
+    // fall back to the still logo and carry on as if there were no video.
+    function fallBack() {
+      if (finished) return;
+      video.remove();
+      els.splash.classList.remove('has-video');
+      finish();
+    }
+    var startTimer = setTimeout(fallBack, SPLASH_VIDEO_START_MS);
+    video.addEventListener('playing', function () { clearTimeout(startTimer); }, { once: true });
+    video.addEventListener('error', fallBack);
+    video.addEventListener('ended', finish);
+    setTimeout(finish, SPLASH_VIDEO_MAX_MS);
+    var p = video.play();
+    if (p && p.catch) p.catch(fallBack);
+
+    els.splash.addEventListener('click', finish);
+    function onKey(e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); finish(); } }
+    document.addEventListener('keydown', onKey);
   }
 
   function fail(msg, opts) {
@@ -890,6 +941,12 @@
   function boot() {
     var started = Date.now();
     var deepLink = /stop=|#about|#people/.test(location.hash);
+
+    // The splash closes once the data is ready AND (on the home page) the animation has ended or been skipped.
+    var waiting = 2;
+    function splashStepDone() { if (--waiting === 0) hideSplash(); }
+    if (deepLink) splashStepDone();
+    else playSplashVideo(function () { setTimeout(splashStepDone, Math.max(0, SPLASH_MIN_MS - (Date.now() - started))); });
 
     if (typeof L === 'undefined') { fail('The map library didn’t load. Please check your connection and reload.'); return; }
 
@@ -933,8 +990,8 @@
       else if (stopIdFromHash()) { setView('map'); handleHash(); }
       else setView('intro');
 
-      // Fade out the splash once everything is ready (briefly held on the home page so it reads as a splash).
-      setTimeout(hideSplash, deepLink ? 0 : Math.max(0, SPLASH_MIN_MS - (Date.now() - started)));
+      // Fade out the splash once everything is ready (see splashStepDone above).
+      splashStepDone();
     }).catch(function (err) {
       console.error(err);
       if (dataLoaded) {

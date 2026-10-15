@@ -24,7 +24,8 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 ### Splash and intro (home)
 
-- A navy **splash screen** with the logo appears while the map's data loads.
+- On the home page, the **splash screen** plays the team's opening animation (about 15 seconds; logo, then names filling in behind it). Visitors can skip it at any time by tapping or clicking anywhere, or pressing Escape, Enter, or Space. There's no Skip button. The home screen opens once the animation ends or is skipped (and the map's data has loaded).
+- The animation is left out, and a navy splash with the still logo shows briefly instead, for visitors who've turned on **reduce motion** or **data saver**, and if the phone blocks autoplay (for example, iPhone Low Power Mode). The video has no sound.
 - On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, a coral **Explore the map** button, and links to **See all sites** and **About this project**. The wording is `tour.welcome` in `data/stops.json`.
 - **Site links and QR codes skip the intro** and open their site directly. The splash is skipped for them too, so visitors standing at a site get there as fast as possible.
 - The **Home** button (⌂) or the logo in the header returns to the intro.

@@ -946,3 +946,22 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - Map loads 35 areas and 18 points; hovering the McCorkle lawn shows "McCorkle Place"; hovering a pin shows its site name; clicking a pin opens the site and closes the label; no console errors.
 - Pins have no browser `title` tip and are still announced by name.
+
+## 2026-10-15 — Opening animation on the splash screen
+
+**Directed by:** Talia Berler (provided the animation as an MP4 and a MOV, asked which to use, and asked to let visitors tap to skip)
+
+### What changed
+- The home page's splash plays the team's animation, `media/splash.mp4`. Tapping or clicking anywhere, or pressing Escape, Enter, or Space, skips it. (A Skip button was tried first and removed at Talia's request.) The home screen opens when it ends (15 s) or is skipped.
+- `scripts/encode-video.swift` makes the web copy: 720×1280 H.264 at 1.4 Mbps, 2.0 MB (the team's MP4 is 1080×1920 and 8.2 MB).
+
+### Decisions and reasons
+- **Decision:** use the MP4, not the MOV. **Why:** the MOV is 347 MB in Apple's Animation format, which most browsers can't play. It has no transparency (24-bit color), so it offers nothing the MP4 doesn't. Keep it as the master copy.
+- **Decision:** 720×1280 at 1.4 Mbps. **Why:** side-by-side frames at the busiest moment (10 s) were indistinguishable from the original, even on the thin outlined names, at a quarter of the size.
+- **Decision:** show the whole frame (never cropped), centered. **Why:** cropping to fill a phone screen cut letters off the names along the edges.
+- **Decision:** while it plays, the splash background is `#122e54`, and the video's edges fade very slightly. **Why:** browsers display the video's navy a shade bluer than the site's navy, and the file has a 1px darker border; without this, a visible band and line showed around the video.
+- **Decision:** home page only, and not for reduce motion, data saver, or blocked autoplay (the still logo shows instead). **Why:** visitors arriving by QR code at a site shouldn't wait or download 2 MB; motion and data preferences are respected; and the splash never gets stuck.
+
+### Verified
+- Phone (375px) and desktop (1280px): plays with no visible edges; tapping, a key press, and the end of the video each open the home screen, with focus on "Explore the map".
+- A site link (`#stop=the-pit`) never creates or downloads the video. No console errors.

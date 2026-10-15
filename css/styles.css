@@ -122,6 +122,26 @@ button { font: inherit; color: inherit; }
   transition: opacity 0.45s ease, visibility 0.45s;
 }
 .splash-logo { width: min(64vw, 300px); height: auto; }
+/* The team's opening animation (home page only; see playSplashVideo in app.js). It's always shown
+   whole (never cropped, so none of the names in it are cut off), centered on its own navy. */
+/* #122e54 is the video's navy as browsers display it (a shade bluer than --navy; likely the export's
+   color profile), so no bands show around it. */
+.splash.has-video { background: #122e54; cursor: pointer; }
+.splash.has-video .splash-logo { visibility: hidden; }
+/* Sized to the video's 9:16 frame and centered. Its outer edge fades out very slightly, to hide a
+   1px darker border in the file and any small color difference between browsers. */
+.splash-video {
+  position: absolute; inset: 0; margin: auto;
+  width: min(100vw, 100vh * 9 / 16); height: min(100vh, 100vw * 16 / 9);
+  width: min(100vw, 100dvh * 9 / 16); height: min(100dvh, 100vw * 16 / 9);
+  object-fit: contain;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 3%, #000 97%, transparent),
+                      linear-gradient(to right, transparent, #000 1.5%, #000 98.5%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent, #000 3%, #000 97%, transparent),
+              linear-gradient(to right, transparent, #000 1.5%, #000 98.5%, transparent);
+  mask-composite: intersect;
+}
 body:not(.is-loading) .splash { opacity: 0; visibility: hidden; pointer-events: none; }
 
 /* ---------- Header ---------- */

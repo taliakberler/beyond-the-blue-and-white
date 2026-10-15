@@ -118,6 +118,20 @@ The current assignments (the Pit's memorial icon was chosen by the team): memori
 
 ---
 
+## Replace the opening animation
+
+The home page's splash plays `media/splash.mp4`. To use a new version, export it from the design software as an MP4 (H.264, no audio), then make a web-sized copy, which keeps it at about 2 MB instead of 8+ MB. On a Mac:
+
+```bash
+swift scripts/encode-video.swift "path/to/Splash.mp4" media/splash.mp4 720 1280 1400000
+```
+
+The numbers are the width, height (for a portrait 9:16 video), and bitrate (1.4 Mbps). Use the MP4 export as the source; the encoder can't read Apple Animation-format MOV files. Then run `npm run stamp` and check the splash in a browser. If the new video's background color differs from the old one, update `#122e54` in `css/styles.css` (`.splash.has-video`) to match (see [design-and-styles.md](design-and-styles.md#motion)).
+
+To turn the animation off, set `SPLASH_VIDEO` to `''` at the top of `js/app.js`.
+
+---
+
 ## Campus place names
 
 `data/places.geojson` holds the names that appear when visitors hover over or tap campus spaces and features that aren't buildings: lawns and quads (McCorkle Place, Polk Place), the Pit, the Old Well, monuments, memorial gardens, and Old Chapel Hill Cemetery. Nothing is drawn; only the name shows.

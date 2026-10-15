@@ -161,6 +161,10 @@ These are used only when building the boundary file, not by visitors.
 
 Used only when building tiles, not by visitors.
 
+### AVFoundation (macOS): video encoding
+
+`scripts/encode-video.swift` uses Apple's built-in AVFoundation framework to make the web copy of the opening animation (H.264 MP4, 720×1280, 1.4 Mbps, no audio, "fast start" so it plays while downloading). It needs a Mac with Swift (included with Xcode or the Command Line Tools); nothing to install. The team's animation file is credited to the Beyond the Blue and White team, like the logo.
+
 ### Node.js and npm
 
 Node.js runs the helper scripts (`npm run qr`, `npm run pins`, `npm run team-map`, `npm run boundary`, `npm run stamp`, `npm run placeholders`). It's free and open source (MIT): <https://nodejs.org>. `package.json` pins the exact versions of `leaflet` and `qrcode`, and `package-lock.json` records the full dependency tree.

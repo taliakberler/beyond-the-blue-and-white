@@ -107,7 +107,7 @@ All sizes use `rem`, so they scale with the visitor's browser text-size setting.
 
 | Screen | Phone (under 900px) | Desktop (900px and up) |
 |---|---|---|
-| **Splash** | Full-screen navy with the stacked Carolina Blue logo while the map's data loads (held for at least 0.9 s on the home page; skipped immediately for site links) | Same |
+| **Splash** | On the home page: the team's 15-second opening animation (`media/splash.mp4`), shown whole and centered; tapping or clicking anywhere, or pressing Escape, Enter, or Space, skips it. Otherwise (reduce motion or data saver turned on, or autoplay blocked): full-screen navy with the stacked Carolina Blue logo, held at least 0.9 s. Skipped entirely for site links. | Same; the portrait video sits in a centered column on its own navy |
 | **Intro (home)** | Full-screen navy: tagline, stacked logo, the project description, a coral **Explore the map** button, and links to "See all sites" and "About this project" | Same, centered in a 560px column |
 | **Map** | Navy header (horizontal navy logo, with All sites ⋮≡, About ⓘ, and Home ⌂ icons), the illustrated map with icon pins (no route line or numbers), a fog **hint card** at the bottom, the compass and scale bottom-left, and "Show where I am" top-right. Zoom by pinching (the zoom buttons are hidden at 640px and below). | Header shows text links (Map, All sites, About) and Home. Zoom buttons are shown. |
 | **Site preview** | Tapping a pin opens a short navy sheet: drag handle, ⊗ close, the site name, and the era | (Desktop always shows the full panel) |
@@ -162,7 +162,8 @@ Key dimensions:
 ## Motion
 
 - The splash fades out over 0.45 s, the map glides (0.6 s) to each site, and the active pin enlarges.
-- With **reduce motion** turned on in the device settings, all transitions are switched off.
+- With **reduce motion** turned on in the device settings, all transitions are switched off and the opening animation is replaced by the still logo.
+- The opening animation's navy displays as `#122e54`, a shade bluer than the site's `--navy` (`#172849`), probably from the video export's color profile. While it plays, the splash background uses `#122e54` so no bands show around it, and the video's edges fade very slightly to hide a 1px darker border in the file. If the team re-exports the video with the site's navy, change that color in `css/styles.css` (`.splash.has-video`).
 
 ---
 
