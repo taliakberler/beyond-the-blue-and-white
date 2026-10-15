@@ -111,7 +111,7 @@ Each stop's `"icon"` picks its pin. The icons are the team's designs:
 
 **To add or change an icon:** save the SVG to `images/icons/source/<name>.svg` (lowercase, no spaces), run `npm run pins`, then use `"icon": "<name>"` on a stop. Use `npm run stamp` too if you changed any CSS or JS.
 
-The current assignments are by kind of place: memorial for the Unsung Founders Memorial, buildings for Steele Building and Lenoir Hall, people for the Pit, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each stop's history.
+The current assignments (the Pit's memorial icon was chosen by the team): memorial for the Unsung Founders Memorial and the Pit, buildings for Steele Building and Lenoir Hall, and cemetery for Old Chapel Hill Cemetery. The carpenters, masons, painters, people, and seamstress icons aren't assigned yet. **The team should choose** which icon best represents each stop's history.
 
 ---
 

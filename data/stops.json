@@ -128,7 +128,7 @@
     {
       "id": "unsung-founders-memorial",
       "order": 1,
-      "title": "The Unsung Founders Memorial",
+      "title": "Unsung Founders Memorial",
       "icon": "memorial",
       "placeholder": true,
       "lat": 35.9133601,
@@ -158,13 +158,13 @@
       "images": [
         {
           "src": "images/stop-1-a.svg",
-          "alt": "Gray placeholder graphic for The Unsung Founders Memorial (stop 1), image 1",
+          "alt": "Gray placeholder graphic for the Unsung Founders Memorial, image 1",
           "caption": "Placeholder caption — describe what the image shows.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         },
         {
           "src": "images/stop-1-b.svg",
-          "alt": "Gray placeholder graphic for The Unsung Founders Memorial (stop 1), image 2",
+          "alt": "Gray placeholder graphic for the Unsung Founders Memorial, image 2",
           "caption": "Placeholder caption — second image.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         }
@@ -201,13 +201,13 @@
       "images": [
         {
           "src": "images/stop-2-a.svg",
-          "alt": "Gray placeholder graphic for Steele Building (stop 2), image 1",
+          "alt": "Gray placeholder graphic for Steele Building, image 1",
           "caption": "Placeholder caption — describe what the image shows.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         },
         {
           "src": "images/stop-2-b.svg",
-          "alt": "Gray placeholder graphic for Steele Building (stop 2), image 2",
+          "alt": "Gray placeholder graphic for Steele Building, image 2",
           "caption": "Placeholder caption — second image.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         }
@@ -244,13 +244,13 @@
       "images": [
         {
           "src": "images/stop-3-a.svg",
-          "alt": "Gray placeholder graphic for Lenoir Hall (stop 3), image 1",
+          "alt": "Gray placeholder graphic for Lenoir Hall, image 1",
           "caption": "Placeholder caption — describe what the image shows.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         },
         {
           "src": "images/stop-3-b.svg",
-          "alt": "Gray placeholder graphic for Lenoir Hall (stop 3), image 2",
+          "alt": "Gray placeholder graphic for Lenoir Hall, image 2",
           "caption": "Placeholder caption — second image.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         }
@@ -266,7 +266,7 @@
       "id": "the-pit",
       "order": 4,
       "title": "The Pit",
-      "icon": "people",
+      "icon": "memorial",
       "placeholder": true,
       "lat": 35.910092,
       "lng": -79.048583,
@@ -287,13 +287,13 @@
       "images": [
         {
           "src": "images/stop-4-a.svg",
-          "alt": "Gray placeholder graphic for The Pit (stop 4), image 1",
+          "alt": "Gray placeholder graphic for The Pit, image 1",
           "caption": "Placeholder caption — describe what the image shows.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         },
         {
           "src": "images/stop-4-b.svg",
-          "alt": "Gray placeholder graphic for The Pit (stop 4), image 2",
+          "alt": "Gray placeholder graphic for The Pit, image 2",
           "caption": "Placeholder caption — second image.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         }
@@ -330,13 +330,13 @@
       "images": [
         {
           "src": "images/stop-5-a.svg",
-          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery (stop 5), image 1",
+          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery, image 1",
           "caption": "Placeholder caption — describe what the image shows.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         },
         {
           "src": "images/stop-5-b.svg",
-          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery (stop 5), image 2",
+          "alt": "Gray placeholder graphic for Old Chapel Hill Cemetery, image 2",
           "caption": "Placeholder caption — second image.",
           "credit": "Placeholder credit — archive or photographer, collection, item ID"
         }
