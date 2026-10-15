@@ -390,7 +390,8 @@ main { flex: 1; position: relative; min-height: 0; }
 }
 
 /* Key people cards */
-.people { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.people { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.person > div { min-width: 0; overflow-wrap: anywhere; }   /* long words (file names, URLs) wrap instead of widening the card */
 .person {
   display: grid; grid-template-columns: 92px 1fr; gap: 12px;
   padding: 10px; background: var(--sky); color: var(--navy); border-radius: 4px;
@@ -402,6 +403,13 @@ main { flex: 1; position: relative; min-height: 0; }
 .person-desc { margin: 0; font-size: var(--fs-xs); line-height: 1.45; }
 .person-credit { margin: 6px 0 0; font-size: 0.75rem; line-height: 1.35; color: #24385c; }
 .person-more { display: inline-flex; align-items: center; min-height: 32px; margin-top: 4px; color: var(--navy); font-size: var(--fs-xs); font-weight: 700; }
+.person-sites { margin: 8px 0 0; font-size: var(--fs-xs); line-height: 1.5; }
+.person-sites-label { font-weight: 700; }
+.person-sites a { display: inline-block; min-height: 32px; padding: 6px 0; color: var(--navy); font-weight: 700; text-underline-offset: 3px; }
+
+/* People page: the same cards as a stop's "Key people", one column on phones, two on wide screens */
+.people-index { margin-top: 16px; }
+@media (min-width: 700px) { .people-index { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .sources { padding-left: 1.3em; margin: 0; font-size: var(--fs-xs); color: var(--fog-muted); }
 .sources li { margin-bottom: 6px; }

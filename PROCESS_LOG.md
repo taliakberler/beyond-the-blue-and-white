@@ -905,3 +905,22 @@ The pasted images arrived without file names, so the originals were found in the
   - The Pit's gallery has 4 images with no broken-image fallbacks.
   - The James Cates card shows the yearbook photo and its credit.
 
+
+## 2026-10-14 — People page
+
+**Directed by:** Talia Berler ("add a People tab on the site that lists all the significant people highlighted in the map tabs, with some form of link to the site that mentions them")
+
+### What changed
+- New **People** page (header button with a two-figure icon, "People" on desktop; also linked from the home screen; address `#people`).
+- It lists everyone in any stop's `people`, alphabetical by last name, using the same cards as a stop's Key people, each with **Featured at:** links to the sites that mention them.
+- The person card code is now shared by the stop panel and the People page; the last-name sort is shared with the About page.
+- Person cards no longer get wider than the screen when a credit contains a long unbroken word (such as a file name).
+
+### Decisions and reasons
+- **Decision:** build the page automatically from the stops' `people` lists. **Why:** one place to edit; the page can't fall out of step with the sites.
+- **Decision:** the site links are ordinary `#stop=` links. **Why:** they open the full story the same way QR codes do, and the phone's Back button returns to the People page.
+- **Decision:** placeholder people are listed like everyone else. **Why:** they'll be replaced by the team's verified people; hiding them would make the mockup look emptier than the stop panels.
+
+### Verified
+- Phone (375px) and desktop (1280px): no horizontal overflow; one column on phones, two on wide screens; no console errors.
+- "The Pit ›" link opens the Pit's story; Back returns to `#people`; header, home-screen, and About navigation still work.

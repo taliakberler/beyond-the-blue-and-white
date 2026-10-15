@@ -20,11 +20,12 @@
     header: document.querySelector('.app-header'), splash: $('splash'),
     intro: $('tour-intro'),
     introView: $('intro-view'), introEyebrow: $('intro-eyebrow'), introText: $('intro-text'),
-    introCta: $('intro-cta'), introList: $('intro-list'), introAbout: $('intro-about'),
+    introCta: $('intro-cta'), introList: $('intro-list'), introAbout: $('intro-about'), introPeople: $('intro-people'),
     homeBtn: $('go-home'), brandHome: $('brand-home'),
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
     locateBtn: $('locate-btn'), mapHint: $('map-hint'), mapHintText: $('map-hint-text'), mapLegend: $('map-legend'),
+    peopleBtn: $('view-people'), peopleView: $('people-view'), peopleList: $('people-list'),
     aboutBtn: $('view-about'), aboutView: $('about-view'), aboutBody: $('about-body'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'), panelTop: document.querySelector('.panel-top'),
@@ -82,6 +83,13 @@
 
   // A stop shows the "PLACEHOLDER CONTENT" badge until its content is verified:
   // set "placeholder": false (or remove it) in stops.json once the stop is ready.
+  // Sorts people alphabetically by last name (the last word of their name).
+  function byLastName(x, y) {
+    var lx = String(x.name || '').trim().split(/\s+/).pop().toLowerCase();
+    var ly = String(y.name || '').trim().split(/\s+/).pop().toLowerCase();
+    return lx < ly ? -1 : lx > ly ? 1 : String(x.name).localeCompare(String(y.name));
+  }
+
   function isPlaceholder(stop) { return stop.placeholder === true || /placeholder/i.test(stop.title || ''); }
 
   function setHeaderHeight() {
@@ -351,25 +359,36 @@
     });
   }
 
-  // Views: 'intro' (home), 'map', 'list' (All stops), 'about'.
+  // Views: 'intro' (home), 'map', 'list' (All stops), 'people', 'about'.
+  // People and About have their own addresses (#people, #about) so they can be linked to.
+  var PAGE_HASHES = { people: '#people', about: '#about' };
+  function pageFromHash() {
+    for (var k in PAGE_HASHES) if (location.hash === PAGE_HASHES[k]) return k;
+    return null;
+  }
+
   function setView(which) {
-    var intro = which === 'intro', list = which === 'list', about = which === 'about';
-    var map = !intro && !list && !about;
+    var intro = which === 'intro', list = which === 'list', about = which === 'about', people = which === 'people';
+    var map = !intro && !list && !about && !people;
     els.introView.hidden = !intro;
     els.listView.hidden = !list;
+    els.peopleView.hidden = !people;
     els.aboutView.hidden = !about;
     els.mapView.hidden = !map;
     els.header.hidden = intro;           // the intro screen is full-screen, like the wireframe
     setHeaderHeight();
     els.viewListBtn.setAttribute('aria-pressed', String(list));
     els.viewMapBtn.setAttribute('aria-pressed', String(map));
+    els.peopleBtn.setAttribute('aria-pressed', String(people));
     els.aboutBtn.setAttribute('aria-pressed', String(about));
     if (!map) closePanel({ keepHash: false, silent: true });
     if (list) els.listView.scrollTop = 0;
-    if (about) {
-      els.aboutView.scrollTop = 0;
-      if (location.hash !== '#about') history.pushState(null, '', '#about');
-    } else if (location.hash === '#about') {
+    if (people) els.peopleView.scrollTop = 0;
+    if (about) els.aboutView.scrollTop = 0;
+    var want = PAGE_HASHES[which];
+    if (want) {
+      if (location.hash !== want) history.pushState(null, '', want);
+    } else if (pageFromHash()) {
       history.pushState(null, '', location.pathname + location.search);
     }
     if (map) setTimeout(function () { state.map.invalidateSize(); if (state.current === -1 && !state.viewTouched) fitAllStops(); }, 0);
@@ -418,6 +437,59 @@
     els.mapLegend.hidden = !order.length;
   }
 
+  /* ---------------- People ---------------- */
+
+  // One person card, used in a stop's "Key people" and on the People page.
+  // `sites` (People page only) lists the stops that feature this person, as links that open them.
+  function personCard(p, sites) {
+    var li = el('li', { 'class': 'person' });
+    var photo = el('img', { 'class': 'person-photo', src: p.image || 'images/person-placeholder.svg', alt: p.imageAlt || (p.image ? 'Portrait of ' + p.name : ''), loading: 'lazy' });
+    photo.addEventListener('error', function () {
+      photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
+    });
+    li.appendChild(photo);
+    var body = el('div');
+    body.appendChild(el('p', { 'class': 'person-name' }, p.name));
+    if (p.description) body.appendChild(el('p', { 'class': 'person-desc' }, p.description));
+    if (p.imageCredit) body.appendChild(el('p', { 'class': 'person-credit' }, 'Credit: ' + p.imageCredit));
+    if (p.link) {
+      var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, 'Learn more ›');
+      more.setAttribute('aria-label', 'Learn more about ' + p.name + ' (opens in a new tab)');
+      body.appendChild(more);
+    }
+    if (sites && sites.length) {
+      var at = el('p', { 'class': 'person-sites' });
+      at.appendChild(el('span', { 'class': 'person-sites-label' }, 'Featured at: '));
+      sites.forEach(function (stop, k) {
+        if (k) at.appendChild(document.createTextNode(', '));
+        var a = el('a', { href: '#stop=' + encodeURIComponent(stop.id) }, stop.title + ' ›');
+        a.setAttribute('aria-label', 'Open ' + stop.title + ' on the map');
+        at.appendChild(a);
+      });
+      body.appendChild(at);
+    }
+    li.appendChild(body);
+    return li;
+  }
+
+  // People page: everyone listed under any stop's "people", once each (matched by name),
+  // alphabetical by last name, each linked to the site(s) that mention them.
+  function renderPeople() {
+    var byName = {}, list = [];
+    state.stops.forEach(function (stop) {
+      (stop.people || []).forEach(function (p) {
+        if (!p || !p.name) return;
+        var key = p.name.trim().toLowerCase();
+        if (!byName[key]) { byName[key] = { person: p, sites: [] }; list.push(byName[key]); }
+        if (byName[key].sites.indexOf(stop) === -1) byName[key].sites.push(stop);
+      });
+    });
+    list.sort(function (x, y) { return byLastName(x.person, y.person); });
+    els.peopleList.textContent = '';
+    list.forEach(function (entry) { els.peopleList.appendChild(personCard(entry.person, entry.sites)); });
+    if (!list.length) els.peopleList.appendChild(el('li', { 'class': 'page-intro' }, 'No people have been added to the sites yet.'));
+  }
+
   /* ---------------- About ---------------- */
 
   function renderAbout() {
@@ -454,11 +526,6 @@
       box.appendChild(sec);
     }
     // Everyone is listed alphabetically by last name, whatever order they're entered in.
-    var byLastName = function (x, y) {
-      var lx = String(x.name || '').trim().split(/\s+/).pop().toLowerCase();
-      var ly = String(y.name || '').trim().split(/\s+/).pop().toLowerCase();
-      return lx < ly ? -1 : lx > ly ? 1 : String(x.name).localeCompare(String(y.name));
-    };
     group('about-team', 'Team', (a.team || []).slice().sort(byLastName));
     group('about-coaches', 'Coaches', (a.coaches || []).slice().sort(byLastName));
     if (a.advisors) group('about-advisors', 'Community advisors', (a.advisors.people || []).slice().sort(byLastName), a.advisors.description);
@@ -561,25 +628,7 @@
     });
 
     els.pPeople.textContent = '';
-    (stop.people || []).forEach(function (p) {
-      var li = el('li', { 'class': 'person' });
-      var photo = el('img', { 'class': 'person-photo', src: p.image || 'images/person-placeholder.svg', alt: p.imageAlt || (p.image ? 'Portrait of ' + p.name : ''), loading: 'lazy' });
-      photo.addEventListener('error', function () {
-        photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
-      });
-      li.appendChild(photo);
-      var body = el('div');
-      body.appendChild(el('p', { 'class': 'person-name' }, p.name));
-      if (p.description) body.appendChild(el('p', { 'class': 'person-desc' }, p.description));
-      if (p.imageCredit) body.appendChild(el('p', { 'class': 'person-credit' }, 'Credit: ' + p.imageCredit));
-      if (p.link) {
-        var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, 'Learn more ›');
-        more.setAttribute('aria-label', 'Learn more about ' + p.name + ' (opens in a new tab)');
-        body.appendChild(more);
-      }
-      li.appendChild(body);
-      els.pPeople.appendChild(li);
-    });
+    (stop.people || []).forEach(function (p) { els.pPeople.appendChild(personCard(p)); });
     els.peopleSection.hidden = !(stop.people && stop.people.length);
 
     els.pSources.textContent = '';
@@ -742,8 +791,9 @@
   }
 
   function handleHash() {
-    if (location.hash === '#about') { if (els.aboutView.hidden) setView('about'); return; }
-    if (!els.aboutView.hidden || !els.introView.hidden) setView('map');
+    var page = pageFromHash();
+    if (page) { if (els[page + 'View'].hidden) setView(page); return; }
+    if (!els.aboutView.hidden || !els.peopleView.hidden || !els.introView.hidden) setView('map');
     var id = stopIdFromHash();
     if (!id) { closePanel({ keepHash: true, silent: true }); return; }
     var i = state.stops.findIndex(function (s) { return s.id === id; });
@@ -783,7 +833,7 @@
 
   function boot() {
     var started = Date.now();
-    var deepLink = /stop=|#about/.test(location.hash);
+    var deepLink = /stop=|#about|#people/.test(location.hash);
 
     if (typeof L === 'undefined') { fail('The map library didn’t load. Please check your connection and reload.'); return; }
 
@@ -806,20 +856,23 @@
       initLocate();
       initPanel();
       renderList();
+      optional(renderPeople, 'People page');
       optional(renderAbout, 'About page');
 
       els.viewMapBtn.addEventListener('click', function () { setView('map'); });
       els.viewListBtn.addEventListener('click', function () { setView(els.listView.hidden ? 'list' : 'map'); });
+      els.peopleBtn.addEventListener('click', function () { setView(els.peopleView.hidden ? 'people' : 'map'); });
       els.aboutBtn.addEventListener('click', function () { setView(els.aboutView.hidden ? 'about' : 'map'); });
       els.homeBtn.addEventListener('click', function () { setView('intro'); });
       els.brandHome.addEventListener('click', function () { setView('intro'); });
       els.introCta.addEventListener('click', function () { setView('map'); });
       els.introList.addEventListener('click', function () { setView('list'); });
+      els.introPeople.addEventListener('click', function () { setView('people'); });
       els.introAbout.addEventListener('click', function () { setView('about'); });
       window.addEventListener('hashchange', handleHash);
 
       // Deep links (QR codes, shared links) go straight to their stop; the home page starts at the intro.
-      if (location.hash === '#about') setView('about');
+      if (pageFromHash()) setView(pageFromHash());
       else if (stopIdFromHash()) { setView('map'); handleHash(); }
       else setView('intro');
 

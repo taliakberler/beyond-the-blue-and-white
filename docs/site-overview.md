@@ -58,6 +58,12 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 The **All stops** button (⋮≡ on phones) shows every stop in order as a card (pin icon and number, name, era, summary). Tapping a card opens that stop on the map.
 
+### People page
+
+The **People** button (two figures on phones, or the address `…/#people`) lists every person featured in any site's **Key people**, alphabetical by last name. Each card shows the same photo, name, description, and credit as on the site, plus **Featured at:** with a link to each site that mentions them. Following a link opens that site's full story on the map, and **Back** returns to the People page.
+
+The page builds itself from the stops' `people` lists, so nothing extra needs editing. A person listed at more than one site (matched by exactly the same name) appears once, with a link to each site.
+
 ### About page
 
 The **ⓘ** button (or "About" on desktop, or the address `…/#about`) opens the About page:
@@ -71,7 +77,7 @@ Everything on it comes from `tour.about` in `data/stops.json`.
 
 ## Deep links and QR codes
 
-The About page has its own address, `…/index.html#about`, and every stop has one too:
+The People and About pages have their own addresses, `…/index.html#people` and `…/index.html#about`, and every stop has one too:
 
 ```
 https://taliakberler.github.io/beyond-the-blue-and-white/index.html#stop=<stop-id>

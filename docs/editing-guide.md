@@ -84,6 +84,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 - **Add a stop:** copy an existing stop block, paste it after a comma, and give it a new `id` and `order`.
 - **Placeholder badge:** stops with `"placeholder": true` show a yellow "PLACEHOLDER CONTENT" badge. Change it to `false` (or delete the line) once the stop's content has been verified. A stop whose title contains the word "PLACEHOLDER" also shows the badge.
 - `people`, `images`, and `sources` can be empty lists (`[]`). The section is then hidden.
+- Everyone in a stop's `people` list also appears on the site's **People** page, linked back to that stop. Spell a person's name exactly the same way at every stop that mentions them, so they're listed once with links to each site.
 - The comments (`// …`) in the example above are for explanation only. JSON doesn't allow comments, so leave them out of the real file.
 
 If any `id` changed, regenerate the QR codes.
