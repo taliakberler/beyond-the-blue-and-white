@@ -1166,6 +1166,20 @@ The pasted images arrived without file names, so the originals were found in the
 **Directed by:** Talia Berler (asked why sources weren't on the site cards; asked for them right after the information)
 
 - **Sources** now come right after each site's text, before Key People.
-- **Why most sites show no Sources yet:** the team's copy-and-credit PDFs list sources for the photos (shown as each photo's credit), but only the Unsung Founders PDF lists sources for the written text ("Other Sources"). The other four sites need their text sources from the team; the section appears automatically once a site's `sources` list in `data/stops.json` has entries.
+- **Why most sites showed no Sources (until the next entry):** the team's copy-and-credit PDFs list sources for the photos (shown as each photo's credit), but only the Unsung Founders PDF lists sources for the written text ("Other Sources"). The other four sites need their text sources from the team; the section appears automatically once a site's `sources` list in `data/stops.json` has entries.
 - The ‹ PREVIOUS and NEXT › buttons are in capitals.
+
+## 2026-10-16 — "Tap to continue" right after the names finish sliding in
+
+**Directed by:** Talia Berler (the message took too long to appear on both phone and desktop)
+
+- The animation now pauses just after the last names finish sliding in: 8.6 s on phones (was 12.2 s) and 6.8 s on wide screens (was 13.2 s). "Tap to continue" follows 0.4 s later (was 1 s).
+- **How the times were found:** each frame was compared with the one before and with the final settled frame. The names stop changing at about 8.5 s (portrait) and 6.75 s (wide); after that the frames differ only by compression noise until the fade-out. The earlier pause points had been chosen as "the last moment before the fade", which left 4–6 seconds of an unchanging screen before the message.
+
+## 2026-10-16 — Main source: The Black and Carolina Blue Tour
+
+**Directed by:** Talia Berler ("the main source for the content on the site is the Black and Carolina Blue Tour by UNC Chapel Hill")
+
+- "The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill" (UNC-Chapel Hill, ArcGIS StoryMaps; title from the page itself; link checked) is now the first source on all five sites, so every site has a Sources section. The Unsung Founders Memorial keeps its two other sources after it.
+- Also credited on the About page (credits and links) and in the README.
 

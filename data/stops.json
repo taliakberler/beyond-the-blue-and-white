@@ -132,6 +132,7 @@
         ]
       },
       "credits": [
+        "Main source for the sites’ history: The Black and Carolina Blue Tour, UNC-Chapel Hill.",
         "Map illustration by Trinity Gill.",
         "Opening animation and icons by Victor Morgan.",
         "Surrounding streets © OpenStreetMap contributors.",
@@ -139,6 +140,10 @@
         "Map software: Leaflet."
       ],
       "links": [
+        {
+          "title": "The Black and Carolina Blue Tour (UNC-Chapel Hill)",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        },
         {
           "title": "Project code, documentation, and process log",
           "url": "https://github.com/taliakberler/beyond-the-blue-and-white"
@@ -198,6 +203,10 @@
         }
       ],
       "sources": [
+        {
+          "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        },
         {
           "title": "“Remembering Forgetting: A Monument to Erasure at the University of North Carolina.” Berghahn Books blog.",
           "url": "https://www.berghahnbooks.com/blog/remembering-forgetting-a-monument-to-erasure-at-the-university-of-north-carolina-essay"
@@ -275,7 +284,12 @@
           "permission": "pending"
         }
       ],
-      "sources": []
+      "sources": [
+        {
+          "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        }
+      ]
     },
     {
       "id": "lenoir-hall",
@@ -358,7 +372,12 @@
           "permission": "pending"
         }
       ],
-      "sources": []
+      "sources": [
+        {
+          "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        }
+      ]
     },
     {
       "id": "the-pit",
@@ -439,7 +458,12 @@
           "permission": "team"
         }
       ],
-      "sources": []
+      "sources": [
+        {
+          "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        }
+      ]
     },
     {
       "id": "old-chapel-hill-cemetery",
@@ -503,7 +527,12 @@
           "permission": "pending"
         }
       ],
-      "sources": []
+      "sources": [
+        {
+          "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        }
+      ]
     }
   ]
 }
