@@ -620,15 +620,13 @@
   // One person card, used in a stop's "Key people" and on the People page.
   // `sites` (People page only) lists the stops that feature this person, as links that open them.
   function personCard(p, sites) {
-    // Without an "image", the card is text only (full width).
-    var li = el('li', { 'class': 'person' + (p.image ? '' : ' no-photo') });
-    if (p.image) {
-      var photo = el('img', { 'class': 'person-photo', src: p.image, alt: p.imageAlt || 'Portrait of ' + p.name, loading: 'lazy' });
-      photo.addEventListener('error', function () {
-        photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
-      });
-      li.appendChild(photo);
-    }
+    // Without an "image", the card shows the placeholder person icon (decorative, so no alt text).
+    var li = el('li', { 'class': 'person' });
+    var photo = el('img', { 'class': 'person-photo', src: p.image || 'images/person-placeholder.svg', alt: p.image ? (p.imageAlt || 'Portrait of ' + p.name) : '', loading: 'lazy' });
+    photo.addEventListener('error', function () {
+      photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
+    });
+    li.appendChild(photo);
     var body = el('div');
     body.appendChild(el('p', { 'class': 'person-name' }, p.name));
     if (p.role) body.appendChild(el('p', { 'class': 'person-role' }, p.role));

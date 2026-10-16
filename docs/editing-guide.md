@@ -68,7 +68,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
     { "name": "Full Name",                        // can name several people, e.g. "Mary Smith & Elizabeth Brooks"
       "role": "Short subtitle (optional)",
       "description": "One paragraph" ,            // or a list of paragraphs: ["First…", "Second…"]
-      "image": "images/people/full-name.jpg",   // Square image for the card (optional; without it the card is text only)
+      "image": "images/people/full-name.jpg",   // Square image for the card (optional; without it the placeholder person icon is shown)
       "imageAlt": "Portrait of Full Name, about 1890",
       "imageCredit": "Archive, collection, item ID (shown under the description)",
       "imagePermission": "pending",

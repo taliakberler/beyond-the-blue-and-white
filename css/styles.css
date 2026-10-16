@@ -491,8 +491,7 @@ main { flex: 1; position: relative; min-height: 0; }
 .person-desc { margin: 0; font-size: var(--fs-xs); line-height: 1.45; }
 .person-desc + .person-desc { margin-top: 8px; }
 .person-role { margin: -2px 0 6px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.35; }
-/* A card with no photo (e.g. a group without a portrait) uses the full width for its text. */
-.person.no-photo { grid-template-columns: 1fr; }
+
 .person-credit { margin: 6px 0 0; font-size: 0.75rem; line-height: 1.35; color: #24385c; }
 .person-more { display: inline-flex; align-items: center; min-height: 32px; margin-top: 4px; color: var(--navy); font-size: var(--fs-xs); font-weight: 700; }
 .person-sites { margin: 8px 0 0; font-size: var(--fs-xs); line-height: 1.5; }
@@ -597,7 +596,6 @@ body.panel-expanded .leaflet-bottom { display: none; }
   body.panel-open .map-tools { right: calc(var(--panel-w) + 12px); }
   body.panel-open .leaflet-right { right: var(--panel-w); }
   .person { grid-template-columns: 104px 1fr; }
-  .person.no-photo { grid-template-columns: 1fr; }
   .person-photo, .person .img-fallback { width: 104px; height: 104px; }
 }
 

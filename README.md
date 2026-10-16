@@ -119,7 +119,7 @@ PROCESS_LOG.md         Record of decisions and changes
 
 **Team** (alphabetical by last name)
 - Talia Berler
-- Andie Day
+- Anderson Day
 - Trinity Gill
 - Jori Husted
 - Victor Morgan

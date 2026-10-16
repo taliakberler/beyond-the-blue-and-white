@@ -632,7 +632,7 @@ Implemented by Claude Code.
   - map and software credits, and a link to the repository
 - **Content** is stored in `tour.about` in `data/stops.json` so it can be edited without code. Each person has a `role` field, left empty until the team adds roles.
 - **People credited:**
-  - **Team:** Talia Berler, Cayla Quintero, Trinity Gill, Gwyneth Shoemaker, Jori Husted, Andrea Perez, Victor Morgan, Leticia Oteng, Andie Day
+  - **Team:** Talia Berler, Cayla Quintero, Trinity Gill, Gwyneth Shoemaker, Jori Husted, Andrea Perez, Victor Morgan, Leticia Oteng, Anderson Day
   - **Coaches:** Adonis Durado, Randy Stano
   - **Community advisors** (from Chapel Hill, who advised the team on the history of Black labor and community there): Samuel Scarborough, Nicholas Graham
 - **README:** new "Project context" and "Team and credits" sections with the same names.
@@ -806,7 +806,7 @@ At 375px:
    - the pin's anchor is at the tip (head center plus 21·√2 ≈ 30px), so **the point marks the site's exact coordinates**
    - the selected pin gets a coral outline and grows from its tip, so the point stays put
    - the keyboard focus ring follows the teardrop's shape
-3. **Team members are listed alphabetically by last name** on the About page and in the README: Talia Berler, Andie Day, Trinity Gill, Jori Husted, Victor Morgan, Leticia Oteng, Andrea Perez, Cayla Quintero, Gwyneth Shoemaker. The **community advisors** are sorted the same way (Nicholas Graham, Samuel Scarborough), and the coaches already were (Adonis Durado, Randy Stano). The About page sorts all three lists in code, so names added later in any order still appear alphabetically.
+3. **Team members are listed alphabetically by last name** on the About page and in the README: Talia Berler, Anderson Day, Trinity Gill, Jori Husted, Victor Morgan, Leticia Oteng, Andrea Perez, Cayla Quintero, Gwyneth Shoemaker. The **community advisors** are sorted the same way (Nicholas Graham, Samuel Scarborough), and the coaches already were (Adonis Durado, Randy Stano). The About page sorts all three lists in code, so names added later in any order still appear alphabetically.
 4. **Compass:** the "N" overlapped the ring. The compass now uses a 48-unit face (ring radius 22.5), with the "N" (8.5px) inside the ring and the needle centered below it, displayed at a fixed 48px. It looks the same at every screen width.
 5. **Zoom buttons:** hovering + or − made the hovered button jump from 30px to 44px, which squeezed the other one so part of its fill was clipped. **Cause:** Leaflet's own `.leaflet-touch .leaflet-bar a` rule (30px) outranked the site's sizing, except while hovering. The site's rule now covers every state (`.leaflet-container .leaflet-bar a`, `:hover`, `:focus`, and `.leaflet-touch`), so both buttons stay 44×44px.
 
@@ -1138,4 +1138,20 @@ The pasted images arrived without file names, so the originals were found in the
 
 ### Verified
 - Phone (375px): Lenoir Hall's peek shows the hero strip; the full story shows 3 history paragraphs, no badge or summary, both Key People with the right images; the People page lists 7 entries sorted by last name, with 2 text-only cards and the Unsung Founders link. No console errors.
+
+## 2026-10-16 — Placeholder person icon on cards without an image
+
+**Directed by:** Talia Berler ("keep the placeholder person icon for the people cards without images")
+
+- The Unsung Founders and Oscar Diggs & James Slade cards show `images/person-placeholder.svg` again instead of being text-only. It's decorative there (empty alt text), since it isn't a portrait of them.
+
+## 2026-10-16 — Team roles, more contact links, cemetery text, All sites intro
+
+**Directed by:** Talia Berler (the team slide with each member's role; contact links; shorter Old Chapel Hill Cemetery text; All sites intro)
+
+- **Roles** from the team slide: Gwyneth Shoemaker (Project Manager, Brand Guidelines), Jori Husted (Brand Design, Socials, Mockups), Anderson Day (Brand Design, Mockups), Leticia Oteng (UI/UX), Victor Morgan (Brand Design, Motion Graphics, Icons), Andrea Perez (UI/UX, Research), Talia Berler (GIS, Web Dev, UI/UX, Research; replaces "Web Developer & Digital Producer"), Trinity Gill and Cayla Quintero (Print Assets). The coaches are listed on the slide as "Project Coaches"; they're already under the Coaches heading, so no role was added.
+- **Links:** Trinity Gill and Leticia Oteng (LinkedIn), Cayla Quintero (Authory, shown as "Portfolio").
+- **Old Chapel Hill Cemetery:** history replaced with the team's shorter two-paragraph text.
+- **All sites page:** the placeholder introduction replaced with the team's text. No placeholder text remains in the site's data.
+- **Name:** the team member listed as "Andie" is now "Anderson Day" everywhere (site, README, options page, and this log), as on the team slide.
 

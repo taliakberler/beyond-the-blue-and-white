@@ -25,7 +25,7 @@
       "streetsOpacity": 0.38,
       "attribution": "Illustrated map: Trinity Gill"
     },
-    "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each site, and the resources it offers.",
+    "intro": "These sites hold Black history that’s easy to miss on a walk across campus. Open any site to find its history, archival images and key people, plus links to the archives behind the story.",
     "welcome": {
       "eyebrow": "Every Site Has a Story",
       "text": "Discover the Black history built into the buildings, memorials and sites you pass every day. Tap a pin to uncover who shaped these places, dig into the archives behind them, and reflect on how their stories still shape Carolina today.",
@@ -62,46 +62,49 @@
       "team": [
         {
           "name": "Talia Berler",
-          "role": "Web Developer & Digital Producer",
+          "role": "GIS, Web Dev, UI/UX, Research",
           "linkedin": "https://www.linkedin.com/in/talia-berler/",
           "portfolio": "https://taliakberler.github.io/"
         },
         {
-          "name": "Andie Day",
-          "role": ""
+          "name": "Anderson Day",
+          "role": "Brand Design, Mockups"
         },
         {
           "name": "Trinity Gill",
-          "role": ""
+          "role": "Print Assets",
+          "linkedin": "https://www.linkedin.com/in/trinity-gill-672bbb2a2/"
         },
         {
           "name": "Jori Husted",
-          "role": "",
+          "role": "Brand Design, Socials, Mockups",
           "linkedin": "https://www.linkedin.com/in/jori-husted/"
         },
         {
           "name": "Victor Morgan",
-          "role": "",
+          "role": "Brand Design, Motion Graphics, Icons",
           "linkedin": "https://www.linkedin.com/in/victor-morgan-878605164/",
           "portfolio": "https://victormorgan.myportfolio.com/"
         },
         {
           "name": "Leticia Oteng",
-          "role": ""
+          "role": "UI/UX",
+          "linkedin": "https://www.linkedin.com/in/loteng/"
         },
         {
           "name": "Andrea Perez",
-          "role": "",
+          "role": "UI/UX, Research",
           "linkedin": "https://www.linkedin.com/in/andreaperezdesign/",
           "portfolio": "https://andreaperezdesign.myportfolio.com/"
         },
         {
           "name": "Cayla Quintero",
-          "role": ""
+          "role": "Print Assets",
+          "portfolio": "https://authory.com/CaylaQuintero"
         },
         {
           "name": "Gwyneth Shoemaker",
-          "role": "",
+          "role": "Project Manager, Brand Guidelines",
           "linkedin": "https://www.linkedin.com/in/gwyneth-shoemaker/"
         }
       ],
@@ -449,10 +452,8 @@
       "era": "Late 18th century",
       "summary": "",
       "history": [
-        "Old Chapel Hill Cemetery has long been the focus of student and community activism urging the Town and University to address the neglect of its African American section. The cemetery is also home to its most prominent monument: a tall sandstone obelisk that originally marked the campus grave of the university’s first president. After a replacement monument was built on campus in 1904, the original obelisk was moved to the cemetery’s African American section and rededicated by the Class of 1891 to honor Wilson Caldwell—an enslaved worker turned university custodian and campus leader—alongside three other loyal university servants: November Caldwell, David Barham, and Henry Smith.",
-        "Black students continuously pressured the University and Town to fix cemetery conditions. In 1992, the Black Student Movement (BSM) held vigils while the Collegiate Black Caucus led “Students for the Improvement of our Ancestry” to demand action. BSM submitted formal demands to Chancellor Michael Hooker in 1997 and Chancellor James Moeser in 2001, calling for headstone repairs and official recognition for the enslaved people who built the University.",
-        "When these went unmet, BSM leaders erected a memorial plaque on South Road in 2004.",
-        "In 2010, Preservation Chapel Hill requested archeological surveys of the burial ground, and in 2015 announced that 475 graves had been found. Ground-penetrating radar identified 361 unmarked graves in Sections A and B. Through a collaborative community effort, including Black students, the Town placed a marker in the cemetery to honor and remember Black Chapel Hillians in 2016, inscribed with a quote from George Moses Horton’s poem, “The Rising Sun.”"
+        "Old Chapel Hill Cemetery has long been the focus of student and community activism urging the Town and University to address the neglect of its African American section. The section features a tall sandstone obelisk that originally marked the campus grave of UNC’s first president. After a replacement monument was built on campus in 1904, the original obelisk was moved here and rededicated by the Class of 1891 to honor Wilson Caldwell—an enslaved worker turned campus leader—alongside November Caldwell, David Barham, and Henry Smith.",
+        "Persistent pressure from Black student groups, including the Black Student Movement (BSM), led to vigils, demands to chancellors, and a 2004 memorial plaque on South Road. Following 2015 surveys that identified 475 graves (361 unmarked), a community effort in 2016 installed a marker honoring Black Chapel Hillians, inscribed with George Moses Horton’s “The Rising Sun.”"
       ],
       "people": [
         {
