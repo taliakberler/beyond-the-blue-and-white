@@ -53,7 +53,7 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 - The full story contains, in order:
   1. a swipeable **image gallery** with captions and credits
   2. the summary and history
-  3. **Key people** cards (photo, name, one-line description, optional "Learn more" link)
+  3. **Key people** cards (the team's duotone image, name, optional subtitle, description, image credit, optional link; a card without an image is text only)
   4. **Sources**
   5. **Get walking directions here** (opens Apple Maps or Google Maps to this site), then **‹ Previous** and **Next ›** to browse the other sites
 

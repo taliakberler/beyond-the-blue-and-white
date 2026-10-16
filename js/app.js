@@ -41,7 +41,7 @@
     aboutBtn: $('view-about'), aboutView: $('about-view'), aboutBody: $('about-body'),
     panel: $('panel'), panelBody: $('panel-body'), panelExpand: $('panel-expand'),
     panelExpandLabel: $('panel-expand-label'), panelClose: $('panel-close'), panelTop: document.querySelector('.panel-top'),
-    pName: $('panel-name'), pEra: $('panel-era'),
+    pName: $('panel-name'), pEra: $('panel-era'), peekHero: $('peek-hero'),
     gallery: $('gallery'), pSummary: $('panel-summary'), pHistory: $('panel-history'),
     peopleSection: $('people-section'), pPeople: $('panel-people'),
     sourcesSection: $('sources-section'), pSources: $('panel-sources'),
@@ -96,9 +96,10 @@
   // A stop shows the "PLACEHOLDER CONTENT" badge until its content is verified:
   // set "placeholder": false (or remove it) in stops.json once the stop is ready.
   // Sorts people alphabetically by last name (the last word of their name).
+  // A person's optional "sortName" overrides this (e.g. for a card naming several people).
   function byLastName(x, y) {
-    var lx = String(x.name || '').trim().split(/\s+/).pop().toLowerCase();
-    var ly = String(y.name || '').trim().split(/\s+/).pop().toLowerCase();
+    var key = function (p) { return String(p.sortName || String(p.name || '').trim().split(/\s+/).pop()).toLowerCase(); };
+    var lx = key(x), ly = key(y);
     return lx < ly ? -1 : lx > ly ? 1 : String(x.name).localeCompare(String(y.name));
   }
 
@@ -619,19 +620,26 @@
   // One person card, used in a stop's "Key people" and on the People page.
   // `sites` (People page only) lists the stops that feature this person, as links that open them.
   function personCard(p, sites) {
-    var li = el('li', { 'class': 'person' });
-    var photo = el('img', { 'class': 'person-photo', src: p.image || 'images/person-placeholder.svg', alt: p.imageAlt || (p.image ? 'Portrait of ' + p.name : ''), loading: 'lazy' });
-    photo.addEventListener('error', function () {
-      photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
-    });
-    li.appendChild(photo);
+    // Without an "image", the card is text only (full width).
+    var li = el('li', { 'class': 'person' + (p.image ? '' : ' no-photo') });
+    if (p.image) {
+      var photo = el('img', { 'class': 'person-photo', src: p.image, alt: p.imageAlt || 'Portrait of ' + p.name, loading: 'lazy' });
+      photo.addEventListener('error', function () {
+        photo.replaceWith(el('div', { 'class': 'img-fallback', role: 'img', 'aria-label': (p.imageAlt || 'Portrait') + ' (unavailable)' }, 'Image unavailable'));
+      });
+      li.appendChild(photo);
+    }
     var body = el('div');
     body.appendChild(el('p', { 'class': 'person-name' }, p.name));
-    if (p.description) body.appendChild(el('p', { 'class': 'person-desc' }, p.description));
-    if (p.imageCredit) body.appendChild(el('p', { 'class': 'person-credit' }, 'Credit: ' + p.imageCredit));
+    if (p.role) body.appendChild(el('p', { 'class': 'person-role' }, p.role));
+    // "description" is one paragraph, or a list of paragraphs.
+    [].concat(p.description || []).forEach(function (para) {
+      if (para && String(para).trim()) body.appendChild(el('p', { 'class': 'person-desc' }, String(para).trim()));
+    });
+    if (p.imageCredit && p.image) body.appendChild(el('p', { 'class': 'person-credit' }, 'Credit: ' + p.imageCredit));
     if (p.link) {
-      var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, 'Learn more ›');
-      more.setAttribute('aria-label', 'Learn more about ' + p.name + ' (opens in a new tab)');
+      var more = el('a', { 'class': 'person-more', href: p.link, target: '_blank', rel: 'noopener' }, (p.linkLabel || 'Learn more') + ' ›');
+      more.setAttribute('aria-label', (p.linkLabel || 'Learn more about ' + p.name) + ' (opens in a new tab)');
       body.appendChild(more);
     }
     if (sites && sites.length) {
@@ -808,6 +816,9 @@
     els.pName.textContent = stop.title;
     els.pEra.textContent = stop.era || '';
     els.pEra.hidden = !stop.era;
+    var hero = (stop.images || [])[0];
+    els.peekHero.hidden = !hero;
+    if (hero) els.peekHero.querySelector('img').src = hero.src;
 
     renderGallery(stop);
 

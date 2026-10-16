@@ -149,58 +149,59 @@
       "order": 1,
       "title": "Unsung Founders Memorial",
       "icon": "memorial",
-      "placeholder": true,
+      "placeholder": false,
       "lat": 35.9133438,
       "lng": -79.0517248,
-      "era": "Era / date TBD (placeholder)",
-      "summary": "Placeholder summary — replace with one or two sentences describing this site.",
+      "era": "Dedicated November 5, 2005",
+      "summary": "",
       "history": [
-        "Placeholder history — replace with verified content.",
-        "This second paragraph shows how longer history text is split into paragraphs. Each paragraph is a separate item in the \"history\" list."
+        "The Unsung Founders Memorial at UNC-Chapel Hill features a five-foot black granite table supported by miniature bronze figures representing the university’s enslaved and free Black workers, surrounded by five stone stools modeled on Old Chapel Hill Cemetery headstones. A gift from the Class of 2002, the memorial has faced continuous controversy over its design, location, and everyday use.",
+        "Community members, and descendants have called its low, two-foot stature a symbol of belittlement and oppression. In 2012, the Real Silent Sam Coalition criticized the monument for honoring a mass of unnamed people rather than specific individuals like Abraham Galloway, Zora Neale Hurston, or Pauli Murray. Further criticism resurfaced in 2021 highlighting the lack of local community involvement in its creation.",
+        "In 2019, the memorial was defaced with racist graffiti, and it continues to sink into the ground due to weight and drainage issues, with a recommended restoration yet to begin. Despite these challenges, students and activists have started a new tradition of decorating the monument with flowers to reinforce its intent as a place of remembrance."
       ],
       "people": [
         {
-          "name": "Placeholder Person A",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
-        },
-        {
-          "name": "Placeholder Person B",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
+          "name": "The Unsung Founders",
+          "sortName": "Unsung Founders",
+          "description": [
+            "UNC would not have grown and thrived without the wealth created by the exploitation of enslaved labor. The joint efforts of researchers, archivists, historians, students, and administrators has resulted in the identification of more than 100 enslaved people who built and labored at the University from 1795 to 1865.",
+            "The full history of slavery at UNC-Chapel Hill has yet to be told, much more work remains to be done to better understand the lives and impact of the enslaved people without whom the University we know today would not have been possible."
+          ],
+          "link": "https://blogs.lib.unc.edu/uarms/2018/04/24/the-names-of-the-enslaved-people-who-built-the-university-of-north-carolina/",
+          "linkLabel": "The Names of the Enslaved People who Built the University of North Carolina"
         }
       ],
       "images": [
         {
           "src": "images/unsung-founders-memorial/01-hero.jpg",
           "alt": "The Unsung Founders Memorial on a shaded quad: a round black tabletop held up by a ring of small figures, with stone seats around it.",
-          "caption": "The Unsung Founders Memorial.",
-          "credit": "Beyond the Blue and White team",
+          "caption": "The Unsung Founders Monument.",
+          "credit": "Jori Husted, October 13, 2026",
           "permission": "team"
         },
         {
           "src": "images/unsung-founders-memorial/02-figures.jpg",
           "alt": "Close-up of the small figures beneath the memorial's tabletop, their arms raised to hold it up.",
-          "caption": "The Unsung Founders Memorial (detail).",
-          "credit": "Source needs confirmation (file: 1_2_unsung-founders.jpeg)",
-          "permission": "pending"
+          "caption": "The Unsung Founders Monument, close-up.",
+          "credit": "Leticia Oteng, October 13, 2026",
+          "permission": "team"
         },
         {
           "src": "images/unsung-founders-memorial/03-flowers.jpg",
           "alt": "The memorial's tabletop covered with bouquets of flowers, with potted plants on the stone seats around it.",
-          "caption": "The Unsung Founders Memorial decorated with flowers.",
-          "credit": "Source needs confirmation (file: 1_3_Unsung Founders_Decorated with Flowers.jpg)",
+          "caption": "Unsung Founders Memorial, decorated with flowers.",
+          "credit": "Personal photograph, Charlotte Fryar, 1 September 2017",
           "permission": "pending"
         }
       ],
       "sources": [
         {
-          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
-          "url": ""
+          "title": "“Remembering Forgetting: A Monument to Erasure at the University of North Carolina.” Berghahn Books blog.",
+          "url": "https://www.berghahnbooks.com/blog/remembering-forgetting-a-monument-to-erasure-at-the-university-of-north-carolina-essay"
+        },
+        {
+          "title": "“The Names of the Enslaved People who Built the University of North Carolina.” For the Record, UNC University Archives and Records Management Services, April 24, 2018.",
+          "url": "https://blogs.lib.unc.edu/uarms/2018/04/24/the-names-of-the-enslaved-people-who-built-the-university-of-north-carolina/"
         }
       ]
     },
@@ -209,21 +210,29 @@
       "order": 2,
       "title": "Steele Building",
       "icon": "buildings",
-      "placeholder": true,
+      "placeholder": false,
       "lat": 35.911508,
       "lng": -79.050345,
-      "era": "Era / date TBD (placeholder)",
-      "summary": "Placeholder summary — replace with one or two sentences describing this site.",
+      "era": "Built around 1921",
+      "summary": "",
       "history": [
-        "Placeholder history — replace with verified content."
+        "Originally built as a dormitory and now an office building, the Steele Building housed the first Black students to live on campus at UNC-Chapel Hill following the landmark legal victory in McKissick v. Carmichael (1951), which integrated graduate education. When Black law students Harvey Beech and Kenneth Lee applied for housing, they were assigned to Room 33 on the third floor of Steele Building, which UNC maintained as a strictly segregated living space—leaving neighboring rooms empty even amid a campus housing shortage.",
+        "The students faced widespread social and physical segregation across campus, including segregated seating at Kenan Stadium football games, bans from campus swimming pools, and the cancellation of integrated events like the law school dance. In response, these pioneering students actively challenged the university’s discriminatory policies through direct action and protest—such as Floyd McKissick jumping into the restricted pool to integrate it, and Army veteran James Walker, Jr. lobbying against stadium seating rules and demanding the full rights of democracy."
       ],
       "people": [
         {
-          "name": "Placeholder Person C",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
+          "name": "Harvey Beech, James Lassiter, J. Kenneth Lee, Floyd McKissick & James Robert Walker Jr.",
+          "sortName": "Beech",
+          "description": "1951: Harvey Beech, James Lassiter, J. Kenneth Lee, Floyd McKissick, and James Robert Walker Jr. became the first Black students to enroll at the UNC-Chapel Hill School of Law. Shown here, Harvey Beech and J. Kenneth Lee enter Manning Hall on their first day of class on June 11, 1951.",
+          "image": "images/people/beech-lee.jpg",
+          "imageAlt": "Duotone photo of Harvey Beech and J. Kenneth Lee, in suits, walking out of a building on their first day of class.",
+          "imageCredit": "UNC-Chapel Hill Wilson Library, Southern Historical Collection and University Archives and Records",
+          "imagePermission": "pending"
+        },
+        {
+          "name": "Oscar Diggs & James Slade",
+          "sortName": "Diggs",
+          "description": "1953: Oscar Diggs and James Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine."
         }
       ],
       "images": [
@@ -231,139 +240,148 @@
           "src": "images/steele-building/01-hero.jpg",
           "alt": "The red-brick front of the Steele Building, with a hanging sign reading “Steele Building” and a columned entrance.",
           "caption": "Steele Building today.",
-          "credit": "Beyond the Blue and White team",
+          "credit": "Beyond the Blue and White team (photographer’s name and date to be added)",
           "permission": "team"
         },
         {
           "src": "images/steele-building/02-before.jpg",
           "alt": "Black-and-white photo of the Steele Building, a three-story brick building, with bare trees and old cars parked beside it.",
-          "caption": "The Steele Building in earlier years.",
-          "credit": "Source needs confirmation (file: 5_2_SteeleBuilding_Before.jpg)",
+          "caption": "Steele Building.",
+          "credit": "North Carolina Collection Photographic Archives, Wilson Library, UNC-Chapel Hill",
           "permission": "pending"
         },
         {
           "src": "images/steele-building/03-beech-lee-1951.jpg",
-          "alt": "Black-and-white photo of two young Black men in suits walking out through an open doorway.",
-          "caption": "Beech and Lee on their first day of classes at UNC, 11 June 1951.",
-          "credit": "Source needs confirmation (file: 5_3_Steele_beech_and_Lee_first_day_of_classes_at_UNC_11_June_1951.jpg)",
+          "alt": "Black-and-white photo of Harvey Beech and J. Kenneth Lee, in suits, walking out through an open doorway.",
+          "caption": "Beech and Lee, first day of classes at UNC, 11 June 1951.",
+          "credit": "UNC-Chapel Hill Wilson Library, Southern Historical Collection and University Archives and Records",
           "permission": "pending"
         },
         {
           "src": "images/steele-building/04-oscar-diggs.jpg",
           "alt": "Black-and-white photo of two men sitting on the front steps of a house; the man on the left wears an academic gown and cap.",
-          "caption": "Oscar Diggs (left).",
-          "credit": "Source needs confirmation (file: 5_4_Steele_OscarDiggs_left_.jpg)",
+          "caption": "Edward O. Diggs (left) and James Slade. Diggs and Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine. Diggs enrolled in 1951, Slade in 1953.",
+          "credit": "Virtual Museum",
           "permission": "pending"
         },
         {
           "src": "images/steele-building/05-lee-beech-litigants.jpg",
           "alt": "Black-and-white photo of four men in suits seated in a circle, talking; one holds papers.",
-          "caption": "Lee, Beech, and other litigants.",
-          "credit": "Source needs confirmation (file: 5_5_Steele_Lee_Beech_and_other_litigants.png)",
+          "caption": "From left: McKissick, Lee, Beech, and Lassiter. Photo by Alex Rivera, Jr.",
+          "credit": "UNC-Chapel Hill Wilson Library, Southern Historical Collection and University Archives and Records",
           "permission": "pending"
         }
       ],
-      "sources": [
-        {
-          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
-          "url": ""
-        }
-      ]
+      "sources": []
     },
     {
       "id": "lenoir-hall",
       "order": 3,
       "title": "Lenoir Hall",
       "icon": "buildings",
-      "placeholder": true,
+      "placeholder": false,
       "lat": 35.910578,
       "lng": -79.048856,
-      "era": "Era / date TBD (placeholder)",
-      "summary": "Placeholder summary — replace with one or two sentences describing this site.",
+      "era": "Opened in 1940 as UNC-Chapel Hill’s central dining hall",
+      "summary": "",
       "history": [
-        "Placeholder history — replace with verified content."
+        "Lenoir Hall became the site of a historic worker-led movement in 1969. Organized by Black female food service workers Elizabeth Brooks and Mary Smith alongside the Black Student Movement, two major strikes protested low pay, lack of full-time benefits, and unfair management. The initial strike secured back pay, higher wages, and established North Carolina’s first minimum wage. However, after the University outsourced dining operations to SAGA Food Services, a second walkout was sparked by Smith’s firing, leading to negotiated contracts and sick leave despite ongoing private outsourcing.",
+        "This legacy inspired decades of campus labor organizing, culminating in a landmark lawsuit filed by the UNC Housekeepers’ Association. The suit directly highlighted the University’s long history of exploiting Black labor, including the use of enslaved workers and profits made from their sale.",
+        "In 1996, the University reached a settlement providing pay raises, bonuses, and the renaming of a campus facility to honor trailblazing Black labor advocates Rebecca Clark and Kennon Cheek. Today, modern student and worker activists continue to call for unfulfilled demands, such as direct compensation and free tuition for descendants of Black campus workers."
       ],
       "people": [
         {
-          "name": "Placeholder Person D",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/person-placeholder.svg",
-          "imageAlt": "Placeholder portrait",
-          "link": ""
+          "name": "Mary Smith & Elizabeth Brooks",
+          "sortName": "Smith",
+          "role": "Leaders, 1969 UNC food workers’ strike",
+          "description": "Mary Smith and Elizabeth Brooks were UNC-Chapel Hill food service workers and labor leaders who spearheaded the landmark 1969 UNC Food Workers’ Strike. Protesting low wages, split shifts, and racial discrimination, they organized co-workers in Lenoir Dining Hall and rallied crucial support from student activist groups like the Black Student Movement. Their months-long strike secured better pay and working conditions for campus employees and ultimately helped spark a statewide minimum wage increase for state workers across North Carolina.",
+          "image": "images/people/mary-smith-elizabeth-brooks.jpg",
+          "imageAlt": "Duotone photo of Mary Smith and Elizabeth Brooks at a podium with microphones; Elizabeth Brooks is speaking.",
+          "imageCredit": "UNC-Chapel Hill University Libraries",
+          "imagePermission": "pending"
+        },
+        {
+          "name": "Marsha Tinnen & Barbara Prear",
+          "sortName": "Tinnen",
+          "role": "Leaders of the UNC Housekeepers Association",
+          "description": "Marsha Tinnen was a UNC-Chapel Hill housekeeper and labor advocate who fought for better pay and working conditions in the 1990s and early 2000s. She co-led the landmark 1996 housekeepers’ strike, which achieved the UNC Housekeepers’ Settlement Agreement, and helped organize UE 150, the UNC Chapel Hill chapter of the North Carolina Public Service Workers Union.",
+          "image": "images/people/marsha-tinnen-barbara-prear.jpg",
+          "imageAlt": "Duotone photo of Marsha Tinnen and Barbara Prear, smiling, in matching polo shirts outside South Building.",
+          "imageCredit": "Southern Historical Collection, Marsha Tinnen’s Housekeepers Association Collection, 1991–2003",
+          "imagePermission": "pending"
         }
       ],
       "images": [
         {
           "src": "images/lenoir-hall/01-hero.jpg",
           "alt": "Lenoir Hall today: a red-brick building with tall windows above wide stone steps, under a clear blue sky.",
-          "caption": "Lenoir Hall today.",
-          "credit": "Photographer needs confirmation (file: 2_1_LenoirHall_HeroImage.png)",
-          "permission": "pending"
+          "caption": "Lenoir Hall.",
+          "credit": "Andrea Perez, October 15, 2026",
+          "permission": "team"
         },
         {
           "src": "images/lenoir-hall/02-strike-leaders-1969.jpg",
           "alt": "Black-and-white photo of two women and a young man standing at a podium with microphones outdoors; the woman in the middle is speaking.",
           "caption": "Strike leaders Mary Smith (left) and Elizabeth Brooks (middle) stand with a young man during the 1969 UNC food workers’ strike.",
-          "credit": "Source needs confirmation",
+          "credit": "UNC-Chapel Hill University Libraries",
           "permission": "pending"
         },
         {
           "src": "images/lenoir-hall/03-nellie-crocker-1963.jpg",
           "alt": "Black-and-white photo of a smiling woman in a white uniform and cap standing behind a cafeteria serving line.",
-          "caption": "Nellie Crocker on the serving line in the dining hall, 2 April 1963.",
-          "credit": "Source needs confirmation (file: …Nellie_Crocker_on_serving_line_in_dining_hall_2_April_1963_Scan_1.jpg)",
+          "caption": "Photograph of Nellie Crocker serving food in Lenoir Hall cafeteria.",
+          "credit": "Digital North Carolina Collection Photographic Archives. Lenoir Hall: Nellie Crocker on serving line in dining hall, 2 April 1963",
           "permission": "pending"
         },
         {
           "src": "images/lenoir-hall/04-demonstrators-1969.jpg",
           "alt": "Black-and-white photo of two young Black men in a crowd; one wears glasses and a jacket, and the other holds a sign supporting workers’ rights.",
-          "caption": "Demonstrators inside Lenoir: picket lines and marches, 10 March 1969.",
-          "credit": "Source needs confirmation (file: …Demonstrators_inside_Lenoir_Pickett_lines__marches_10_March_1969.jpg)",
+          "caption": "Black student leaders, 10 March 1969.",
+          "credit": "University of North Carolina at Chapel Hill Photographic Laboratory Collection, 1946–1990",
           "permission": "pending"
         },
         {
           "src": "images/lenoir-hall/05-tinnen-prear-housekeepers.jpg",
           "alt": "Two smiling women in matching navy polo shirts standing outside the entrance of South Building.",
-          "caption": "Marsha Tinnen and Barbara Prear, UNC Housekeepers Association.",
-          "credit": "Source needs confirmation (file: 2_5_Lenoir_MarshaTinnen and BarbaraPrear_UNC_HousekeepersAssociation.png)",
+          "caption": "Marsha Tinnen and Barbara Prear, leaders of the UNC Housekeepers Association, on the steps of South Building.",
+          "credit": "Southern Historical Collection, Marsha Tinnen’s Housekeepers Association Collection, 1991–2003",
           "permission": "pending"
         },
         {
           "src": "images/lenoir-hall/06-students-support-food-workers.jpg",
           "alt": "A young Black man in a green jacket speaks into a microphone in front of students sitting on wide stone steps.",
-          "caption": "Students support the food workers.",
-          "credit": "Source: Virtual Museum (from the file name; add the full citation)",
+          "caption": "Students Support the Food Workers.",
+          "credit": "The Black Student Movement",
           "permission": "pending"
         }
       ],
-      "sources": [
-        {
-          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
-          "url": ""
-        }
-      ]
+      "sources": []
     },
     {
       "id": "the-pit",
       "order": 4,
       "title": "The Pit",
       "icon": "memorial",
-      "placeholder": true,
+      "placeholder": false,
       "lat": 35.910092,
       "lng": -79.048583,
-      "era": "Era / date TBD (placeholder)",
-      "summary": "Placeholder summary — replace with one or two sentences describing this site.",
+      "era": "1969",
+      "summary": "",
       "history": [
-        "Placeholder history — replace with verified content."
+        "The Pit is a central brick courtyard that serves as a hub for student social life, campus organization booths, and various events—including gospel performances, dances, step shows in the 1990s, and political protests.",
+        "In November 1970, it was the site of a tragic event when James Cates, a 22-year-old Black Chapel Hill resident whose mother worked in the university’s campus laundry, was fatally stabbed in The Pit following a campus dance during an attack by the “Storm Troopers,” a Durham-based white supremacist motorcycle gang. Police on the scene failed to provide emergency care or arrest the attackers, sparking decades of community mourning and protest over the University’s response.",
+        "After student-placed memorials were previously removed, UNC formally acknowledged Cates’s murder in 2022 by installing an official memorial marker in The Pit on the anniversary of his death."
       ],
       "people": [
         {
-          "name": "James Cates",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/people/james-cates.jpg",
-          "imageAlt": "Black-and-white yearbook portrait of James Cates in a suit and tie.",
+          "name": "James Lewis Cates",
+          "description": [
+            "James “Baby Boy” Lewis Cates, Jr. was born in Chapel Hill October 28 (or 26th), 1948. His father was James “Boot” L. Cates, Sr., his mother was Eula Mae (Trice) Cates. He moved to Chapel Hill High during the town’s integration of public schools in 1967.",
+            "Cates never attended the University directly but his grandmother, Annie Cates worked at the University Laundry for decades. In November 1970 he was fatally stabbed at The Pit by the “Storm Troopers,” a Durham-based white supremacist group."
+          ],
+          "image": "images/people/james-cates-duotone.jpg",
+          "imageAlt": "Duotone yearbook portrait of James Cates in a suit and tie.",
           "imageCredit": "Photo via the Town of Chapel Hill",
-          "link": "",
           "imagePermission": "pending"
         }
       ],
@@ -371,81 +389,79 @@
         {
           "src": "images/the-pit/01-hero.jpg",
           "alt": "The Pit today: a sunken brick plaza with trees, tables, and chairs in front of the UNC Student Stores building.",
-          "caption": "The Pit today.",
-          "credit": "Beyond the Blue and White team",
+          "caption": "The Pit.",
+          "credit": "Leticia Oteng, October 13, 2026",
           "permission": "team"
         },
         {
           "src": "images/the-pit/02-delta-sigma-theta-step-show.jpg",
           "alt": "Newspaper photo of a woman in a Delta Sigma Theta shirt mid-step, with other steppers and a crowd behind her.",
-          "caption": "Delta Sigma Theta step show in the Pit.",
-          "credit": "Source needs confirmation (file: 3_2_ThePit_Delta Sigma Theta step show in The Pit.png)",
+          "caption": "Delta Sigma Theta step show in The Pit.",
+          "credit": "The Daily Tar Heel (Chapel Hill, N.C.)",
           "permission": "pending"
         },
         {
           "src": "images/the-pit/03-bsm-gospel-choir-1980.jpg",
           "alt": "Newspaper clipping headed “Mid-Day Magic,” with a photo of a choir in robes standing in rows.",
-          "caption": "“Mid-Day Magic”: the Black Student Movement Gospel Choir performing in the Pit, October 24, 1980.",
-          "credit": "Photo by Beatrice Taylor (as credited in the clipping); publication needs confirmation",
+          "caption": "“Mid-Day Magic”: The Black Student Movement Gospel Choir performing in The Pit, October 1980.",
+          "credit": "The Daily Tar Heel (Chapel Hill, N.C.); photo by Beatrice Taylor",
           "permission": "pending"
         },
         {
           "src": "images/the-pit/04-james-cates-yearbook.jpg",
           "alt": "Black-and-white yearbook portrait of James Cates in a suit and tie.",
-          "caption": "James Cates, yearbook photo.",
+          "caption": "James Lewis Cates’ yearbook photo.",
           "credit": "Photo via the Town of Chapel Hill",
           "permission": "pending"
         },
         {
           "src": "images/the-pit/05-james-cates-memorial-the-assembly.jpg",
           "alt": "Grainy newspaper photo of a large crowd gathered in the Pit, with campus buildings behind.",
-          "caption": "James Cates memorial at the Pit on UNC-Chapel Hill’s campus.",
-          "credit": "Source: The Assembly (from the file name; add the full citation)",
+          "caption": "James Cates’ memorial at The Pit.",
+          "credit": "Photo via The Assembly; photo credit: Black Ink",
           "permission": "pending"
         },
         {
           "src": "images/the-pit/06-james-cates-tribute.jpg",
           "alt": "Flowers laid on the bricks in front of a hand-made display headed “Rest in Power James Cates,” with a photo of him and newspaper clippings.",
-          "caption": "Modern-day tribute to James Cates in the Pit.",
+          "caption": "James Cates’ memorial at The Pit.",
           "credit": "Photo courtesy of the James Cates Remembrance Coalition",
           "permission": "pending"
         },
         {
           "src": "images/the-pit/07-james-cates-memorial.jpg",
           "alt": "A dark metal memorial marker headed “James Lewis Cates, Jr.” standing on the brick plaza of the Pit.",
-          "caption": "The James Cates memorial in the Pit.",
-          "credit": "Beyond the Blue and White team",
+          "caption": "The James L. Cates, Jr. Memorial marker, dedicated and installed on November 21, 2022, the anniversary of his murder.",
+          "credit": "Jori Husted, October 13, 2026",
           "permission": "team"
         }
       ],
-      "sources": [
-        {
-          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
-          "url": ""
-        }
-      ]
+      "sources": []
     },
     {
       "id": "old-chapel-hill-cemetery",
       "order": 5,
       "title": "Old Chapel Hill Cemetery",
       "icon": "cemetery",
-      "placeholder": true,
+      "placeholder": false,
       "lat": 35.91102859131603,
       "lng": -79.04563912237869,
-      "era": "Era / date TBD (placeholder)",
-      "summary": "Placeholder summary — replace with one or two sentences describing this site.",
+      "era": "Late 18th century",
+      "summary": "",
       "history": [
-        "Placeholder history — replace with verified content."
+        "Old Chapel Hill Cemetery has long been the focus of student and community activism urging the Town and University to address the neglect of its African American section. The cemetery is also home to its most prominent monument: a tall sandstone obelisk that originally marked the campus grave of the university’s first president. After a replacement monument was built on campus in 1904, the original obelisk was moved to the cemetery’s African American section and rededicated by the Class of 1891 to honor Wilson Caldwell—an enslaved worker turned university custodian and campus leader—alongside three other loyal university servants: November Caldwell, David Barham, and Henry Smith.",
+        "Black students continuously pressured the University and Town to fix cemetery conditions. In 1992, the Black Student Movement (BSM) held vigils while the Collegiate Black Caucus led “Students for the Improvement of our Ancestry” to demand action. BSM submitted formal demands to Chancellor Michael Hooker in 1997 and Chancellor James Moeser in 2001, calling for headstone repairs and official recognition for the enslaved people who built the University.",
+        "When these went unmet, BSM leaders erected a memorial plaque on South Road in 2004.",
+        "In 2010, Preservation Chapel Hill requested archeological surveys of the burial ground, and in 2015 announced that 475 graves had been found. Ground-penetrating radar identified 361 unmarked graves in Sections A and B. Through a collaborative community effort, including Black students, the Town placed a marker in the cemetery to honor and remember Black Chapel Hillians in 2016, inscribed with a quote from George Moses Horton’s poem, “The Rising Sun.”"
       ],
       "people": [
         {
           "name": "Wilson Swain Caldwell",
-          "description": "One-line description — replace with verified content.",
-          "image": "images/people/wilson-caldwell.jpg",
-          "imageAlt": "Black-and-white portrait of an older man with a gray beard, wearing a suit and bow tie.",
-          "imageCredit": "Source needs confirmation (file: Folder_0498_Caldwell_Wilson_18411898_Scan_3.jpg)",
-          "link": "",
+          "sortName": "Caldwell",
+          "description": "A former slave, mentor to students, justice of the peace, elected official, and educator, Wilson Caldwell spent his 57 years working tirelessly for the benefit of his community. Born into slavery as the property of David Lowry Swain—then president of the University of North Carolina—Caldwell went on to become the first African American elected to office in Chapel Hill. His life of service established a lasting legacy that continues to inspire future generations in their pursuit of a better world.",
+          "image": "images/people/wilson-caldwell-duotone.jpg",
+          "imageAlt": "Duotone portrait of Wilson Caldwell, an older man with a gray beard, wearing a suit and bow tie.",
+          "imageCredit": "North Carolina Collection Photographic Archives, The Wilson Library, University of North Carolina at Chapel Hill",
           "imagePermission": "pending"
         }
       ],
@@ -453,45 +469,40 @@
         {
           "src": "images/old-chapel-hill-cemetery/01-hero.jpg",
           "alt": "A bronze historical marker headed “African American Section of the Old Chapel Hill Cemetery,” framed by tree leaves.",
-          "caption": "The marker for the African American section of Old Chapel Hill Cemetery.",
-          "credit": "Source needs confirmation (file: 4_1_OCHCementery_HeroImage.jpg)",
-          "permission": "pending"
+          "caption": "Old Chapel Hill Cemetery.",
+          "credit": "Jori Husted, October 13, 2026",
+          "permission": "team"
         },
         {
           "src": "images/old-chapel-hill-cemetery/02-cemetery.jpg",
           "alt": "A low stone wall and scattered stones among tall trees and fallen leaves in Old Chapel Hill Cemetery.",
           "caption": "Old Chapel Hill Cemetery.",
-          "credit": "Beyond the Blue and White team",
+          "credit": "Jori Husted, October 13, 2026",
           "permission": "team"
         },
         {
           "src": "images/old-chapel-hill-cemetery/03-wilson-caldwell.jpg",
           "alt": "Black-and-white portrait of an older man with a gray beard, wearing a suit and bow tie.",
           "caption": "Wilson Caldwell.",
-          "credit": "Source needs confirmation (file: 4_3_OCHCementery_CaldwellWilson.jpg)",
+          "credit": "North Carolina Collection Photographic Archives, The Wilson Library, University of North Carolina at Chapel Hill",
           "permission": "pending"
         },
         {
           "src": "images/old-chapel-hill-cemetery/04-caldwell-monument.jpg",
           "alt": "Black-and-white photo of a weathered stone monument inscribed in memory of Wilson Swain Caldwell, November Caldwell, David Barham, and Henry Smith, “who served the University faithfully.”",
-          "caption": "The Caldwell Monument.",
-          "credit": "Source needs confirmation (file: 4_4_OCHCementery_Caldwell_Monument.jpg)",
+          "caption": "Inscription on the monument originally erected for President Joseph Caldwell and now in the Black section of the Old Chapel Hill Cemetery.",
+          "credit": "University of North Carolina at Chapel Hill, Wilson Library, North Carolina Collection Photographic Archives",
           "permission": "pending"
         },
         {
           "src": "images/old-chapel-hill-cemetery/05-bsm-demands.jpg",
           "alt": "A printed page headed “Hate Fighters: Our Demands,” listing fourteen demands, beside photos of a student handing a list to a university official and of student protesters.",
-          "caption": "List of demands presented by the Black Student Movement (BSM).",
-          "credit": "Source needs confirmation (file: 4_5_OCHCementery_List of demands presented by BSM .png)",
+          "caption": "List of demands presented by BSM to Chancellor Moeser, reprinted in Black Ink, May 1, 2001.",
+          "credit": "Black Ink: Black Student Movement, University of North Carolina at Chapel Hill",
           "permission": "pending"
         }
       ],
-      "sources": [
-        {
-          "title": "Placeholder source — add a verified citation (author, title, archive, item ID, date)",
-          "url": ""
-        }
-      ]
+      "sources": []
     }
   ]
 }

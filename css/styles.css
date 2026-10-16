@@ -459,6 +459,10 @@ main { flex: 1; position: relative; min-height: 0; }
 .panel-title { font-family: var(--font-body); font-weight: 700; font-size: 1.125rem; line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
 .stop-name { display: block; }
 .era { margin: 6px 0 0; color: var(--carolina); font-size: var(--fs-small); }
+/* Peek view (phones): a sliver of the hero photo under the name and era, hinting at the story above. */
+.peek-hero { height: 76px; margin: 12px 0 0 0; margin-right: -44px; border-radius: 6px; overflow: hidden; background: var(--navy-2); }
+.peek-hero img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.panel.is-expanded .peek-hero { display: none; }
 
 .panel-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 20px 28px; }
 .panel-body:focus { outline: none; }
@@ -485,6 +489,10 @@ main { flex: 1; position: relative; min-height: 0; }
 .person-name { margin: 2px 0 0; font-weight: 700; font-size: var(--fs-small); line-height: 1.25; text-transform: uppercase; }
 .person-name::after { content: ""; display: block; width: 44px; height: 3px; margin: 6px 0; background: var(--fog); }
 .person-desc { margin: 0; font-size: var(--fs-xs); line-height: 1.45; }
+.person-desc + .person-desc { margin-top: 8px; }
+.person-role { margin: -2px 0 6px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.35; }
+/* A card with no photo (e.g. a group without a portrait) uses the full width for its text. */
+.person.no-photo { grid-template-columns: 1fr; }
 .person-credit { margin: 6px 0 0; font-size: 0.75rem; line-height: 1.35; color: #24385c; }
 .person-more { display: inline-flex; align-items: center; min-height: 32px; margin-top: 4px; color: var(--navy); font-size: var(--fs-xs); font-weight: 700; }
 .person-sites { margin: 8px 0 0; font-size: var(--fs-xs); line-height: 1.5; }
@@ -582,12 +590,14 @@ body.panel-expanded .leaflet-bottom { display: none; }
   }
   .panel-top { cursor: default; touch-action: auto; padding-top: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--navy-3); }
   .handle { display: none; }
+  .peek-hero { display: none; }
   .close-btn { top: 10px; }
   body.panel-open .leaflet-bottom { bottom: 0; }
   body.panel-expanded .leaflet-bottom { display: block; }
   body.panel-open .map-tools { right: calc(var(--panel-w) + 12px); }
   body.panel-open .leaflet-right { right: var(--panel-w); }
   .person { grid-template-columns: 104px 1fr; }
+  .person.no-photo { grid-template-columns: 1fr; }
   .person-photo, .person .img-fallback { width: 104px; height: 104px; }
 }
 

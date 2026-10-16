@@ -65,11 +65,15 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
     "Second paragraph…"
   ],
   "people": [
-    { "name": "Full Name", "description": "One-line description.",
-      "image": "images/people/full-name.jpg",   // Square photo for the Key People card (optional; a placeholder portrait is used if empty)
+    { "name": "Full Name",                        // can name several people, e.g. "Mary Smith & Elizabeth Brooks"
+      "role": "Short subtitle (optional)",
+      "description": "One paragraph" ,            // or a list of paragraphs: ["First…", "Second…"]
+      "image": "images/people/full-name.jpg",   // Square image for the card (optional; without it the card is text only)
       "imageAlt": "Portrait of Full Name, about 1890",
       "imageCredit": "Archive, collection, item ID (shown under the description)",
-      "link": "https://… (optional: adds a 'Learn more' link)" }
+      "imagePermission": "pending",
+      "link": "https://… (optional)", "linkLabel": "Text for the link (optional; default 'Learn more')",
+      "sortName": "Smith (optional: what the People page sorts by; default is the name's last word)" }
   ],
   "images": [
     { "src": "images/example-site-1.jpg", "alt": "What the image shows, for screen readers",

@@ -1118,3 +1118,24 @@ The pasted images arrived without file names, so the originals were found in the
 - Phone (375px): opening screen matches the mockup's layout; About cards show 8 links with the right addresses and labels; the Pit's gallery shows 7 photos with the team's hero first.
 - Chrome, desktop 1440×900: plays `splash-wide.mp4`, fills the screen, pauses at 13.21 s with "Tap to continue"; phone: plays `splash.mp4`, pauses at 12.22 s. Canvas fill matches the video's navy in both.
 
+## 2026-10-16 — The team's content: text, dates, Key People, credits; hero sliver
+
+**Directed by:** Talia Berler (the team's five "copy and credit" PDFs and "people card images" folder; a sliver of the hero image in the peek view)
+
+### What changed
+- **Every site's text, date line, Key People, and photo captions and credits** now come from the team's PDFs (Unsung_Founders, Lenoir, pit, OCHCemetery, and steele `_copyandcredit.pdf`). All placeholders are gone: no "PLACEHOLDER CONTENT" badges, placeholder summaries, placeholder people, or placeholder sources.
+- **Key People:** The Unsung Founders (with a link to UNC's list of names); Mary Smith & Elizabeth Brooks; Marsha Tinnen & Barbara Prear; James Lewis Cates; Wilson Swain Caldwell; Harvey Beech, James Lassiter, J. Kenneth Lee, Floyd McKissick & James Robert Walker Jr.; Oscar Diggs & James Slade. Images are the team's duotones (480px squares in `images/people/`); two entries have no image and show as text-only cards.
+- **Cards** now support a subtitle (`role`), several paragraphs, a named link (`linkLabel`), a sort name (`sortName`, for cards naming several people), and no image.
+- **Sources:** the Unsung Founders Memorial lists its two sources (Berghahn Books essay; UNC's "Names of the Enslaved People…" post), both checked to load. The other PDFs list no written sources, so those sites' Sources sections are hidden.
+- **Peek view (phones):** a 76px strip of the site's hero photo under the name and date. Hidden once the full story is open (the gallery shows it) and on desktop.
+- Photo credits now name the team photographers (Jori Husted, Leticia Oteng, Andrea Perez); 8 photos are the team's own.
+
+### Decisions and reasons
+- **The team's wording is used as written.** Only text-extraction glitches were fixed against the PDFs' rendered pages (dropped apostrophes, hyphens, and dashes). The lead paragraph's date line became each site's date (e.g. "Opened in 1940 as UNC-Chapel Hill's central dining hall").
+- **Matched by content where the PDFs' file names were off:** Unsung #3 lists the close-up's file name but is titled "Decorated with Flowers"; Lenoir #6 lists the 1969 demonstrators' file name but is "Students Support the Food Workers"; Steele #2 lists the hero's file name but is the archival photo; Steele #3 and #5 have their titles swapped relative to the images (the doorway photo is Beech and Lee's first day; the seated group of four is "From left: McKissick, Lee, Beech, and Lassiter"). The people image `4_3_OCHCementery_CaldwellWilson_DuoTone.jpg` actually shows the strike leaders, and `…DuoTone(1).jpg` shows Wilson Caldwell.
+- **One title corrected:** "James Cates Louis' Yearbook Photo" became "James Lewis Cates' yearbook photo", matching the name used everywhere else. **For the team to check:** the Pit's date line is "1969"; Steele's Diggs photo says "Diggs enrolled in 1951, Slade in 1953", while the Key People text says both in 1953 and calls him Oscar (the caption says Edward O.); the Steele hero's photographer and date are still "to be added"; the Pit's date line and "Cates's" possessive are as written.
+- People image file names for James Cates and Wilson Caldwell were changed (`…-duotone.jpg`) so browsers that cached the old portraits load the new duotones.
+
+### Verified
+- Phone (375px): Lenoir Hall's peek shows the hero strip; the full story shows 3 history paragraphs, no badge or summary, both Key People with the right images; the People page lists 7 entries sorted by last name, with 2 text-only cards and the Unsung Founders link. No console errors.
+
