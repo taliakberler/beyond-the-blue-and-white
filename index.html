@@ -11,7 +11,7 @@
   <link rel="preload" href="fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/lato-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=ec929f11">
-  <link rel="stylesheet" href="css/styles.css?v=f2e6b4a0">
+  <link rel="stylesheet" href="css/styles.css?v=c799950d">
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#main">Skip to map content</a>
@@ -29,22 +29,28 @@
       </button>
     </h1>
     <nav class="header-nav" aria-label="Main">
-      <button type="button" id="view-map" class="nav-link" aria-pressed="true">Map</button>
-      <button type="button" id="view-list" class="nav-link" aria-pressed="false" aria-label="All sites">
-        <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="4.5" cy="6" r="1.6" fill="currentColor"/><circle cx="4.5" cy="12" r="1.6" fill="currentColor"/><circle cx="4.5" cy="18" r="1.6" fill="currentColor"/></svg>
-        <span class="nav-text" aria-hidden="true">All sites</span>
+      <!-- Phones: one menu button; the links open in a drop-down. Desktop: the links show in the header. -->
+      <button type="button" id="menu-btn" class="nav-link menu-btn" aria-expanded="false" aria-controls="nav-menu" aria-label="Menu">
+        <svg class="menu-icon" aria-hidden="true" viewBox="0 0 24 24" width="26" height="26"><path class="menu-open" d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path class="menu-close" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
-      <button type="button" id="view-people" class="nav-link" aria-pressed="false" aria-label="People">
-        <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.8 19.5c.6-3.6 3-5.6 6.2-5.6s5.6 2 6.2 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.8 14.3c1.9.7 3.1 2.4 3.5 5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <span class="nav-text" aria-hidden="true">People</span>
-      </button>
-      <button type="button" id="view-about" class="nav-link" aria-pressed="false" aria-label="About this project">
-        <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
-        <span class="nav-text" aria-hidden="true">About</span>
-      </button>
-      <button type="button" id="go-home" class="nav-link icon-only" aria-label="Home">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26"><path d="M3.5 11 12 4l8.5 7M6 9.5V20h4.5v-5.5h3V20H18V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      </button>
+      <div id="nav-menu" class="nav-menu">
+        <button type="button" id="view-map" class="nav-link" aria-pressed="true">
+          <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Zm0 0v14m6-12v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span class="nav-text">Map</span>
+        </button>
+        <button type="button" id="view-list" class="nav-link" aria-pressed="false">
+          <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="4.5" cy="6" r="1.6" fill="currentColor"/><circle cx="4.5" cy="12" r="1.6" fill="currentColor"/><circle cx="4.5" cy="18" r="1.6" fill="currentColor"/></svg>
+          <span class="nav-text">All sites</span>
+        </button>
+        <button type="button" id="view-people" class="nav-link" aria-pressed="false">
+          <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.8 19.5c.6-3.6 3-5.6 6.2-5.6s5.6 2 6.2 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.8 14.3c1.9.7 3.1 2.4 3.5 5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="nav-text">People</span>
+        </button>
+        <button type="button" id="view-about" class="nav-link" aria-pressed="false">
+          <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+          <span class="nav-text">About</span>
+        </button>
+      </div>
     </nav>
   </header>
 
@@ -58,13 +64,6 @@
         </h2>
         <p id="intro-text" class="intro-text"></p>
         <button type="button" id="intro-cta" class="cta">Explore the map</button>
-        <p class="intro-links">
-          <button type="button" id="intro-list" class="text-link">See all sites</button>
-          <span aria-hidden="true">·</span>
-          <button type="button" id="intro-people" class="text-link">People</button>
-          <span aria-hidden="true">·</span>
-          <button type="button" id="intro-about" class="text-link">About this project</button>
-        </p>
       </div>
     </section>
 
@@ -110,6 +109,7 @@
   <aside id="panel" class="panel" aria-labelledby="panel-title" hidden>
     <div class="panel-top">
       <button type="button" id="panel-expand" class="handle" aria-expanded="false" aria-controls="panel-body">
+        <svg class="swipe-hint" aria-hidden="true" viewBox="0 0 24 12" width="28" height="14"><path d="M3 10l9-7 9 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="handle-bar" aria-hidden="true"></span>
         <span class="visually-hidden" id="panel-expand-label">Show the full story</span>
       </button>
@@ -155,6 +155,6 @@
   </noscript>
 
   <script src="js/vendor/leaflet/leaflet.js?v=5a640ff8"></script>
-  <script src="js/app.js?v=8c5ff5e7"></script>
+  <script src="js/app.js?v=9eeda423"></script>
 </body>
 </html>

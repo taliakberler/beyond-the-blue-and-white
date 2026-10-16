@@ -14,7 +14,7 @@ All styling lives in one file, [`css/styles.css`](../css/styles.css), with no CS
 | Readable outdoors in sunlight | Fog text on navy (12.5:1), large type (17px base), solid surfaces (no translucency behind text) |
 | Easy to use one-handed while walking | All tap targets at least 44×44px. A site opens as a short preview at the bottom, within thumb reach. |
 | Phone-first | Designed at 375px wide first; the desktop layout is an enhancement at 900px and up |
-| Accessible | WCAG 2.1 AA contrast, visible amber focus rings, screen-reader labels, reduced-motion support (see [site-overview.md](site-overview.md#accessibility)) |
+| Accessible | WCAG 2.1 AA contrast, visible keyboard focus rings (shown only to keyboard users), screen-reader labels, reduced-motion support (see [site-overview.md](site-overview.md#accessibility)) |
 
 ---
 
@@ -33,7 +33,7 @@ The palette comes from the team's files: the logo (Carolina Blue `#4b9cd3`, fog 
 | `--sky` | `#87aed0` | Key People cards |
 | `--coral` | `#d85c54` | Call to action ("Explore the map"), "Next ›", the active pin ring, the "You are here" dot |
 | `--logo-navy` | `#11294b` | The logo files' navy (links in the map credit line) |
-| `--color-focus` | `#f6c34a` | Keyboard focus ring (amber, visible on navy, fog, and the map) |
+| `--color-focus` | `#eceded` | Keyboard focus ring: fog, with a thin navy gap so it shows on light and dark backgrounds. Shown only for keyboard use; when the page moves focus itself for a mouse or touch user, no ring appears (`.quiet-focus`). |
 | `--color-placeholder-badge` | `#f6c34a` | "PLACEHOLDER CONTENT" badge |
 | `--color-map-bg` | `#9fc6e0` | The illustrated map's own background blue |
 
@@ -57,8 +57,8 @@ Ratios were calculated with the WCAG 2.1 relative-luminance formula. AA requires
 | Navy pin against the map blue | 8.1:1 | Interface part: passes |
 | Coral active ring against navy | 3.9:1 | Interface part: passes |
 | Carolina Blue on the raised surface (`--navy-2`) | 4.0:1 | **Fails AA for normal text**, so Carolina Blue text is only placed on `--navy` (the All sites cards use `--navy` for this reason) |
-| Amber focus ring on navy | 8.9:1 | Passes |
-| Amber focus ring on the map blue | 1.1:1 | Too faint alone, so on the map the ring gets a navy surround (`box-shadow`) |
+| Fog focus ring on navy | 13.5:1 | Passes |
+| Fog focus ring on light backgrounds (map, sky cards) | low alone | So every ring has a navy gap/surround (`box-shadow`) |
 
 ---
 
@@ -107,11 +107,11 @@ All sizes use `rem`, so they scale with the visitor's browser text-size setting.
 
 | Screen | Phone (under 900px) | Desktop (900px and up) |
 |---|---|---|
-| **Splash** | On the home page: the team's 15-second opening animation (`media/splash.mp4`), shown whole and centered; tapping or clicking anywhere, or pressing Escape, Enter, or Space, skips it. Otherwise (reduce motion or data saver turned on, or autoplay blocked): full-screen navy with the stacked Carolina Blue logo, held at least 0.9 s. Skipped entirely for site links. | Same; the portrait video sits in a centered column on its own navy |
-| **Intro (home)** | Full-screen navy: tagline, stacked logo, the project description, a coral **Explore the map** button, and links to "See all sites" and "About this project" | Same, centered in a 560px column |
-| **Map** | Navy header (horizontal navy logo, with All sites ⋮≡, About ⓘ, and Home ⌂ icons), the illustrated map with icon pins (no route line or numbers), a fog **hint card** at the bottom, the compass and scale bottom-left, and "Show where I am" top-right. Zoom by pinching (the zoom buttons are hidden at 640px and below). | Header shows text links (Map, All sites, About) and Home. Zoom buttons are shown. |
-| **Site preview** | Tapping a pin opens a short navy sheet: drag handle, ⊗ close, the site name, and the era | (Desktop always shows the full panel) |
-| **Full story** | Tap the preview, swipe up, or open a site link: the sheet fills the screen below the header, with the gallery, caption and credit, summary, history, KEY PEOPLE, SOURCES, walking directions to the site, and Previous / Next to browse other sites | A 420px navy side panel on the right with the same content |
+| **Splash** | On the home page: the team's 15-second opening animation (`media/splash.mp4`), shown whole and centered. At 12.2 s, with the logo and every name on screen (the names start fading at about 12.5 s), it pauses and a slow-blinking **TAP TO CONTINUE** (heading font, capitals) appears near the bottom. Tapping or clicking anywhere, or pressing Escape, Enter, or Space, continues to the home screen, at any point. Otherwise (reduce motion or data saver turned on, or autoplay blocked): full-screen navy with the stacked Carolina Blue logo, held at least 0.9 s. Skipped entirely for site links. | Same; the portrait video sits in a centered column on its own navy |
+| **Intro (home)** | Full-screen navy: tagline, stacked logo, the project description, and a coral **EXPLORE THE MAP** button (all capitals) low on the screen, within thumb reach | Same, centered in a 560px column |
+| **Map** | Navy header (horizontal navy logo, which returns home, and a ☰ menu button that opens Map, All sites, People, and About), the illustrated map with icon pins (no route line or numbers), a fog **hint card** at the bottom, the compass and scale bottom-left, and "Show where I am" top-right. Zoom by pinching (the zoom buttons are hidden at 640px and below). | Header shows text links (Map, All sites, People, About); no menu button. Zoom buttons are shown. |
+| **Site preview** | Tapping a pin turns it coral with a white icon, and a navy sheet slides up showing the drag handle, ⊗ close, the site name, and the era. While it's in this peek view, a blinking arrow above the handle invites a swipe up. Tapping the white bar opens the full story; tapping it again in the full story drops back to the peek view. | (Desktop always shows the full panel) |
+| **Full story** | Tap the preview, drag it up, or open a site link: the sheet fills the screen below the header, with the gallery, caption and credit, summary, history, KEY PEOPLE, SOURCES, walking directions to the site, and Previous / Next to browse other sites | A 420px navy side panel on the right with the same content |
 | **All sites** | Navy page of site cards (pin icon, uppercase name, era in Carolina Blue, summary) | Same, in a 760px column |
 | **About** | Navy page: tagline, description, project card, and credits | Same |
 
@@ -120,7 +120,7 @@ Key dimensions:
 | Token | Value | Purpose |
 |---|---|---|
 | `--tap` | 44px | Minimum size of every button and control |
-| `--radius` | 14px | Cards on the All sites and About pages. The sheet uses 20px top corners; the CTA, buttons, and people cards use 4px, as in the wireframe. |
+| `--radius` | 14px | Cards on the All sites page. (The About page's name cards are sky blue with 4px corners, like the Key People cards; a card with a LinkedIn or portfolio link is the link, marked "LinkedIn ↗" or "Portfolio ↗".) The sheet uses 20px top corners; the CTA, buttons, and people cards use 4px, as in the wireframe. |
 | `--panel-w` | 420px | Desktop side panel |
 | `--header-h`, `--panel-h`, `--hint-h` | Measured by JavaScript | Keep the map's corner controls clear of the header, the sheet, and the hint card |
 
@@ -132,7 +132,7 @@ Key dimensions:
 |---|---|
 | **Pins** | Upside-down **teardrops**: navy with a 3px fog outline, holding the site's icon in the round head. The point marks the site's exact location. (The shape is a square with three rounded corners, turned 45°.) No numbers, since the sites aren't a set sequence. The active site gets a coral outline and enlarges slightly from its tip, so the point stays on the spot. Icons come from `images/icons/pins/` (see below). |
 | **Hint card and map key** | Fog card with navy text at the bottom of the map ("Explore the map. Tap a location to get more details."), shown whenever no site is open. Below a thin divider, a **map key** lists each icon in use on the map: a small navy circle with the icon, then its name in bold (for example, Memorial, Building, Cemetery). Entries wrap onto more rows as needed. The text is `tour.mapHint`, and the icon names are `tour.iconLabels`, both in `data/stops.json`. |
-| **Site sheet** | Navy, with 20px top corners and a 96px fog drag handle. In preview it shows only the title and era; expanded, it scrolls. The close button is a circled ⊗. |
+| **Site sheet** | Navy, with 20px top corners and a 96px fog drag handle. It follows the finger when dragged (from its top, or from the story when scrolled to the top) and snaps to preview, full story, or closed; a quick flick also works. Expanded, the story scrolls. The close button is a circled ⊗. Closing slides it away and zooms the map back out to show every site. |
 | **Gallery** | A full-width 4:3 frame that swipes sideways. Images are shown **whole, never cropped** (`object-fit: contain` on a dark navy background), because cropping an archival photo can change what it shows. The caption and credit appear in small muted fog text below, with round previous/next image buttons. |
 | **Key People cards** | Sky-blue cards with a photo on the left (92px square, 104px on desktop), the name in uppercase bold navy with a short fog underline, a one-line description, the photo credit, and an optional **Learn more ›** link. Placeholder people use `images/person-placeholder.svg`, a coral duotone portrait marked "PLACEHOLDER", in the style of the wireframe. |
 | **Buttons** | **Call to action:** coral with a 2px fog outline and large Oswald text. **Next ›:** coral. **Previous:** outlined in fog. **Round map buttons:** navy with a fog outline. |

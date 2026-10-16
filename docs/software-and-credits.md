@@ -91,7 +91,7 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`
 | **What it does** | The site's basemap: the project team's own illustration of central campus, placed on real-world coordinates so sites and "You are here" line up with it |
 | **Where it lives** | `tiles/team-map/{z}/{x}/{y}.png`: 99 web-map tiles for zooms 14–18, built by `npm run team-map` from a PNG export of the team's Illustrator file. The export itself isn't in the repository. |
 | **Settings** | `tour.basemap` in `data/stops.json` (tile path, bounds, zoom range, street opacity, credit), and `scripts/team-map.json` for building the tiles |
-| **Credit** | "Illustrated map: Beyond the Blue and White team", shown in the map's credit line |
+| **Credit** | Illustrated by **Trinity Gill**. "Illustrated map: Trinity Gill" is shown in the map's credit line. |
 
 ### The team's logo and icons
 
@@ -99,7 +99,7 @@ The building layer is set in `data/stops.json` under `tour.buildingLayer` (`url`
 |---|---|
 | **What** | The *Beyond the Blue and White* logo (horizontal and stacked, in Carolina Blue, Franklin Fog, and Navy) and eight map icons (buildings, carpenters, cemetery, masons, memorial, painters, people, seamstress) |
 | **Where they live** | `images/logo/` (SVG, unchanged) and `images/icons/source/` (SVG, unchanged). The pin versions in `images/icons/pins/` are built from them by `npm run pins`. |
-| **Created by** | The Beyond the Blue and White team |
+| **Created by** | Icons: **Victor Morgan**. Logo: the Beyond the Blue and White team. |
 | **Checked** | 2026-10-14: valid and fully vector, with no scripts or outside references (see [PROCESS_LOG.md](../PROCESS_LOG.md)) |
 
 ### Phone map apps: walking directions
@@ -163,7 +163,7 @@ Used only when building tiles, not by visitors.
 
 ### AVFoundation (macOS): video encoding
 
-`scripts/encode-video.swift` uses Apple's built-in AVFoundation framework to make the web copy of the opening animation (H.264 MP4, 720×1280, 1.4 Mbps, no audio, "fast start" so it plays while downloading). It needs a Mac with Swift (included with Xcode or the Command Line Tools); nothing to install. The team's animation file is credited to the Beyond the Blue and White team, like the logo.
+`scripts/encode-video.swift` uses Apple's built-in AVFoundation framework to make the web copy of the opening animation (H.264 MP4, 720×1280, 1.4 Mbps, no audio, "fast start" so it plays while downloading). It needs a Mac with Swift (included with Xcode or the Command Line Tools); nothing to install. The opening animation is by **Victor Morgan**.
 
 ### Node.js and npm
 
@@ -198,6 +198,6 @@ The site's code, scripts, and documentation were drafted with help from Claude C
 - [ ] Every image has a `credit` that matches the holding repository's requirements
 - [ ] Every site lists its `sources`
 - [ ] Confirmed attribution preferences for the UNC GIS building layer and campus place names
-- [ ] Credit for the illustrated map's designers added (the map credit currently says "Beyond the Blue and White team")
+- [x] Credit for the illustrated map (Trinity Gill), the opening animation and icons (Victor Morgan) added
 - [x] Credits for the project team, coaches, and community advisors added (the About page and the README)
 - [ ] Team members' roles added (in `tour.about.team` in `data/stops.json`)

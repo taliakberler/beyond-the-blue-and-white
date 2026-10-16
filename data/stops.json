@@ -23,7 +23,7 @@
       "minNativeZoom": 14,
       "maxNativeZoom": 18,
       "streetsOpacity": 0.38,
-      "attribution": "Illustrated map: Beyond the Blue and White team"
+      "attribution": "Illustrated map: Trinity Gill"
     },
     "intro": "PLACEHOLDER introduction — replace with a short welcome to the map: its theme, what visitors will find at each site, and the resources it offers.",
     "welcome": {
@@ -62,7 +62,8 @@
       "team": [
         {
           "name": "Talia Berler",
-          "role": ""
+          "role": "Web Developer & Digital Producer",
+          "link": "https://www.linkedin.com/in/talia-berler/"
         },
         {
           "name": "Andie Day",
@@ -121,7 +122,8 @@
         ]
       },
       "credits": [
-        "Map illustration by the Beyond the Blue and White team.",
+        "Map illustration by Trinity Gill.",
+        "Opening animation and icons by Victor Morgan.",
         "Surrounding streets © OpenStreetMap contributors.",
         "Building and campus place names from UNC Chapel Hill's public GIS data and OpenStreetMap.",
         "Map software: Leaflet."

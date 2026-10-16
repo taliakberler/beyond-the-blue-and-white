@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Options — Beyond the Blue and White</title>
+<!-- Side-by-side options for team decisions; not part of the site. Uses the site's fonts and colors. -->
+<link rel="stylesheet" href="../css/styles.css">
+<style>
+  body { display: block; overflow: auto; height: auto; background: #0f1c35; color: var(--fog); padding: 24px 16px 64px; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  h1 { font-family: var(--font-heading); text-transform: uppercase; font-size: 1.8rem; margin: 0 0 6px; }
+  h2.section { font-family: var(--font-heading); text-transform: uppercase; font-size: 1.35rem; margin: 40px 0 6px; color: var(--carolina); }
+  .lede { color: var(--fog-muted); margin: 0 0 18px; max-width: 70ch; }
+  .grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .opt { background: var(--navy); border: 1px solid var(--navy-3); border-radius: 14px; padding: 16px; }
+  .opt h3 { font-family: var(--font-body); font-size: 1rem; margin: 0 0 4px; }
+  .opt .note { color: var(--fog-muted); font-size: 0.875rem; margin: 0 0 14px; }
+
+  /* ---- Splash end options: a phone-sized frame holding the video near its end ---- */
+  .phone { position: relative; width: 100%; max-width: 300px; aspect-ratio: 9 / 16; margin: 0 auto; overflow: hidden; border-radius: 18px; background: #122e54; }
+  .phone video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .end-btn {
+    position: absolute; left: 16px; right: 16px; bottom: 22px; min-height: 52px;
+    border: 2px solid var(--fog); border-radius: 4px; background: var(--coral); color: var(--fog);
+    font-family: var(--font-heading); font-weight: 700; font-size: 1.3rem; letter-spacing: 0.04em; text-transform: uppercase;
+    animation: rise 0.6s ease-out both;
+  }
+  .end-tap {
+    position: absolute; left: 0; right: 0; bottom: 30px; text-align: center;
+    font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 1rem;
+    animation: slow-blink 2.4s ease-in-out infinite;
+  }
+  .end-tap.small { font-family: var(--font-body); text-transform: none; letter-spacing: 0.02em; font-weight: 400; font-size: 0.95rem; }
+  .end-chev { display: block; margin: 0 auto 6px; }
+  @keyframes slow-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ---- Team layouts ---- */
+  .about-demo h4 { font-family: var(--font-body); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--carolina); margin: 18px 0 8px; }
+  .about-demo h4:first-child { margin-top: 0; }
+  .ex-role { color: var(--fog-muted); }
+
+  /* A: credits roll */
+  .roll { text-align: center; }
+  .roll ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+  .roll li { font-family: var(--font-heading); text-transform: uppercase; font-size: 1.05rem; letter-spacing: 0.03em; }
+  .roll li small { display: block; font-family: var(--font-body); text-transform: none; font-size: 0.75rem; letter-spacing: 0; color: var(--fog-muted); }
+  .roll hr { width: 48px; border: 0; border-top: 3px solid var(--coral); margin: 18px auto; }
+
+  /* B: masthead list with hairlines */
+  .mast ul { list-style: none; margin: 0; padding: 0; }
+  .mast li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--navy-3); }
+  .mast li:first-child { border-top: 1px solid var(--navy-3); }
+  .mast .n { font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 0.03em; }
+  .mast .r { font-size: 0.8rem; color: var(--fog-muted); text-align: right; }
+
+  /* C: inline masthead */
+  .inline p { margin: 0; font-family: var(--font-heading); text-transform: uppercase; font-size: 1.15rem; line-height: 1.6; letter-spacing: 0.02em; }
+  .inline .nm { white-space: nowrap; }
+  .inline .dot { color: var(--coral); padding: 0 0.1em 0 0.35em; }
+
+  /* D: sky name tags (the Key People card color) */
+  .tags ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags li { background: var(--sky); color: var(--navy); border-radius: 4px; padding: 7px 12px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em; }
+  .tags li small { display: block; font-weight: 400; text-transform: none; font-size: 0.72rem; letter-spacing: 0; }
+  .tags .ex-role { color: #24385c; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Design options</h1>
+  <p class="lede">For the team to compare before deciding. <strong>Decided 2026-10-15:</strong> 1B ("Tap to continue", shown over the logo and names) and 2D (name cards, with LinkedIn or portfolio links). Kept for the process record.</p>
+
+  <h2 class="section">1. When the opening animation ends</h2>
+  <p class="lede">Right now the home screen opens on its own when the animation ends (or is tapped). These options instead hold the animation on its last logo frame and wait for the visitor. The video's final half-second fades to plain navy, so it would pause just before that.</p>
+  <div class="grid">
+    <div class="opt">
+      <h3>A. "Continue" button</h3>
+      <p class="note">Clearest. Matches the coral "Explore the map" button.</p>
+      <div class="phone"><video muted playsinline preload="auto" src="../media/splash.mp4#t=14.2"></video>
+        <button type="button" class="end-btn">Continue</button></div>
+    </div>
+    <div class="opt">
+      <h3>B. Slow-blinking "Tap to continue"</h3>
+      <p class="note">Quieter; the whole screen is the button. Heading font, capitals.</p>
+      <div class="phone"><video muted playsinline preload="auto" src="../media/splash.mp4#t=14.2"></video>
+        <div class="end-tap">Tap to continue</div></div>
+    </div>
+    <div class="opt">
+      <h3>C. "Tap to explore" with an arrow</h3>
+      <p class="note">Softer, body font; the arrow echoes the one on the site sheet.</p>
+      <div class="phone"><video muted playsinline preload="auto" src="../media/splash.mp4#t=14.2"></video>
+        <div class="end-tap small"><svg class="end-chev" viewBox="0 0 24 12" width="26" height="13" aria-hidden="true"><path d="M3 10l9-7 9 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Tap to explore the map</div></div>
+    </div>
+  </div>
+
+  <h2 class="section">2. Team names on the About page</h2>
+  <p class="lede">All four use the real names, sorted by last name. Roles aren't set yet, so one example role is shown (in grey) to show where roles would go.</p>
+  <div class="grid" id="team-options"></div>
+</div>
+
+<script>
+  var team = ['Talia Berler', 'Andie Day', 'Trinity Gill', 'Jori Husted', 'Victor Morgan', 'Leticia Oteng', 'Andrea Perez', 'Cayla Quintero', 'Gwyneth Shoemaker'];
+  var coaches = ['Adonis Durado', 'Randy Stano'];
+  var advisors = ['Nicholas Graham', 'Samuel Scarborough'];
+  var exampleRole = { 'Talia Berler': 'Web Developer & Digital Producer (example)' };
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function role(n, tag) { return exampleRole[n] ? '<' + tag + ' class="ex-role">' + esc(exampleRole[n]) + '</' + tag + '>' : ''; }
+  var groups = [['Team', team], ['Coaches', coaches], ['Community advisors', advisors]];
+
+  var options = [
+    ['A. Credits roll', 'Centered, two columns, heading font; coral rules between groups. Like film credits.', 'roll', function () {
+      return groups.map(function (g, i) {
+        return (i ? '<hr>' : '') + '<h4>' + g[0] + '</h4><ul>' + g[1].map(function (n) { return '<li>' + esc(n) + role(n, 'small') + '</li>'; }).join('') + '</ul>';
+      }).join('');
+    }],
+    ['B. Masthead list', 'One name per line with hairlines; roles line up on the right. Most like a newspaper masthead.', 'mast', function () {
+      return groups.map(function (g) {
+        return '<h4>' + g[0] + '</h4><ul>' + g[1].map(function (n) { return '<li><span class="n">' + esc(n) + '</span>' + (exampleRole[n] ? '<span class="r ex-role">' + esc(exampleRole[n]) + '</span>' : '') + '</li>'; }).join('') + '</ul>';
+      }).join('');
+    }],
+    ['C. Inline masthead', 'Names flow as one block separated by coral dots. Compact and bold; roles would go in a separate list.', 'inline', function () {
+      return groups.map(function (g) {
+        return '<h4>' + g[0] + '</h4><p>' + g[1].map(function (n) { return '<span class="nm">' + esc(n) + '</span>'; }).join('<span class="dot">•</span> ') + '</p>';
+      }).join('');
+    }],
+    ['D. Name tags', 'Sky-blue tags, the same color as the Key People cards. Playful; wraps to any width.', 'tags', function () {
+      return groups.map(function (g) {
+        return '<h4>' + g[0] + '</h4><ul>' + g[1].map(function (n) { return '<li>' + esc(n) + role(n, 'small') + '</li>'; }).join('') + '</ul>';
+      }).join('');
+    }]
+  ];
+  document.getElementById('team-options').innerHTML = options.map(function (o) {
+    return '<div class="opt"><h3>' + o[0] + '</h3><p class="note">' + o[1] + '</p><div class="about-demo ' + o[2] + '">' + o[3]() + '</div></div>';
+  }).join('');
+</script>
+</body>
+</html>

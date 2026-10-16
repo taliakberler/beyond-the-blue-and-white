@@ -51,7 +51,7 @@
   --color-text: var(--fog);
   --color-text-muted: var(--fog-muted);
   --color-accent: var(--carolina);
-  --color-focus: #f6c34a;                 /* focus ring: amber, visible on navy, fog, and the map */
+  --color-focus: #eceded;                 /* keyboard focus ring: fog, with a thin navy gap so it shows on light and dark */
   --color-placeholder-badge: #f6c34a;
 
   /* Map */
@@ -98,7 +98,10 @@ a { color: var(--carolina); }
 img { max-width: 100%; display: block; }
 button { font: inherit; color: inherit; }
 
-:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; box-shadow: 0 0 0 2px var(--navy); }
+/* When the page moves focus itself (e.g. to "Explore the map" after the splash) for someone using a
+   mouse or touch, no ring is shown; it appears only for keyboard users. See moveFocus in app.js. */
+.quiet-focus:focus-visible { outline: none; box-shadow: none; }
 
 .visually-hidden {
   position: absolute !important;
@@ -144,17 +147,28 @@ button { font: inherit; color: inherit; }
               linear-gradient(to right, transparent, #000 1.5%, #000 98.5%, transparent);
   mask-composite: intersect;
 }
+/* Shown when the animation pauses at its end (on the logo and names). The whole screen is tappable;
+   this is the visible invitation. */
+.splash-continue {
+  position: absolute; left: 0; right: 0; bottom: calc(44px + env(safe-area-inset-bottom));
+  width: max-content; margin: 0 auto; padding: 12px 20px; min-height: var(--tap);
+  border: 0; background: none; color: var(--fog); cursor: pointer;
+  font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase;
+  animation: slow-blink 2.4s ease-in-out infinite;
+}
+@keyframes slow-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 body:not(.is-loading) .splash { opacity: 0; visibility: hidden; pointer-events: none; }
 
 /* ---------- Header ---------- */
 .app-header {
+  position: relative;
   flex: none;
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   padding: 8px 8px 8px 14px;
   padding-top: max(8px, env(safe-area-inset-top));
   background: var(--navy);
   border-bottom: 1px solid var(--navy-3);
-  z-index: 1100;
+  z-index: 1300;       /* above the site sheet, so the menu drop-down isn't covered */
 }
 .brand { min-width: 0; flex: 1 1 auto; font-size: inherit; }
 .brand-btn {
@@ -173,7 +187,20 @@ body:not(.is-loading) .splash { opacity: 0; visibility: hidden; pointer-events: 
 .nav-link:hover { background: var(--navy-3); }
 .nav-link[aria-pressed="true"] { color: var(--carolina); }
 .nav-link .nav-text { display: none; }
-#view-map { display: none; }               /* phones: the map is the default; Home and the icons cover the rest */
+
+/* Phones: menu button + drop-down. (Desktop overrides below show the links in the header.) */
+.menu-btn .menu-close { display: none; }
+.menu-btn[aria-expanded="true"] .menu-open { display: none; }
+.menu-btn[aria-expanded="true"] .menu-close { display: inline; }
+.nav-menu {
+  display: none; position: absolute; top: 100%; right: 8px; margin-top: 6px;
+  min-width: 210px; padding: 6px; flex-direction: column; gap: 2px;
+  background: var(--navy); border: 1px solid var(--navy-3); border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+.nav-menu.is-open { display: flex; }
+.nav-menu .nav-link { justify-content: flex-start; gap: 12px; width: 100%; padding: 0 14px; border-radius: 8px; font-size: var(--fs-base); }
+.nav-menu .nav-link .nav-text { display: inline; }
 
 /* ---------- Views ---------- */
 main { flex: 1; position: relative; min-height: 0; }
@@ -187,7 +214,7 @@ main { flex: 1; position: relative; min-height: 0; }
   padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
   display: flex; flex-direction: column; justify-content: center; gap: 22px;
 }
-.intro-eyebrow { margin: 0; font-size: var(--fs-small); color: var(--fog-muted); letter-spacing: 0.02em; }
+.intro-eyebrow { margin: auto 0 0; font-size: var(--fs-small); color: var(--fog-muted); letter-spacing: 0.02em; }
 .intro-logo img { width: min(78vw, 340px); height: auto; }
 .intro-text { margin: 0; font-size: var(--fs-base); color: var(--fog); }
 .cta {
@@ -195,15 +222,13 @@ main { flex: 1; position: relative; min-height: 0; }
   min-height: 60px; padding: 0 24px;
   border: 2px solid var(--fog); border-radius: 4px;
   background: var(--coral); color: var(--fog);
-  font-family: var(--font-heading); font-weight: 700; font-size: 1.625rem; letter-spacing: 0.02em;
+  font-family: var(--font-heading); font-weight: 700; font-size: 1.625rem; letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
+  /* Sits low on the screen, within thumb reach; the tagline, logo, and text stay centered above it. */
+  margin-top: auto;
 }
 .cta:hover { background: var(--coral-hover); }
-.intro-links { margin: -6px 0 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 10px; color: var(--fog-muted); }
-.text-link {
-  min-height: var(--tap); padding: 0 6px; border: 0; background: none; cursor: pointer;
-  color: var(--fog); font-weight: 700; text-decoration: underline; text-underline-offset: 4px;
-}
 
 /* Pages (All stops, About) */
 .page-view { overflow-y: auto; background: var(--navy); }
@@ -260,7 +285,8 @@ main { flex: 1; position: relative; min-height: 0; }
   position: relative; width: 48px; height: 56px;
   transform-origin: 50% 54px;                       /* grow from the tip, which stays on the spot */
   transition: transform 0.15s ease;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+  /* Two shadows: a tight one that outlines the pin and a soft one that lifts it off the map. */
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
 }
 .stop-pin .pin {
   position: absolute; left: 3px; top: 3px;
@@ -269,11 +295,15 @@ main { flex: 1; position: relative; min-height: 0; }
   background: var(--color-map-marker);
   border: 3px solid var(--color-map-ring);
   transform: rotate(45deg);
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 .stop-pin .pin-icon { position: absolute; left: 10px; top: 10px; width: 28px; height: 28px; }
-.stop-pin-wrap:focus-visible .pin { box-shadow: 0 0 0 3px var(--color-focus), 0 0 0 7px var(--navy); }
-.stop-pin-wrap.is-active .pin { border-color: var(--color-map-active); }
+.stop-pin-wrap:focus-visible .pin { box-shadow: 0 0 0 3px var(--color-focus), 0 0 0 6px var(--navy); }
+.stop-pin-wrap.quiet-focus:focus-visible .pin { box-shadow: none; }
+.stop-pin-wrap.is-active .pin { background: var(--coral); }
+/* Selected: coral (the brand's red) with the icon turned white. The icons in use are single-color
+   shapes, so turning every drawn pixel white keeps all their detail. */
+.stop-pin-wrap.is-active .pin-icon { filter: brightness(0) invert(1); }
 .stop-pin-wrap.is-active .stop-pin { transform: scale(1.15); }
 
 .you-are-here {
@@ -369,10 +399,18 @@ main { flex: 1; position: relative; min-height: 0; }
 .about-card p:last-child { margin-bottom: 0; }
 .about-group { margin: 24px 0; }
 .about-note { margin: -2px 0 10px; color: var(--fog-muted); font-size: var(--fs-small); }
-.credit-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-.credit-list li { padding: 10px 12px; min-height: var(--tap); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; }
-.credit-name { display: block; font-weight: 700; }
-.credit-role { display: block; font-size: var(--fs-small); color: var(--fog-muted); }
+/* Team, coaches, and advisors: sky-blue name cards (the Key People card color) that wrap to any width.
+   A card with a LinkedIn or portfolio link is itself the link. */
+.credit-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.credit-card {
+  display: block; min-height: var(--tap); padding: 9px 14px;
+  background: var(--sky); color: var(--navy); border-radius: 4px; text-decoration: none;
+}
+a.credit-card { transition: background-color 0.15s ease; }
+a.credit-card:hover { background: #a4c3de; }
+.credit-name { display: block; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.credit-role { display: block; margin-top: 2px; font-size: var(--fs-small); color: #24385c; }
+.credit-link { display: block; margin-top: 4px; font-size: 0.75rem; font-weight: 700; color: var(--navy); text-decoration: underline; text-underline-offset: 3px; }
 .about-credits { margin: 0; padding-left: 1.2em; font-size: var(--fs-small); color: var(--fog-muted); }
 .about-credits li { margin-bottom: 6px; }
 
@@ -380,18 +418,38 @@ main { flex: 1; position: relative; min-height: 0; }
 .panel {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200;
   display: flex; flex-direction: column;
-  max-height: calc(100dvh - var(--header-h) - 8px);
+  /* Always full height on phones; JS slides it with a transform so only the top shows in preview. */
+  height: calc(100vh - var(--header-h) - 8px);
+  height: calc(100dvh - var(--header-h) - 8px);
   background: var(--navy); color: var(--fog);
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.35);
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
 }
-.panel:not(.is-expanded) .panel-body { display: none; }       /* preview: title and era only */
-.panel.is-expanded { height: calc(100dvh - var(--header-h) - 8px); }
+.panel.is-dragging { transition: none; }
 
-.panel-top { position: relative; flex: none; padding: 0 64px 14px 20px; padding-bottom: max(14px, env(safe-area-inset-bottom)); cursor: pointer; }
-.panel.is-expanded .panel-top { cursor: default; padding-bottom: 14px; border-bottom: 1px solid var(--navy-3); }
-.handle { display: grid; place-items: center; width: calc(100% + 84px); margin-left: -20px; height: 26px; border: 0; background: transparent; cursor: pointer; }
+.panel-top {
+  position: relative; flex: none; padding: 0 64px 14px 20px; padding-bottom: max(14px, env(safe-area-inset-bottom));
+  cursor: grab; touch-action: none;   /* drags move the sheet, not the page */
+  border-bottom: 1px solid transparent;
+}
+.panel.is-expanded .panel-top { border-bottom-color: var(--navy-3); padding-bottom: 14px; }
+.handle {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px;
+  width: calc(100% + 84px); margin-left: -20px; height: 26px; padding: 0 0 4px;
+  border: 0; background: transparent; cursor: inherit;
+}
 .handle-bar { width: 96px; height: 4px; border-radius: 999px; background: var(--fog); }
+/* Blinking arrow above the handle, inviting a swipe up, until the visitor first opens a full story. */
+.swipe-hint { display: none; color: var(--fog); }
+.panel.show-swipe-hint .handle { height: 46px; gap: 6px; }
+.panel.show-swipe-hint .swipe-hint { display: block; animation: swipe-hint 1.3s ease-in-out infinite; }
+@keyframes swipe-hint {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.25; transform: translateY(3px); }
+}
 .close-btn {
   position: absolute; top: 14px; right: 12px;
   display: grid; place-items: center; width: var(--tap); height: var(--tap);
@@ -507,19 +565,22 @@ body.panel-expanded .leaflet-bottom { display: none; }
 @media (min-width: 900px) {
   .app-header { padding: 10px 16px 10px 22px; }
   .brand-btn { max-width: 380px; }
-  #view-map { display: inline-flex; }
-  .nav-link { padding: 0 14px; }
+  .menu-btn { display: none; }
+  .nav-menu, .nav-menu.is-open {
+    display: flex; position: static; flex-direction: row; gap: 2px; min-width: 0; margin: 0; padding: 0;
+    background: none; border: 0; box-shadow: none;
+  }
+  .nav-menu .nav-link { width: auto; padding: 0 14px; border-radius: 999px; font-size: var(--fs-small); }
   .nav-link .nav-icon { display: none; }
   .nav-link .nav-text { display: inline; }
-  .nav-link.icon-only { padding: 0 8px; }
 
   .panel {
     left: auto; right: 0; top: var(--header-h); bottom: 0;
     width: var(--panel-w); max-height: none; height: auto;
     border-radius: 0; border-left: 1px solid var(--navy-3);
+    transform: none !important; transition: none;
   }
-  .panel .panel-body { display: block !important; }
-  .panel-top { cursor: default; padding-top: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--navy-3); }
+  .panel-top { cursor: default; touch-action: auto; padding-top: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--navy-3); }
   .handle { display: none; }
   .close-btn { top: 10px; }
   body.panel-open .leaflet-bottom { bottom: 0; }
@@ -532,4 +593,5 @@ body.panel-expanded .leaflet-bottom { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+  .panel.show-swipe-hint .swipe-hint, .splash-continue { animation: none; }
 }

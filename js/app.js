@@ -12,7 +12,9 @@
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   var SPLASH_VIDEO = 'media/splash.mp4';
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
-  var SPLASH_VIDEO_MAX_MS = 20000;   // safety cap, in case the video never reports that it ended
+  var SPLASH_VIDEO_MAX_MS = 20000;   // if the video stalls before the hold point, show "Tap to continue" anyway
+  var SPLASH_HOLD_AT = 12.2;         // seconds: pause here (logo and every name still on screen; the names
+                                     // start fading at about 12.5 s) and wait for "Tap to continue"
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
   var ICON_DIR = 'images/icons/pins/';
   var BUILDING_PAGE_LIMIT = 10;     // max pages fetched from the ArcGIS layer
@@ -23,8 +25,8 @@
     header: document.querySelector('.app-header'), splash: $('splash'),
     intro: $('tour-intro'),
     introView: $('intro-view'), introEyebrow: $('intro-eyebrow'), introText: $('intro-text'),
-    introCta: $('intro-cta'), introList: $('intro-list'), introAbout: $('intro-about'), introPeople: $('intro-people'),
-    homeBtn: $('go-home'), brandHome: $('brand-home'),
+    introCta: $('intro-cta'),
+    menuBtn: $('menu-btn'), navMenu: $('nav-menu'), brandHome: $('brand-home'),
     viewMapBtn: $('view-map'), viewListBtn: $('view-list'),
     mapView: $('map-view'), listView: $('list-view'), stopList: $('stop-list'),
     locateBtn: $('locate-btn'), mapHint: $('map-hint'), mapHintText: $('map-hint-text'), mapLegend: $('map-legend'),
@@ -91,6 +93,20 @@
     var lx = String(x.name || '').trim().split(/\s+/).pop().toLowerCase();
     var ly = String(y.name || '').trim().split(/\s+/).pop().toLowerCase();
     return lx < ly ? -1 : lx > ly ? 1 : String(x.name).localeCompare(String(y.name));
+  }
+
+  // Moves focus where it's needed (for keyboard and screen-reader users) without showing a focus
+  // ring to someone using a mouse or touch; browsers would otherwise show one for script-moved focus.
+  var usingKeyboard = false;
+  document.addEventListener('keydown', function (e) { if (!e.metaKey && !e.ctrlKey) usingKeyboard = true; }, true);
+  document.addEventListener('pointerdown', function () { usingKeyboard = false; }, true);
+  function moveFocus(node) {
+    if (!node || !node.focus) return;
+    if (!usingKeyboard) {
+      node.classList.add('quiet-focus');
+      node.addEventListener('blur', function () { node.classList.remove('quiet-focus'); }, { once: true });
+    }
+    node.focus({ preventScroll: true, focusVisible: usingKeyboard });
   }
 
   function isPlaceholder(stop) { return stop.placeholder === true || /placeholder/i.test(stop.title || ''); }
@@ -223,7 +239,7 @@
       m.getElement().addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); m.closeTooltip(); goToStop(i, { fromMap: true }); }
       });
-      m.getElement().addEventListener('focus', function () { m.openTooltip(); });
+      m.getElement().addEventListener('focus', function () { if (m.getElement().classList.contains('quiet-focus')) setTimeout(function () { m.closeTooltip(); }, 0); else m.openTooltip(); });
       m.getElement().addEventListener('blur', function () { m.closeTooltip(); });
       state.markers[stop.id] = m;
       bounds.push([stop.lat, stop.lng]);
@@ -418,6 +434,29 @@
     });
   }
 
+  // Phones: the header's links live in a drop-down opened by the menu button (on desktop they're
+  // always shown and the button is hidden by CSS). Choosing a link, tapping outside, or Escape closes it.
+  function setMenu(open) {
+    els.navMenu.classList.toggle('is-open', open);
+    els.menuBtn.setAttribute('aria-expanded', String(open));
+    els.menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+  }
+  function initMenu() {
+    els.menuBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = !els.navMenu.classList.contains('is-open');
+      setMenu(open);
+      if (open) moveFocus(els.navMenu.querySelector('[aria-pressed="true"]') || els.navMenu.querySelector('button'));
+    });
+    els.navMenu.addEventListener('click', function (e) { if (e.target.closest('button')) setMenu(false); });
+    document.addEventListener('click', function (e) {
+      if (els.navMenu.classList.contains('is-open') && !e.target.closest('.header-nav')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && els.navMenu.classList.contains('is-open')) { setMenu(false); moveFocus(els.menuBtn); }
+    });
+  }
+
   // Views: 'intro' (home), 'map', 'list' (All stops), 'people', 'about'.
   // People and About have their own addresses (#people, #about) so they can be linked to.
   var PAGE_HASHES = { people: '#people', about: '#about' };
@@ -429,6 +468,7 @@
   function setView(which) {
     var intro = which === 'intro', list = which === 'list', about = which === 'about', people = which === 'people';
     var map = !intro && !list && !about && !people;
+    setMenu(false);
     els.introView.hidden = !intro;
     els.listView.hidden = !list;
     els.peopleView.hidden = !people;
@@ -440,7 +480,7 @@
     els.viewMapBtn.setAttribute('aria-pressed', String(map));
     els.peopleBtn.setAttribute('aria-pressed', String(people));
     els.aboutBtn.setAttribute('aria-pressed', String(about));
-    if (!map) closePanel({ keepHash: false, silent: true });
+    if (!map) closePanel({ keepHash: false, silent: true, noZoom: true });
     if (list) els.listView.scrollTop = 0;
     if (people) els.peopleView.scrollTop = 0;
     if (about) els.aboutView.scrollTop = 0;
@@ -451,7 +491,7 @@
       history.pushState(null, '', location.pathname + location.search);
     }
     if (map) setTimeout(function () { state.map.invalidateSize(); if (state.current === -1 && !state.viewTouched) fitAllStops(); }, 0);
-    if (intro) els.introCta.focus({ preventScroll: true });
+    if (intro) moveFocus(els.introCta);
     updateHint();
   }
 
@@ -574,11 +614,22 @@
       var sec = el('section', { 'class': 'about-group', 'aria-labelledby': id });
       sec.appendChild(el('h3', { id: id }, title));
       if (note) sec.appendChild(el('p', { 'class': 'about-note' }, note));
+      // Sky-blue name cards. With a "link" (LinkedIn or portfolio), the whole card is the link.
       var ul = el('ul', { 'class': 'credit-list' });
       people.forEach(function (person) {
+        var name = person.name || String(person);
         var li = el('li');
-        li.appendChild(el('span', { 'class': 'credit-name' }, person.name || String(person)));
-        if (person.role) li.appendChild(el('span', { 'class': 'credit-role' }, person.role));
+        var card = person.link
+          ? el('a', { 'class': 'credit-card', href: person.link, target: '_blank', rel: 'noopener' })
+          : el('div', { 'class': 'credit-card' });
+        card.appendChild(el('span', { 'class': 'credit-name' }, name));
+        if (person.role) card.appendChild(el('span', { 'class': 'credit-role' }, person.role));
+        if (person.link) {
+          var where = /linkedin\.com/i.test(person.link) ? 'LinkedIn' : 'Portfolio';
+          card.appendChild(el('span', { 'class': 'credit-link' }, where + ' ↗'));
+          card.setAttribute('aria-label', name + (person.role ? ', ' + person.role : '') + ': ' + where + ' (opens in a new tab)');
+        }
+        li.appendChild(card);
         ul.appendChild(li);
       });
       sec.appendChild(ul);
@@ -732,8 +783,8 @@
     if (DESKTOP_QUERY.matches) {
       offset = L.point(els.panel.offsetWidth / 2, 0);
     } else {
-      var sheet = els.panel.classList.contains('is-expanded') ? 0 : els.panel.offsetHeight;
-      offset = L.point(0, Math.min(sheet, size.y * 0.7) / 2);
+      var visible = els.panel.classList.contains('is-expanded') ? 0 : previewHeight();
+      offset = L.point(0, Math.min(visible, size.y * 0.7) / 2);
     }
     var pt = map.project([stop.lat, stop.lng], zoom).add(offset);
     map.flyTo(map.unproject(pt, zoom), zoom, { duration: 0.6 });
@@ -751,41 +802,85 @@
     flyToStop(stop);
   }
 
-  // On phones a stop opens as a short preview (title and era); tap it or swipe up for the full story.
+  /* The site sheet. On phones it's a bottom sheet the full height of the screen below the header,
+     moved up and down with a transform: "preview" shows just the top (name and era), "expanded"
+     shows the whole story. It slides up when a site opens, follows the finger when dragged, and
+     snaps to preview, expanded, or closed on release. On desktop it's a fixed side panel. */
+  var SHEET_ANIM_MS = 320;
+  var sheet = { y: null, hideTimer: null };
+
+  function isPhoneSheet() { return !DESKTOP_QUERY.matches; }
+  function sheetHeight() { return els.panel.offsetHeight; }
+  function previewHeight() { return els.panelTop.offsetHeight; }
+  // Where the sheet's top edge rests (in px from the top of the sheet's full-height position).
+  function restingY() { return els.panel.classList.contains('is-expanded') ? 0 : Math.max(0, sheetHeight() - previewHeight()); }
+
+  function setSheetY(y, animate) {
+    sheet.y = y;
+    els.panel.classList.toggle('is-dragging', !animate);
+    els.panel.style.transform = isPhoneSheet() ? 'translateY(' + Math.round(y) + 'px)' : '';
+    syncPanelHeight();
+  }
+
   function setExpanded(exp) {
     els.panel.classList.toggle('is-expanded', exp);
     document.body.classList.toggle('panel-expanded', exp && !els.panel.hidden);
     els.panelExpand.setAttribute('aria-expanded', String(exp));
     els.panelExpandLabel.textContent = exp ? 'Show less' : 'Show the full story';
-    syncPanelHeight();
+    // In preview the story is below the screen edge: keep it out of the tab order and screen readers.
+    els.panelBody.inert = !exp && isPhoneSheet();
+    // The blinking arrow shows whenever a site is in the peek view, inviting a swipe up.
+    els.panel.classList.toggle('show-swipe-hint', !exp);
+    if (!els.panel.hidden) setSheetY(restingY(), true);
   }
 
+  // --panel-h: how much of the sheet is on screen (keeps the compass and scale above it).
   function syncPanelHeight() {
-    var h = els.panel.hidden || DESKTOP_QUERY.matches ? 0 : els.panel.offsetHeight;
+    var h = 0;
+    if (!els.panel.hidden && isPhoneSheet()) h = Math.max(0, sheetHeight() - (sheet.y == null ? restingY() : sheet.y));
     document.documentElement.style.setProperty('--panel-h', h + 'px');
   }
 
   function openPanel(i, opts) {
     opts = opts || {};
-    var wasOpen = !els.panel.hidden;
-    if (!wasOpen) state.lastFocus = document.activeElement;
+    var wasOpen = !els.panel.hidden && !els.panel.classList.contains('is-closing');
+    if (!wasOpen && els.panel.hidden) state.lastFocus = document.activeElement;
+    clearTimeout(sheet.hideTimer);
+    els.panel.classList.remove('is-closing');
     state.current = i;
     renderStop(i);
-    els.panel.hidden = false;
-    if (!wasOpen) setExpanded(!!opts.expand);
+    if (els.panel.hidden) {
+      els.panel.hidden = false;
+      setSheetY(sheetHeight(), false);   // start just below the screen…
+      void els.panel.offsetHeight;        // (apply that before animating)
+    }
     document.body.classList.add('panel-open');
-    syncPanelHeight();
+    if (!wasOpen) setExpanded(!!opts.expand);   // …then slide up into place
+    else syncPanelHeight();
     updateHint();
     state.map.invalidateSize();
-    if (!wasOpen) (DESKTOP_QUERY.matches ? els.panelBody : els.panelExpand).focus({ preventScroll: true });
+    if (!wasOpen) moveFocus(DESKTOP_QUERY.matches ? els.panelBody : els.panelExpand);
   }
 
+  // opts.keepHash: leave the address alone; opts.silent: don't move focus;
+  // opts.noZoom: don't zoom the map back out (used when switching to another page).
   function closePanel(opts) {
     opts = opts || {};
-    if (els.panel.hidden) return;
-    els.panel.hidden = true;
-    setExpanded(false);
-    document.body.classList.remove('panel-open');
+    if (els.panel.hidden || els.panel.classList.contains('is-closing')) return;
+    var finish = function () {
+      els.panel.hidden = true;
+      els.panel.classList.remove('is-closing');
+      setExpanded(false);
+      syncPanelHeight();
+    };
+    document.body.classList.remove('panel-open', 'panel-expanded');
+    if (isPhoneSheet() && !opts.noZoom) {
+      els.panel.classList.add('is-closing');
+      setSheetY(sheetHeight(), true);       // slide down, then hide
+      sheet.hideTimer = setTimeout(finish, SHEET_ANIM_MS);
+    } else {
+      finish();
+    }
     Object.keys(state.markers).forEach(function (id) {
       var node = state.markers[id].getElement();
       if (node) node.classList.remove('is-active');
@@ -797,11 +892,99 @@
       history.pushState(null, '', location.pathname + location.search);
     }
     state.map.invalidateSize();
+    if (!opts.noZoom) zoomToAllSites();
     if (!opts.silent) {
       var m = closedStop && state.markers[closedStop.id];
-      var target = (m && m.getElement()) || state.lastFocus;
-      if (target && target.focus) target.focus();
+      moveFocus((m && m.getElement()) || state.lastFocus);
+      // Leaflet shows a pin's name when it gets focus; only keyboard users need that here.
+      if (m && !usingKeyboard) m.closeTooltip();
     }
+  }
+
+  // Back to the default view of every site, with the same glide as opening one.
+  function zoomToAllSites() {
+    if (!state.bounds || els.mapView.hidden) return;
+    state.fitting = true;
+    state.viewTouched = false;
+    state.map.flyToBounds(state.bounds, {
+      paddingTopLeft: [24, 24], paddingBottomRight: [24, 90],
+      maxZoom: state.tour.zoom || 17, duration: 0.6
+    });
+    state.fitting = false;
+  }
+
+  // Dragging the sheet: from its top (handle, name) at any time, and from the story itself when
+  // it's scrolled to the top and pulled down (like a phone's own sheets).
+  function initSheetDrag() {
+    var drag = null, suppressClick = false;
+
+    function start(y0) {
+      drag = { startY: y0, sheetY0: sheet.y == null ? restingY() : sheet.y, lastY: y0, lastT: Date.now(), v: 0, moved: false };
+    }
+    function move(y) {
+      if (!drag) return;
+      var dy = y - drag.startY;
+      if (!drag.moved && Math.abs(dy) < 6) return;
+      drag.moved = true;
+      var now = Date.now(), dt = Math.max(1, now - drag.lastT);
+      drag.v = 0.8 * ((y - drag.lastY) / dt) + 0.2 * drag.v;   // px per ms, smoothed; positive = down
+      drag.lastY = y; drag.lastT = now;
+      setSheetY(Math.min(sheetHeight(), Math.max(0, drag.sheetY0 + dy)), false);
+    }
+    function end() {
+      if (!drag) return;
+      var d = drag; drag = null;
+      if (!d.moved) return;                 // a tap: the click handlers deal with it
+      suppressClick = true; setTimeout(function () { suppressClick = false; }, 0);
+      var H = sheetHeight(), previewY = Math.max(0, H - previewHeight()), y = sheet.y;
+      var target;
+      if (d.v > 0.6) target = y < previewY - 40 ? 'preview' : 'close';        // flick down
+      else if (d.v < -0.6) target = 'expanded';                                 // flick up
+      else if (y > previewY + previewHeight() * 0.5) target = 'close';
+      else target = y < previewY / 2 ? 'expanded' : 'preview';
+      if (target === 'close') { closePanel(); return; }
+      var exp = target === 'expanded', changed = exp !== els.panel.classList.contains('is-expanded');
+      setExpanded(exp);                     // animates to the resting position
+      if (changed && state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, SHEET_ANIM_MS);
+    }
+
+    // The top of the sheet: pointer events (touch, pen, or mouse).
+    els.panelTop.addEventListener('pointerdown', function (e) {
+      if (!isPhoneSheet() || e.target.closest('#panel-close') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      start(e.clientY);
+    });
+    els.panelTop.addEventListener('pointermove', function (e) {
+      move(e.clientY);
+      // Capture the pointer only once it's really dragging. Capturing on touch-down would send a
+      // plain tap's click to the sheet's top instead of the handle button, so tapping the bar
+      // wouldn't toggle the sheet.
+      if (drag && drag.moved && !drag.captured && els.panelTop.setPointerCapture) {
+        drag.captured = true;
+        try { els.panelTop.setPointerCapture(e.pointerId); } catch (err) { /* not capturable; fine */ }
+      }
+    });
+    els.panelTop.addEventListener('pointerup', end);
+    els.panelTop.addEventListener('pointercancel', end);
+    els.panelTop.addEventListener('click', function (e) { if (suppressClick) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+    // The story: only a downward pull that starts at the top of its scroll becomes a drag.
+    var touch = null;
+    els.panelBody.addEventListener('touchstart', function (e) {
+      touch = isPhoneSheet() && els.panelBody.scrollTop <= 0 ? e.touches[0].clientY : null;
+    }, { passive: true });
+    els.panelBody.addEventListener('touchmove', function (e) {
+      if (touch == null) return;
+      var y = e.touches[0].clientY;
+      if (!drag) {
+        if (y - touch > 6 && els.panelBody.scrollTop <= 0) start(touch);
+        else if (touch - y > 6) { touch = null; return; }      // scrolling up through the story
+        else return;
+      }
+      e.preventDefault();
+      move(y);
+    }, { passive: false });
+    els.panelBody.addEventListener('touchend', function () { touch = null; end(); });
+    els.panelBody.addEventListener('touchcancel', function () { touch = null; end(); });
   }
 
   function initPanel() {
@@ -811,35 +994,33 @@
     els.panelExpand.addEventListener('click', function (e) {
       e.stopPropagation();
       setExpanded(!els.panel.classList.contains('is-expanded'));
-      if (state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, 60);
+      if (state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, SHEET_ANIM_MS);
     });
     // Tapping anywhere on the preview (not the close button) opens the full story.
     els.panelTop.addEventListener('click', function (e) {
       if (DESKTOP_QUERY.matches || els.panel.classList.contains('is-expanded')) return;
       if (e.target.closest('#panel-close')) return;
       setExpanded(true);
+      if (state.current >= 0) setTimeout(function () { flyToStop(state.stops[state.current]); }, SHEET_ANIM_MS);
     });
-    if ('ResizeObserver' in window) new ResizeObserver(syncPanelHeight).observe(els.panel);
+    // If the sheet's size changes (fonts loading, rotating the phone), keep it resting in place.
+    if ('ResizeObserver' in window) new ResizeObserver(function () {
+      if (!els.panel.hidden && !els.panel.classList.contains('is-dragging') && !els.panel.classList.contains('is-closing')) setSheetY(restingY(), false);
+    }).observe(els.panel);
+    var onLayoutChange = function () {
+      els.panelBody.inert = isPhoneSheet() && !els.panel.classList.contains('is-expanded');
+      if (!els.panel.hidden) setSheetY(restingY(), false);
+    };
+    if (DESKTOP_QUERY.addEventListener) DESKTOP_QUERY.addEventListener('change', onLayoutChange);
     // Keep the compass and scale clear of the hint card if its height changes (fonts loading, text wrapping).
     if ('ResizeObserver' in window) new ResizeObserver(function () {
       if (!els.mapHint.hidden) document.documentElement.style.setProperty('--hint-h', els.mapHint.offsetHeight + 'px');
     }).observe(els.mapHint);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHint);
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !els.panel.hidden) closePanel();
+      if (e.key === 'Escape' && !els.panel.hidden && !els.navMenu.classList.contains('is-open')) closePanel();
     });
-    // Swipe up/down on the handle area to expand/collapse the sheet.
-    var startY = null;
-    els.panel.querySelector('.panel-top').addEventListener('touchstart', function (e) { startY = e.touches[0].clientY; }, { passive: true });
-    els.panel.querySelector('.panel-top').addEventListener('touchend', function (e) {
-      if (startY == null) return;
-      var dy = e.changedTouches[0].clientY - startY;
-      startY = null;
-      var exp = els.panel.classList.contains('is-expanded');
-      if (dy < -40 && !exp) setExpanded(true);
-      else if (dy > 40 && exp) setExpanded(false);
-      else if (dy > 40 && !exp) closePanel();
-    });
+    initSheetDrag();
   }
 
   /* ---------------- Deep links ---------------- */
@@ -877,12 +1058,13 @@
       els.splash.hidden = true;
       Array.prototype.forEach.call(videos, function (v) { v.pause(); v.removeAttribute('src'); v.load(); });  // stop downloading
     }, 600);
-    if (hadFocus && !els.introView.hidden) els.introCta.focus({ preventScroll: true });
+    if (hadFocus && !els.introView.hidden) moveFocus(els.introCta);
   }
 
   // The team's splash animation, on the home page only. Visitors arriving from a site link or
   // QR code never see it (or download it), and neither do visitors who've asked their device for
   // reduced motion or to save data. Tapping or clicking anywhere, or pressing Escape, Enter, or Space, ends it.
+  // If nobody does, it pauses on the logo and names with a slow-blinking "Tap to continue".
   // Calls done() when it has ended or been skipped, or right away if it doesn't play.
   function playSplashVideo(done) {
     var finished = false;
@@ -943,7 +1125,8 @@
         var sw = vw - 2 * CROP, sh = vh - 2 * CROP;
         var k = Math.min(W / sw, H / sh), dw = sw * k, dh = sh * k, dx = (W - dw) / 2, dy = (H - dh) / 2;
         ctx.drawImage(video, CROP, CROP, sw, sh, dx, dy, dw, dh);
-        if (!fill || frames++ % 10 === 0) {
+        if (!held && video.currentTime >= SPLASH_HOLD_AT) hold();
+        if (!fill || (!held && frames++ % 10 === 0)) {
           try { fill = sampleFill(dx, dy, dw, dh); }
           catch (e) { canvas.remove(); return; }   // can't read pixels: show the plain video instead
         }
@@ -970,8 +1153,21 @@
     var startTimer = setTimeout(fallBack, SPLASH_VIDEO_START_MS);
     video.addEventListener('playing', function () { clearTimeout(startTimer); }, { once: true });
     video.addEventListener('error', fallBack);
-    video.addEventListener('ended', finish);
-    setTimeout(finish, SPLASH_VIDEO_MAX_MS);
+    // Hold on the logo and names, and invite the visitor to continue. (The paint loop above catches
+    // the hold point to the frame; timeupdate and ended are backups if the canvas isn't in use.)
+    var held = false;
+    function hold() {
+      if (finished || held) return;
+      held = true;
+      video.pause();
+      clearTimeout(capTimer);
+      var cont = el('button', { type: 'button', 'class': 'splash-continue' }, 'Tap to continue');
+      els.splash.appendChild(cont);
+      moveFocus(cont);
+    }
+    video.addEventListener('timeupdate', function () { if (video.currentTime >= SPLASH_HOLD_AT) hold(); });
+    video.addEventListener('ended', function () { video.currentTime = SPLASH_HOLD_AT; hold(); });
+    var capTimer = setTimeout(hold, SPLASH_VIDEO_MAX_MS);   // if it stalls, still wait for the tap
     var p = video.play();
     if (p && p.catch) p.catch(fallBack);
 
@@ -1035,12 +1231,9 @@
       els.viewListBtn.addEventListener('click', function () { setView(els.listView.hidden ? 'list' : 'map'); });
       els.peopleBtn.addEventListener('click', function () { setView(els.peopleView.hidden ? 'people' : 'map'); });
       els.aboutBtn.addEventListener('click', function () { setView(els.aboutView.hidden ? 'about' : 'map'); });
-      els.homeBtn.addEventListener('click', function () { setView('intro'); });
+      initMenu();
       els.brandHome.addEventListener('click', function () { setView('intro'); });
       els.introCta.addEventListener('click', function () { setView('map'); });
-      els.introList.addEventListener('click', function () { setView('list'); });
-      els.introPeople.addEventListener('click', function () { setView('people'); });
-      els.introAbout.addEventListener('click', function () { setView('about'); });
       window.addEventListener('hashchange', handleHash);
 
       // Deep links (QR codes, shared links) go straight to their stop; the home page starts at the intro.

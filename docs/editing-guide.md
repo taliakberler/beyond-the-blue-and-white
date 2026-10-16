@@ -43,7 +43,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 |---|---|
 | `tagline`, `description` | The project's tagline and one-paragraph description, shown at the top |
 | `context`, `prompt` | Where the project was made, and the team's prompt |
-| `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…" }`. Leave `role` as `""` until roles are decided; it appears under the name once filled in. |
+| `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…", "link": "…" }`. Each shows as a sky-blue name card. `role` appears under the name once filled in (leave it `""` until then). `link` is optional: a LinkedIn or portfolio address makes the whole card a link, labeled "LinkedIn ↗" (for linkedin.com addresses) or "Portfolio ↗". |
 | `advisors` | `description` (who they are and how they helped) and `people` (same format as `team`) |
 | `credits` | Short lines crediting the map, data, and software |
 | `links` | `{ "title": "…", "url": "…" }`, shown at the end of the credits |

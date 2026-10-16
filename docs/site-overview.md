@@ -24,11 +24,12 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 ### Splash and intro (home)
 
-- On the home page, the **splash screen** plays the team's opening animation (about 15 seconds; logo, then names filling in behind it). Visitors can skip it at any time by tapping or clicking anywhere, or pressing Escape, Enter, or Space. There's no Skip button. The home screen opens once the animation ends or is skipped (and the map's data has loaded).
+- On the home page, the **splash screen** plays the team's opening animation (about 15 seconds; logo, then names filling in behind it). Near the end it pauses on the logo with all the names behind it, and a slow-blinking **TAP TO CONTINUE** appears. Tapping or clicking anywhere (or pressing Escape, Enter, or Space) opens the home screen, at any point during the animation too. There's no Skip button.
 - The animation is left out, and a navy splash with the still logo shows briefly instead, for visitors who've turned on **reduce motion** or **data saver**, and if the phone blocks autoplay (for example, iPhone Low Power Mode). The video has no sound.
-- On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, a coral **Explore the map** button, and links to **See all sites** and **About this project**. The wording is `tour.welcome` in `data/stops.json`.
+- On the home address, the **intro screen** follows. It shows the tagline, the stacked logo, the project description, and a coral **EXPLORE THE MAP** button near the bottom of the screen. The wording is `tour.welcome` in `data/stops.json`.
 - **Site links and QR codes skip the intro** and open their site directly. The splash is skipped for them too, so visitors standing at a site get there as fast as possible.
-- The **Home** button (⌂) or the logo in the header returns to the intro.
+- The logo in the header returns to the intro.
+- On phones, the **☰ menu** in the header opens Map, All sites, People, and About. On desktop those links show in the header.
 
 ### Map
 
@@ -44,8 +45,9 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 ### Site preview and full story
 
-- **Tapping a pin on a phone** opens a short navy **preview** at the bottom: the site's name (for example "STEELE BUILDING") and its era. The map stays visible, with the site centered above it.
-- **Tap the preview, swipe it up, or press its handle** to open the **full story**, which fills the screen below the header. Swiping down returns to the preview, and swiping down again (or ⊗) closes it.
+- **Tapping a pin** turns it coral with a white icon. On a phone, a short navy **preview** slides up from the bottom: the site's name (for example "STEELE BUILDING") and its era. The map stays visible, with the site centered above it. While it's in this peek view, a blinking arrow above the handle invites a swipe up.
+- **Drag the preview up, tap it, or tap the white bar** to open the **full story**, which fills the screen below the header. The sheet follows the finger and snaps into place when let go. Dragging down (or tapping the white bar) returns to the preview; dragging down again (or ⊗) closes it. In the full story, pulling down while scrolled to the top also drags the sheet.
+- **Closing a site** (⊗, dragging it away, Escape, or Back) zooms the map back out to show every site.
 - **Arriving from a site link or QR code** opens the full story straight away.
 - **On desktop**, sites open as a 420px side panel with the full story.
 - The full story contains, in order:
@@ -59,7 +61,7 @@ The screens follow the team's wireframe (see [design-and-styles.md](design-and-s
 
 ### All sites
 
-The **All sites** button (⋮≡ on phones) shows every site in order as a card (pin icon, name, era, summary). Tapping a card opens that site on the map.
+**All sites** (in the ☰ menu on phones) shows every site in order as a card (pin icon, name, era, summary). Tapping a card opens that site on the map.
 
 ### People page
 
@@ -69,7 +71,7 @@ The page builds itself from the sites' `people` lists, so nothing extra needs ed
 
 ### About page
 
-The **ⓘ** button (or "About" on desktop, or the address `…/#about`) opens the About page:
+**About** (in the ☰ menu on phones, or the address `…/#about`) opens the About page:
 - the project's tagline and description
 - where it was made (the Visual Discovery Conference 2026 at UNC Chapel Hill) and the team's prompt (highlight Black history at UNC Chapel Hill)
 - credits for the team, coaches, and community advisors, then the map and software credits and a link to the project's code and documentation
@@ -123,8 +125,8 @@ All paths are **relative** (`data/stops.json`, not `/data/stops.json`), so the s
 
 | Area | What's built in |
 |---|---|
-| **Keyboard** | Every control is reachable with Tab. Site pins can be focused and opened with Enter or Space; on the map, the amber focus ring has a navy surround so it shows against the light illustration. Escape closes the site panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
-| **Focus** | A thick orange focus ring on every focused element. Opening a site moves focus into its panel; closing returns focus to that site's marker. |
+| **Keyboard** | Every control is reachable with Tab. Site pins can be focused and opened with Enter or Space; the focus ring is fog with a navy surround, so it shows on both the navy interface and the light map. Escape closes the site panel. Arrow keys move through the image gallery. A "Skip to tour content" link is the first focusable item. |
+| **Focus** | A thick fog focus ring on every element focused with the keyboard. Opening a site moves focus into its panel; closing returns focus to that site's marker. When the page moves focus itself for a mouse or touch user (e.g. to "Explore the map" after the splash), no ring is shown. |
 | **Screen readers** | Pins are announced as buttons with the site's name ("Lenoir Hall"). The splash announces "Loading the map…". The header's Map, All sites, and About buttons report which is active (`aria-pressed`). The site sheet's handle reports whether the full story is open (`aria-expanded`). The gallery is labeled as a carousel with "Image 1 of 2". Status messages (location, offline, errors) are read aloud through a live region. |
 | **Images** | Every image has alt text from `stops.json`, and images that fail to load are replaced by a labeled text box. |
 | **Text** | 17px base size in `rem` units, so it follows browser text-size settings. Zooming the page isn't blocked. |

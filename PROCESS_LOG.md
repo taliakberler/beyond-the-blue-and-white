@@ -1013,3 +1013,65 @@ The pasted images arrived without file names, so the originals were found in the
 
 ### Verified
 - Firefox (Playwright) and Google Chrome, 1280×800 and 375×812: canvas pixels and on-screen pixels beside and inside the frame identical (Firefox 19,41,72; Chrome 19,41,74) at 3 s and 5.6 s. Tapping skips; no errors.
+
+## 2026-10-15 — Home screen, menu, focus ring, draggable site sheet, selected pins
+
+**Directed by:** Talia Berler (a list of eight edits; plus three things to preview before deciding)
+
+### What changed
+1. **Home screen:** removed the "See all sites", "People", and "About" links.
+2. **"EXPLORE THE MAP"** now sits low on the screen (within thumb reach) and is in capitals.
+3. **Focus ring:** no longer yellow. It's fog with a thin navy surround, and it only appears for keyboard use. When the page moves focus itself (e.g. to "Explore the map" after the splash, or back to a pin after closing a site) for a mouse or touch user, no ring and no pin label appear.
+4. **Header:** on phones, the List, People, and About icons are now in a ☰ menu (with Map). On desktop the text links stay in the header. The Home icon is gone; the logo does the same thing.
+5. **Site sheet (phones):** slides up when a site opens; follows the finger when dragged (from its top, or from the story when it's scrolled to the top) and snaps to preview, full story, or closed, with flicks too. A blinking arrow above the handle invites a swipe up, until the visitor first opens a full story.
+6. **Closing a site** zooms the map back out to the default view of every site.
+7. **Selected pin:** coral fill (the brand's red) with the icon turned white, done in CSS. No white icon files were needed: the three icons in use are single-color shapes, and the four two-tone icons stay readable in all white.
+8. **Pin drop shadows:** two layers (a tight outline shadow and a soft lift).
+- New `tools/design-options.html` shows the options to decide on: three ways to end the opening animation (Continue button, slow-blinking "Tap to continue", "Tap to explore" with an arrow) and four layouts for the team names on the About page.
+
+### Decisions and reasons
+- **Decision:** keep a keyboard focus ring (recolored, keyboard-only) instead of removing it entirely. **Why:** without it, keyboard users can't see where they are (WCAG 2.4.7); the yellow ring Talia saw came from the page moving focus for mouse and touch users, which no longer shows a ring.
+- **Decision:** the hamburger is phones only. **Why:** desktop has room for the four text links, which are quicker to use than a menu.
+- **Decision:** "red" = the brand coral, `#d85c54`. **Why:** it's the palette's red, already used for the main button and "you are here".
+- **Decision:** the sheet is always full height and moved with a transform. **Why:** so it can follow the finger smoothly between preview and full story; the story is made `inert` while in preview so it's skipped by keyboard and screen readers.
+
+### Verified
+- Phone (375px): home screen layout; menu opens, lists four links, closes on choosing, tapping outside, or Escape; opening a pin shows the coral pin, the slide-up sheet, and the arrow; real mouse drags in the preview: preview → full story, full story → preview, preview → closed; closing zooms out with no stray label or ring.
+- Desktop (1280px): header links, no menu button; side panel opens; closing zooms out. No console errors.
+- Note: the browser tool's synthetic touch events don't reach the page, so dragging was tested with real mouse drags; swipes on a physical phone still need checking.
+
+## 2026-10-15 — Splash ends on "Tap to continue"; About page name cards
+
+**Directed by:** Talia Berler (chose option B for the splash ending, shown over the logo and names; chose option D, name cards, for the About page, with her role and LinkedIn as the first link)
+
+### What changed
+- The opening animation now pauses at 12.2 s, on the logo with every name behind it, and shows a slow-blinking **TAP TO CONTINUE**. Tapping anywhere (or Escape, Enter, or Space) opens the home screen, as it already did during the animation. The home screen no longer opens on its own.
+- About page: team, coaches, and advisors are sky-blue name cards (option D). A card with a `link` is itself the link, labeled "LinkedIn ↗" or "Portfolio ↗", and opens in a new tab.
+- Talia Berler: role "Web Developer & Digital Producer", link https://www.linkedin.com/in/talia-berler/.
+
+### Decisions and reasons
+- **Decision:** pause at 12.2 s. **Why:** measured frames showed every name present through 12.5 s and fading from about 13 s; the logo disappears by 14.5 s.
+- **Decision:** the 20-second safety timer is cancelled once the animation pauses. **Why:** the visitor chooses when to continue; the timer only guards against a video that stalls before reaching the pause.
+- **Decision:** cards for coaches and advisors too. **Why:** consistent, and ready for their links.
+
+### Verified
+- Phone (375px): the animation pauses on the logo and names with "TAP TO CONTINUE"; a tap opens the home screen. About page: 13 cards; Talia's card shows the role and "LinkedIn ↗", links to the profile in a new tab, and has a screen-reader label naming the role and destination.
+
+## 2026-10-15 — Splash fallback, credits, arrow every time, white bar collapses the sheet
+
+**Directed by:** Talia Berler (testing on her phone; credit corrections; keep the options page for the process docs)
+
+### What changed
+- **Splash:** if the video stalls before its pause point, the 20-second safety timer now shows "Tap to continue" instead of opening the home screen, so the splash always waits for a tap.
+- **Credits:** map illustration by **Trinity Gill** ("Illustrated map: Trinity Gill" in the map's credit line); opening animation and icons by **Victor Morgan**. The logo stays credited to the team. Updated on the About page, the README, and docs/software-and-credits.md.
+- **Arrow on the site sheet:** shows every time a site is in the peek view (before, only until the first full story was opened, so it seemed to stop after the first site).
+- **White bar:** tapping it in the full story drops the sheet back to the peek view (and opens the full story from the peek view).
+- `tools/design-options.html` is kept for the process record, marked with the decisions; listed in the README with the basemap comparison page.
+
+### Decisions and reasons
+- **Finding (white bar):** the drag code "captured" the finger on touch-down, which sends a plain tap's click to the sheet's top instead of the bar's button, so the tap was ignored when the sheet was fully open. Now the finger is captured only once it's actually dragging.
+- **Finding (splash):** Talia's phone didn't open the home screen on its own after the animation. In a phone-sized Chrome the live version did (at about 15 s), so it's specific to her phone's browser and couldn't be reproduced here. The new ending waits for a tap by design, and no longer depends on the video reporting that it ended.
+
+### Verified
+- Phone-sized Chrome (iPhone 13 emulation, real taps and touch drags): the arrow shows for each of three sites opened in turn; tapping the bar toggles full story ↔ peek; swipe up opens, drag down returns to peek, flick down closes and zooms the map out. No page errors.
+
