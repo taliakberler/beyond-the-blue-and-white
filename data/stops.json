@@ -133,7 +133,11 @@
         ]
       },
       "credits": [
-        "Main source for the sites’ history: The Black and Carolina Blue Tour, UNC-Chapel Hill.",
+        {
+          "text": "Main source for the sites’ history: The Black and Carolina Blue Tour, UNC-Chapel Hill.",
+          "linkText": "The Black and Carolina Blue Tour",
+          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        },
         "Map illustration by Trinity Gill.",
         "Opening animation and icons by Victor Morgan.",
         "Surrounding streets © OpenStreetMap contributors.",
@@ -141,10 +145,6 @@
         "Map software: Leaflet."
       ],
       "links": [
-        {
-          "title": "The Black and Carolina Blue Tour (UNC-Chapel Hill)",
-          "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
-        },
         {
           "title": "Project code, documentation, and process log",
           "url": "https://github.com/taliakberler/beyond-the-blue-and-white"

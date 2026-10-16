@@ -1194,3 +1194,10 @@ The pasted images arrived without file names, so the originals were found in the
 **Directed by:** Talia Berler
 
 - The person icon (shown on Key People cards without an image) no longer has the "PLACEHOLDER" banner; the silhouette fills the space. Renamed from `person-placeholder.svg` to `images/person-icon.svg` (references updated, including earlier log entries), so browsers don't show a cached copy with the banner.
+
+## 2026-10-16 — Linked credit for the Black and Carolina Blue Tour
+
+**Directed by:** Talia Berler
+
+- On the About page, "The Black and Carolina Blue Tour" in the first credit is now a link to the StoryMap; the separate link to it below was removed. Credits can now contain a link (`{ text, linkText, url }`).
+- README brought up to date: team roles and LinkedIn/portfolio links (a table matching the About page), the tagline as on the site, sources and photo-permission status, photo credits, `npm run photos`, and the `media/` and `tools/` folders.

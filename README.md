@@ -1,6 +1,6 @@
 # Beyond the Blue and White
 
-### Every site has a story.
+### Every Site Has a Story
 
 An interactive campus storytelling experience that connects people to the Black histories, contributions, and communities that have shaped UNC Chapel Hill through location-based discovery, layered digital storytelling, and thoughtfully designed campaign materials.
 
@@ -59,7 +59,7 @@ Visitors can start at any site. Every sign is a way in.
 
 ## Current status
 
-> **Status:** all five sites (the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery) have the team's researched text, dates, Key People, photos, and credits, from the team's copy-and-credit documents (October 2026). **Permission to publish most photos hasn't been confirmed yet** (see [docs/image-permissions.md](docs/image-permissions.md)), and only the Unsung Founders Memorial lists written sources so far.
+> **Status:** all five sites (the Unsung Founders Memorial, Steele Building, Lenoir Hall, the Pit, and Old Chapel Hill Cemetery) have the team's researched text, dates, Key People, photos, and credits, from the team's copy-and-credit documents (October 2026). Every site lists [The Black and Carolina Blue Tour](https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4) (UNC-Chapel Hill) as its main source; further text sources are still to come for four of the sites. **Permission to publish the archival photos hasn't been confirmed yet** (see [docs/image-permissions.md](docs/image-permissions.md)); the team's own photos are cleared.
 
 See [docs/content-guidelines.md](docs/content-guidelines.md) for how content is prepared and sourced.
 
@@ -73,7 +73,7 @@ See [docs/content-guidelines.md](docs/content-guidelines.md) for how content is 
 | [docs/design-and-styles.md](docs/design-and-styles.md) | The wireframe-based design: color tokens, typography, screens, components, logos and icons, and contrast measurements |
 | [docs/software-and-credits.md](docs/software-and-credits.md) | Every library, map service, and data source used, with licenses and required credits |
 | [tools/](tools/) | Comparison pages kept for the process record: [basemap options](tools/basemap-preview.html) and [design options](tools/design-options.html) (splash ending, About page names) |
-| [docs/image-permissions.md](docs/image-permissions.md) | **Permission to publish each photo: not yet confirmed.** Checklist of every image, its holder, and its status |
+| [docs/image-permissions.md](docs/image-permissions.md) | **Publishing permission is confirmed only for the team's own photos.** Checklist of every image, its holder, and its status |
 | [PROCESS_LOG.md](PROCESS_LOG.md) | Dated record of every decision and code change, kept for publication |
 
 ## Quick start
@@ -87,6 +87,7 @@ python3 -m http.server 8080
 Then open <http://localhost:8080/>.
 
 - **Edit the map's content:** change `data/stops.json` (see the [editing guide](docs/editing-guide.md)).
+- **Update the site photos:** edit `scripts/site-photos.json`, then run `npm run photos` (after `npm install`).
 - **Generate QR codes:** run `npm install` once, then `npm run qr`.
 - **Publish:** push to `main`. GitHub Pages redeploys automatically.
 
@@ -100,11 +101,13 @@ js/app.js              App logic
 js/vendor/leaflet/     Leaflet map library (bundled copy)
 data/stops.json        All map content and settings
 tiles/team-map/        The team's illustrated campus map, as web-map tiles (the site's basemap)
-images/                Site photos (images/<site-id>/), Key People images (images/people/)
+images/                Site photos (images/<site-id>/), Key People images (images/people/), person icon
+media/                 The team's opening animation (portrait and 16:9 web copies)
 images/logo/           The team's logo files (SVG)
 images/icons/          The team's icons: source/ (as delivered) and pins/ (map-pin versions)
 qr/                    Generated QR codes and printable sign sheet
-scripts/               QR generator and helper scripts
+scripts/               QR codes, photo import (site-photos.json), map tiles, video encoding, and other helpers
+tools/                 Comparison pages kept for the process record
 docs/                  Project documentation
 PROCESS_LOG.md         Record of decisions and changes
 ```
@@ -115,18 +118,19 @@ PROCESS_LOG.md         Record of decisions and changes
 
 ## Team and credits
 
-*Roles to be added.*
-
 **Team** (alphabetical by last name)
-- Talia Berler
-- Anderson Day
-- Trinity Gill
-- Jori Husted
-- Victor Morgan
-- Leticia Oteng
-- Andrea Perez
-- Cayla Quintero
-- Gwyneth Shoemaker
+
+| Name | Role | Links |
+|---|---|---|
+| Talia Berler | GIS, Web Dev, UI/UX, Research | [LinkedIn](https://www.linkedin.com/in/talia-berler/) · [Portfolio](https://taliakberler.github.io/) |
+| Anderson Day | Brand Design, Mockups | [LinkedIn](https://www.linkedin.com/in/mary-anderson-day-99b44a443/) |
+| Trinity Gill | Print Assets | [LinkedIn](https://www.linkedin.com/in/trinity-gill-672bbb2a2/) |
+| Jori Husted | Brand Design, Socials, Mockups | [LinkedIn](https://www.linkedin.com/in/jori-husted/) |
+| Victor Morgan | Brand Design, Motion Graphics, Icons | [LinkedIn](https://www.linkedin.com/in/victor-morgan-878605164/) · [Portfolio](https://victormorgan.myportfolio.com/) |
+| Leticia Oteng | UI/UX | [LinkedIn](https://www.linkedin.com/in/loteng/) |
+| Andrea Perez | UI/UX, Research | [LinkedIn](https://www.linkedin.com/in/andreaperezdesign/) · [Portfolio](https://andreaperezdesign.myportfolio.com/) |
+| Cayla Quintero | Print Assets | [Portfolio](https://authory.com/CaylaQuintero) |
+| Gwyneth Shoemaker | Project Manager, Brand Guidelines | [LinkedIn](https://www.linkedin.com/in/gwyneth-shoemaker/) |
 
 **Coaches** (alphabetical by last name)
 - Adonis Durado
@@ -136,10 +140,10 @@ PROCESS_LOG.md         Record of decisions and changes
 - Nicholas Graham
 - Samuel Scarborough
 
-The same credits appear on the site's About page (**About** in the menu, or [`#about`](https://taliakberler.github.io/beyond-the-blue-and-white/#about)). To add roles or names, edit `tour.about` in `data/stops.json`.
+The same credits appear on the site's About page (**About** in the menu, or [`#about`](https://taliakberler.github.io/beyond-the-blue-and-white/#about)). To add or change names, roles, or links, edit `tour.about` in `data/stops.json` (and this list).
 
 ### Map and software
 
-The sites' history draws mainly on [The Black and Carolina Blue Tour](https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4) by UNC-Chapel Hill. The campus map is illustrated by Trinity Gill; the opening animation and icons are by Victor Morgan. Surrounding streets are © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, and building names come from UNC Chapel Hill's public GIS service. Mapping is by [Leaflet](https://leafletjs.com). The full list of software and licenses is in [docs/software-and-credits.md](docs/software-and-credits.md).
+The sites' history draws mainly on [The Black and Carolina Blue Tour](https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4) by UNC-Chapel Hill. The campus map is illustrated by Trinity Gill; the opening animation and icons are by Victor Morgan. The team's own site photos are by Jori Husted, Leticia Oteng, and Andrea Perez; archival images are credited on each photo. Surrounding streets are © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, and building names come from UNC Chapel Hill's public GIS service. Mapping is by [Leaflet](https://leafletjs.com). The full list of software and licenses is in [docs/software-and-credits.md](docs/software-and-credits.md).
 
 The site's code was developed with help from Claude Code, an AI coding assistant. No historical content was generated by AI: the sites' text, dates, people, captions, and credits were researched and written by the project team, and placed on the site from their documents (see [PROCESS_LOG.md](PROCESS_LOG.md)).

@@ -731,7 +731,19 @@
       var cr = el('section', { 'class': 'about-group', 'aria-labelledby': 'about-credits' });
       cr.appendChild(el('h3', { id: 'about-credits' }, 'Credits'));
       var ul = el('ul', { 'class': 'about-credits' });
-      (a.credits || []).forEach(function (c) { ul.appendChild(el('li', null, c)); });
+      // A credit is plain text, or { "text", "linkText", "url" } to make part of the text a link.
+      (a.credits || []).forEach(function (c) {
+        var li = el('li');
+        var text = typeof c === 'string' ? c : String(c.text || '');
+        var at = c && c.linkText && c.url ? text.indexOf(c.linkText) : -1;
+        if (at < 0) li.textContent = text;
+        else {
+          li.appendChild(document.createTextNode(text.slice(0, at)));
+          li.appendChild(el('a', { href: c.url, target: '_blank', rel: 'noopener' }, c.linkText));
+          li.appendChild(document.createTextNode(text.slice(at + c.linkText.length)));
+        }
+        ul.appendChild(li);
+      });
       (a.links || []).forEach(function (l) {
         var li = el('li');
         li.appendChild(el('a', { href: l.url, target: '_blank', rel: 'noopener' }, l.title || l.url));
