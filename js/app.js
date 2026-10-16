@@ -13,15 +13,15 @@
   var DEFAULT_ZOOM_OUT = 0.5;       // the starting view is this much further out than "just fits every site"
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   // The team's opening animation: a portrait version for phones and a 16:9 version for wider
-  // screens. Each pauses at holdAt (seconds), just after the last names finish sliding in, and
-  // waits for "Tap to continue". (Measured frame by frame: the names settle at about 8.5 s in the
-  // portrait version and 6.75 s in the wide one; nothing changes after that until they fade out.)
+  // screens. Each pauses at holdAt (seconds), as soon as the names stop moving, and waits for
+  // "Tap to continue". (Measured frame by frame: visible motion ends at about 6.1 s in the portrait
+  // version and 2.3 s in the wide one; after that only a faint, invisible shimmer until they fade out.)
   var SPLASH_VIDEOS = {
-    tall: { src: 'media/splash.mp4', holdAt: 8.6 },
-    wide: { src: 'media/splash-wide.mp4', holdAt: 6.8 }
+    tall: { src: 'media/splash.mp4', holdAt: 6.2 },
+    wide: { src: 'media/splash-wide.mp4', holdAt: 2.4 }
   };
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
-  var SPLASH_CONTINUE_DELAY_MS = 400;    // "Tap to continue" appears this long after the animation pauses
+  var SPLASH_CONTINUE_DELAY_MS = 1000;   // "Tap to continue" appears this long after the animation ends
   var SPLASH_VIDEO_MAX_MS = 20000;   // if the video stalls before the hold point, show "Tap to continue" anyway
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
   var ICON_DIR = 'images/icons/pins/';

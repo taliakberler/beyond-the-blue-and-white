@@ -1258,3 +1258,16 @@ The pasted images arrived without file names, so the originals were found in the
 
 - A note under the All sites and People headings: "This website is a work in progress. There are many significant sites and individuals whose stories have yet to be included here." Navy box with a coral left edge and info icon; the text is `tour.disclaimer` in `data/stops.json` (empty = hidden).
 
+
+## 2026-10-16 — Tinnen & Prear card image: border trimmed
+
+**Directed by:** Talia Berler ("remove the white line at the bottom")
+
+- The duotone on the "Marsha Tinnen & Barbara Prear" card had a white strip and a dark band along its bottom edge (from the source file's border). Cropped them off, kept it square (a few pixels trimmed from each side), and saved it as `images/people/marsha-tinnen-barbara-prear-duotone.jpg` (new name so browsers don't show the cached old one).
+
+## 2026-10-16 — "Tap to continue" one second after the animation ends
+
+**Directed by:** Talia Berler (it appeared about 4 s after the animation ended on desktop and 2 s on mobile; "I want only a one second delay")
+
+- Re-measured both videos frame by frame, counting only pixels that visibly change: the motion ends at about 6.1 s (portrait) and 2.3 s (wide). The earlier hold points (8.6 s and 6.8 s) had been set by a faint shimmer in the names that isn't visible.
+- The animation now pauses at 6.2 s (portrait) and 2.4 s (wide), and "Tap to continue" starts fading in 1 s later (`SPLASH_CONTINUE_DELAY_MS`, was 0.4 s).

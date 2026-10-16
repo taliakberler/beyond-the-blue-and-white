@@ -153,7 +153,7 @@ The numbers are the width, height, and bitrate (portrait: 720×1280 at 1.4 Mbps,
 
 The space around the video is filled automatically with the video's own background color (see [design-and-styles.md](design-and-styles.md#motion)). That color is read from a thin strip along the top of the frame, so keep the top ~1.5% of a new video plain background.
 
-Each version pauses at a set time, with the logo and every name on screen, and waits for "Tap to continue". If a new export's timing changes, update `holdAt` (seconds) for that version in `SPLASH_VIDEOS` at the top of `js/app.js`: pick a moment just before the names start to fade. To turn the animation off, set both `src` values to `''`.
+Each version pauses at a set time, with the logo and every name on screen, and waits for "Tap to continue". If a new export's timing changes, update `holdAt` (seconds) for that version in `SPLASH_VIDEOS` at the top of `js/app.js`: pick the moment the names stop moving ("Tap to continue" appears 1 s later; that delay is `SPLASH_CONTINUE_DELAY_MS`). To turn the animation off, set both `src` values to `''`.
 
 ---
 
