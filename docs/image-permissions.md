@@ -37,6 +37,7 @@
 | `images/people/wilson-caldwell-duotone.jpg` | Old Chapel Hill Cemetery (Key People: Wilson Swain Caldwell) | `4_3_OCHCementery_CaldwellWilson_DuoTone(1).jpg` | North Carolina Collection Photographic Archives, The Wilson Library, University of North Carolina at Chapel Hill | ☐ Pending | | Team's duotone of an archival photo |
 | `images/people/zora-neale-hurston-duotone.jpg` | Unsung Founders Memorial (Key People: Zora Neale Hurston) | `File:Portrait of Zora Neale Hurston LCCN2004663047.jpg` (Wikimedia Commons) | Carl Van Vechten, 1938; Library of Congress | ✔ Public domain | | Duotone added; cropped |
 | `images/people/pauli-murray-duotone.jpg` | Unsung Founders Memorial (Key People: Pauli Murray) | `File:Portrait of Dr. Pauli Murray.jpg` (Wikimedia Commons) | FDR Presidential Library & Museum | ✔ CC BY 2.0 (credit required, given) | | Duotone added |
+| `images/people/oscar-diggs-james-slade-duotone.jpg` | Steele Building (Key People: Oscar Diggs & James Slade) | `5_4_Steele_OscarDiggs_left_.jpg` | Virtual Museum | ☐ Pending | | Duotone of the gallery photo |
 
 ## How to confirm
 

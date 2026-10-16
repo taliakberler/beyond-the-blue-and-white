@@ -11,7 +11,7 @@
   <link rel="preload" href="fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/lato-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=ec929f11">
-  <link rel="stylesheet" href="css/styles.css?v=902fe0bd">
+  <link rel="stylesheet" href="css/styles.css?v=89d16938">
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#main">Skip to map content</a>
@@ -85,6 +85,10 @@
     <section id="list-view" class="view page-view" aria-labelledby="list-heading" hidden>
       <div class="page-inner">
         <h2 id="list-heading">All sites</h2>
+        <aside class="wip-note" role="note" hidden>
+          <svg class="wip-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+          <p class="wip-text"></p>
+        </aside>
         <p id="tour-intro" class="page-intro"></p>
         <ol id="stop-list" class="stop-list"></ol>
       </div>
@@ -93,6 +97,10 @@
     <section id="people-view" class="view page-view" aria-labelledby="people-page-heading" hidden>
       <div class="page-inner">
         <h2 id="people-page-heading">People</h2>
+        <aside class="wip-note" role="note" hidden>
+          <svg class="wip-icon" aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.6v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.35" fill="currentColor"/></svg>
+          <p class="wip-text"></p>
+        </aside>
         <p class="page-intro">The people highlighted at the sites on this map. Choose a site name to read their story there.</p>
         <ul id="people-list" class="people people-index"></ul>
       </div>
@@ -157,6 +165,6 @@
   </noscript>
 
   <script src="js/vendor/leaflet/leaflet.js?v=5a640ff8"></script>
-  <script src="js/app.js?v=73557377"></script>
+  <script src="js/app.js?v=8d05aed8"></script>
 </body>
 </html>

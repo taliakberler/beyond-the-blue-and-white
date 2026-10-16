@@ -1245,3 +1245,10 @@ The pasted images arrived without file names, so the originals were found in the
 - **"Draft — to be verified" badges removed** from the Horton, Hurston, and Murray cards; Talia is reviewing them. (The `"draft": true` option still works if it's needed again.)
 - **For the team:** the *On These Grounds* page for Henry Smith is titled "Henry (1850–1916)", while the text says he was born about 1851; David Barham's record is titled "1907, David Barham, Mention", while the text gives 1904 for the memorial.
 
+## 2026-10-16 — Oscar Diggs caption and card image
+
+**Directed by:** Talia Berler
+
+- Steele Building gallery photo 4: caption now reads "Oscar Diggs (left) and James Slade…" (was "Edward O. Diggs"), in `scripts/site-photos.json` and `data/stops.json`.
+- The same photo, cropped square inside its border and given the team's duotone, is now the image on the "Oscar Diggs & James Slade" card (`images/people/oscar-diggs-james-slade-duotone.jpg`; credit: Virtual Museum; permission pending).
+

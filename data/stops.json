@@ -279,7 +279,11 @@
         {
           "name": "Oscar Diggs & James Slade",
           "sortName": "Diggs",
-          "description": "1953: Oscar Diggs and James Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine."
+          "description": "1953: Oscar Diggs and James Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine.",
+          "image": "images/people/oscar-diggs-james-slade-duotone.jpg",
+          "imageAlt": "Duotone photo of Oscar Diggs, in an academic gown and cap, and James Slade, seated together on the front steps of a house.",
+          "imageCredit": "Virtual Museum",
+          "imagePermission": "pending"
         }
       ],
       "images": [
@@ -307,7 +311,7 @@
         {
           "src": "images/steele-building/04-oscar-diggs.jpg",
           "alt": "Black-and-white photo of two men sitting on the front steps of a house; the man on the left wears an academic gown and cap.",
-          "caption": "Edward O. Diggs (left) and James Slade. Diggs and Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine. Diggs enrolled in 1951, Slade in 1953.",
+          "caption": "Oscar Diggs (left) and James Slade. Diggs and Slade were the first two Black students to enroll at the UNC-Chapel Hill School of Medicine. Diggs enrolled in 1951, Slade in 1953.",
           "credit": "Virtual Museum",
           "permission": "pending"
         },

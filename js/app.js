@@ -475,7 +475,17 @@
 
   /* ---------------- List view ---------------- */
 
+  // "Work in progress" note at the top of the All sites and People pages (tour.disclaimer).
+  function renderDisclaimer() {
+    var text = state.tour.disclaimer || '';
+    document.querySelectorAll('.wip-note').forEach(function (n) {
+      n.querySelector('.wip-text').textContent = text;
+      n.hidden = !text;
+    });
+  }
+
   function renderList() {
+    renderDisclaimer();
     if (state.tour.intro) els.intro.textContent = state.tour.intro;
     els.stopList.textContent = '';
     state.stops.forEach(function (stop, i) {
