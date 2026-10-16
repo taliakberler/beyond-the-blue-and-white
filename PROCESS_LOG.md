@@ -1252,3 +1252,9 @@ The pasted images arrived without file names, so the originals were found in the
 - Steele Building gallery photo 4: caption now reads "Oscar Diggs (left) and James Slade…" (was "Edward O. Diggs"), in `scripts/site-photos.json` and `data/stops.json`.
 - The same photo, cropped square inside its border and given the team's duotone, is now the image on the "Oscar Diggs & James Slade" card (`images/people/oscar-diggs-james-slade-duotone.jpg`; credit: Virtual Museum; permission pending).
 
+## 2026-10-16 — Work-in-progress note on the All sites and People pages
+
+**Directed by:** Talia Berler (asked for a mockup, then "publish the disclaimer as is")
+
+- A note under the All sites and People headings: "This website is a work in progress. There are many significant sites and individuals whose stories have yet to be included here." Navy box with a coral left edge and info icon; the text is `tour.disclaimer` in `data/stops.json` (empty = hidden).
+
