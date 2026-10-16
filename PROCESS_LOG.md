@@ -1183,3 +1183,8 @@ The pasted images arrived without file names, so the originals were found in the
 - "The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill" (UNC-Chapel Hill, ArcGIS StoryMaps; title from the page itself; link checked) is now the first source on all five sites, so every site has a Sources section. The Unsung Founders Memorial keeps its two other sources after it.
 - Also credited on the About page (credits and links) and in the README.
 
+## 2026-10-16 — Anderson Day's LinkedIn
+
+**Directed by:** Talia Berler
+
+- Added Anderson Day's LinkedIn link to the About page.
