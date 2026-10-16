@@ -130,7 +130,7 @@ Key dimensions:
 
 | Component | Notes |
 |---|---|
-| **Pins** | Upside-down **teardrops**: navy with a 3px fog outline, holding the site's icon in the round head. The point marks the site's exact location. (The shape is a square with three rounded corners, turned 45°.) No numbers, since the sites aren't a set sequence. The active site gets a coral outline and enlarges slightly from its tip, so the point stays on the spot. Icons come from `images/icons/pins/` (see below). |
+| **Pins** | Upside-down **teardrops**: navy with a 3px fog outline, holding the site's icon in the round head. The point marks the site's exact location. (The shape is a square with three rounded corners, turned 45°.) No numbers, since the sites aren't a set sequence. The active site turns coral with a white icon and enlarges slightly from its tip, so the point stays on the spot. Each pin has two drop shadows (a tight dark one and a soft lift) plus a dark, blurred contact shadow on the ground under its point. Icons come from `images/icons/pins/` (see below). |
 | **Hint card and map key** | Fog card with navy text at the bottom of the map ("Explore the map. Tap a location to get more details."), shown whenever no site is open. Below a thin divider, a **map key** lists each icon in use on the map: a small navy circle with the icon, then its name in bold (for example, Memorial, Building, Cemetery). Entries wrap onto more rows as needed. The text is `tour.mapHint`, and the icon names are `tour.iconLabels`, both in `data/stops.json`. |
 | **Site sheet** | Navy, with 20px top corners and a 96px fog drag handle. It follows the finger when dragged (from its top, or from the story when scrolled to the top) and snaps to preview, full story, or closed; a quick flick also works. Expanded, the story scrolls. The close button is a circled ⊗. Closing slides it away and zooms the map back out to show every site. |
 | **Gallery** | A full-width 4:3 frame that swipes sideways. Images are shown **whole, never cropped** (`object-fit: contain` on a dark navy background), because cropping an archival photo can change what it shows. The caption and credit appear in small muted fog text below, with round previous/next image buttons. |
@@ -161,7 +161,9 @@ Key dimensions:
 
 ## Motion
 
-- The splash fades out over 0.45 s, the map glides (0.6 s) to each site, and the active pin enlarges.
+- The splash fades out over 0.45 s; "Tap to continue" fades in over 1 s, then blinks slowly. "Explore the map" lifts the landing page up and away over the map (0.65 s).
+- The map glides (1 s) to each site and back out to the default view when a site closes. During a glide the map scales the tiles already shown and loads sharp ones on arrival.
+- The default view fits every site, then zooms out half a step further. In-between zoom levels are used only for this view; zooming by hand (or with + and −) goes to whole levels, because the illustration shows faint tile seams at in-between zooms past its sharpest level.
 - With **reduce motion** turned on in the device settings, all transitions are switched off and the opening animation is replaced by the still logo.
 - Browsers display video colors differently from page colors, and differently from each other, so the opening animation's navy never exactly matches any CSS color (in Chrome it shows a shade bluer than `--navy`; other browsers differ again). Firefox on Macs even draws two videos in different shades. So each frame of the animation is painted onto one full-screen canvas, and the space around it is filled with a color read from that same canvas (the most common color in a thin plain strip along the top of the frame, re-read a few times a second because the video's navy drifts very slightly as it plays). It's all one surface, so it matches in every browser. The file's 1px darker border is trimmed off. If the canvas can't be used, the plain video shows instead, on `#122e54` with slightly faded edges.
 

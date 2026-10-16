@@ -9,6 +9,8 @@
   var DATA_URL = 'data/stops.json';
   var DESKTOP_QUERY = window.matchMedia('(min-width: 900px)');
   var STOP_ZOOM = 18;
+  var GLIDE_S = 1.0;                // seconds for the map's automatic zooms (opening and closing a site)
+  var DEFAULT_ZOOM_OUT = 0.5;       // the starting view is this much further out than "just fits every site"
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
   var SPLASH_VIDEO = 'media/splash.mp4';
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
@@ -123,10 +125,45 @@
 
   /* ---------------- Map ---------------- */
 
+  // OpenStreetMap tiles turned gray once, as each one loads. (A CSS filter on the layer looked the
+  // same, but Firefox recomputes it on every frame of a zoom, which made the map's glides stutter:
+  // about 17 frames a second instead of 45 in testing.) The numbers match the old filter:
+  // grayscale(1) contrast(0.85) brightness(1.08).
+  var GrayTileLayer = L.TileLayer.extend({
+    createTile: function (coords, done) {
+      var size = this.getTileSize();
+      var canvas = document.createElement('canvas');
+      canvas.width = size.x; canvas.height = size.y;
+      var img = new Image();
+      img.crossOrigin = 'anonymous';           // OpenStreetMap allows this, so the pixels can be read
+      img.onload = function () {
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size.x, size.y);
+        try {
+          var data = ctx.getImageData(0, 0, size.x, size.y), p = data.data;
+          for (var i = 0; i < p.length; i += 4) {
+            var v = 0.2126 * p[i] + 0.7152 * p[i + 1] + 0.0722 * p[i + 2];   // grayscale
+            v = ((v - 127.5) * 0.85 + 127.5) * 1.08;                          // contrast, brightness
+            p[i] = p[i + 1] = p[i + 2] = v < 0 ? 0 : v > 255 ? 255 : v;
+          }
+          ctx.putImageData(data, 0, 0);
+        } catch (e) { /* pixels unreadable: the tile stays in color */ }
+        done(null, canvas);
+      };
+      img.onerror = function (e) { done(e, canvas); };
+      img.src = this.getTileUrl(coords);
+      return canvas;
+    }
+  });
+
   function initMap() {
     var center = state.tour.center || [state.stops[0].lat, state.stops[0].lng];
     var map = L.map('map', { zoomControl: true }).setView(center, state.tour.zoom || 17);
     state.map = map;
+    // From the in-between default zoom (see defaultView), + and − go to the next whole level.
+    var zoomIn = map.zoomIn, zoomOut = map.zoomOut;
+    map.zoomIn = function (d, o) { var z = this.getZoom(); return z % 1 ? this.setZoom(Math.ceil(z), o) : zoomIn.call(this, d, o); };
+    map.zoomOut = function (d, o) { var z = this.getZoom(); return z % 1 ? this.setZoom(Math.floor(z), o) : zoomOut.call(this, d, o); };
 
     map.createPane('art');
     map.getPane('art').style.zIndex = 250;       // illustrated map: above the faded streets (200)
@@ -142,10 +179,11 @@
     var OSM_CREDIT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     var bm = state.tour.basemap || {};
 
-    // Surrounding streets: OpenStreetMap, grayed and faded into the illustration's blue (see CSS .faded-streets).
-    var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Surrounding streets: OpenStreetMap, grayed and faded into the illustration's blue.
+    var streets = new GrayTileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       className: 'faded-streets', opacity: bm.streetsOpacity || 0.38,
-      maxNativeZoom: 19, maxZoom: 20, attribution: OSM_CREDIT
+      maxNativeZoom: 19, maxZoom: 20, attribution: OSM_CREDIT,
+      updateWhenZooming: false   // during a glide, scale the tiles already shown; load sharp ones on arrival
     }).addTo(map);
 
     // The team's illustrated campus map, as pre-built tiles (scripts/build-team-map-tiles.js).
@@ -154,6 +192,7 @@
       art = L.tileLayer(bm.tiles, {
         pane: 'art', bounds: bm.bounds,
         minZoom: 0, minNativeZoom: bm.minNativeZoom || 14, maxNativeZoom: bm.maxNativeZoom || 18, maxZoom: 20,
+        updateWhenZooming: false,
         attribution: bm.attribution || ''
       }).addTo(map);
     }
@@ -247,14 +286,31 @@
     state.bounds = L.latLngBounds(bounds);
   }
 
-  // Fit every stop on screen, leaving room for the map buttons and the Start button.
+  // The default view: every site on screen (clear of the map buttons and hint card), then zoomed
+  // out a little further so there's some campus around them.
+  function defaultView() {
+    var map = state.map;
+    var tl = L.point(24, 24), br = L.point(24, 90);
+    var zoom = Math.min(map.getBoundsZoom(state.bounds, false, tl.add(br)), state.tour.zoom || 17) - DEFAULT_ZOOM_OUT;
+    zoom = Math.round(zoom / 0.25) * 0.25;
+    // Centre the sites in the space left by the uneven padding.
+    var a = map.project(state.bounds.getNorthWest(), zoom), b = map.project(state.bounds.getSouthEast(), zoom);
+    var mid = a.add(b).divideBy(2).add(br.subtract(tl).divideBy(2));
+    return { center: map.unproject(mid, zoom), zoom: zoom };
+  }
+
+  // The default view uses an in-between zoom (e.g. 16.5). Leaflet only allows those while zoomSnap
+  // is fine, so it's lowered just for this; zooming by hand afterwards snaps to whole levels again,
+  // because the illustration shows faint tile seams at in-between zooms past its sharpest level.
+  function withFineZoom(fn) {
+    state.map.options.zoomSnap = 0.25;
+    try { fn(); } finally { state.map.options.zoomSnap = 1; }
+  }
+
   function fitAllStops() {
     state.fitting = true;
     state.viewTouched = false;
-    state.map.fitBounds(state.bounds, {
-      paddingTopLeft: [24, 24], paddingBottomRight: [24, 90],
-      maxZoom: state.tour.zoom || 17, animate: false
-    });
+    withFineZoom(function () { var v = defaultView(); state.map.setView(v.center, v.zoom, { animate: false }); });
     state.fitting = false;
   }
 
@@ -457,6 +513,21 @@
     });
   }
 
+  // "Explore the map": the landing page swipes up and away, revealing the map underneath.
+  var INTRO_LEAVE_MS = 650;
+  function leaveIntro() {
+    var intro = els.introView;
+    intro.classList.add('is-leaving');        // fixed over everything, still in place…
+    setView('map', { keepIntro: true });
+    void intro.offsetHeight;                   // (apply that before animating)
+    intro.classList.add('is-gone');           // …then slide up off the screen
+    setTimeout(function () {
+      if (!intro.classList.contains('is-leaving')) return;   // came back to it meanwhile
+      intro.classList.remove('is-leaving', 'is-gone');
+      intro.hidden = true;
+    }, INTRO_LEAVE_MS);
+  }
+
   // Views: 'intro' (home), 'map', 'list' (All stops), 'people', 'about'.
   // People and About have their own addresses (#people, #about) so they can be linked to.
   var PAGE_HASHES = { people: '#people', about: '#about' };
@@ -465,11 +536,13 @@
     return null;
   }
 
-  function setView(which) {
+  function setView(which, opts) {
+    opts = opts || {};
     var intro = which === 'intro', list = which === 'list', about = which === 'about', people = which === 'people';
     var map = !intro && !list && !about && !people;
     setMenu(false);
-    els.introView.hidden = !intro;
+    els.introView.hidden = !intro && !opts.keepIntro;
+    if (intro) els.introView.classList.remove('is-leaving', 'is-gone');
     els.listView.hidden = !list;
     els.peopleView.hidden = !people;
     els.aboutView.hidden = !about;
@@ -787,7 +860,7 @@
       offset = L.point(0, Math.min(visible, size.y * 0.7) / 2);
     }
     var pt = map.project([stop.lat, stop.lng], zoom).add(offset);
-    map.flyTo(map.unproject(pt, zoom), zoom, { duration: 0.6 });
+    map.flyTo(map.unproject(pt, zoom), zoom, { duration: GLIDE_S });
   }
 
   function goToStop(i, opts) {
@@ -906,10 +979,7 @@
     if (!state.bounds || els.mapView.hidden) return;
     state.fitting = true;
     state.viewTouched = false;
-    state.map.flyToBounds(state.bounds, {
-      paddingTopLeft: [24, 24], paddingBottomRight: [24, 90],
-      maxZoom: state.tour.zoom || 17, duration: 0.6
-    });
+    withFineZoom(function () { var v = defaultView(); state.map.flyTo(v.center, v.zoom, { duration: GLIDE_S }); });
     state.fitting = false;
   }
 
@@ -1233,7 +1303,7 @@
       els.aboutBtn.addEventListener('click', function () { setView(els.aboutView.hidden ? 'about' : 'map'); });
       initMenu();
       els.brandHome.addEventListener('click', function () { setView('intro'); });
-      els.introCta.addEventListener('click', function () { setView('map'); });
+      els.introCta.addEventListener('click', leaveIntro);
       window.addEventListener('hashchange', handleHash);
 
       // Deep links (QR codes, shared links) go straight to their stop; the home page starts at the intro.

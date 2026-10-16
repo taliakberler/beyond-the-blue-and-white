@@ -25,7 +25,7 @@ These are the things a visitor's phone loads or contacts while using the map.
 
 | | |
 |---|---|
-| **What it does** | Shows the streets and features around campus, beyond the illustrated map. The tiles are drawn grayscale at 38% opacity over the illustration's blue, so they stay in the background. |
+| **What it does** | Shows the streets and features around campus, beyond the illustrated map. The tiles are turned gray as each one loads (in a canvas; OpenStreetMap's tile server allows this, sending `Access-Control-Allow-Origin: *`) and shown at 38% opacity over the illustration's blue, so they stay in the background. A live CSS grayscale filter looked the same but made Firefox stutter during the map's glides. |
 | **Address** | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` |
 | **Data license** | Open Database License (ODbL). Map data © OpenStreetMap contributors. |
 | **Usage policy** | <https://operations.osmfoundation.org/policies/tiles/>. Free for light use, with attribution, no bulk downloading, and a valid referrer (browsers send one automatically). |

@@ -1075,3 +1075,23 @@ The pasted images arrived without file names, so the originals were found in the
 ### Verified
 - Phone-sized Chrome (iPhone 13 emulation, real taps and touch drags): the arrow shows for each of three sites opened in turn; tapping the bar toggles full story ↔ peek; swipe up opens, drag down returns to peek, flick down closes and zooms the map out. No page errors.
 
+## 2026-10-15 — Motion polish, smoother glides, pin shadows, Unsung Founders pin
+
+**Directed by:** Talia Berler (six adjustments after testing)
+
+### What changed
+- **"Tap to continue"** fades in over 1 s, then blinks slowly. (With reduce motion: fades in, no blinking.)
+- **"Explore the map"** lifts the landing page up and away over the map (0.65 s) instead of switching instantly.
+- **Pin shadows** are darker, with a blurred contact shadow on the ground beneath each point.
+- **Unsung Founders Memorial pin** moved to the center of the grey circle beneath it in the illustration: from 35.9133601, -79.0517912 to 35.9133438, -79.0517248 (about 6 m east and 2 m south), measured from a zoom-20 render of the map.
+- **Smoother glides:** the faded street tiles are now turned gray once as each loads, instead of with a live CSS filter; the glides take 1 s instead of 0.6 s; and tile layers no longer load intermediate zoom levels mid-glide.
+- **Default view** is half a zoom step further out than "just fits every site". + and − from there go to the next whole level.
+
+### Decisions and reasons
+- **Finding (stutter):** frame timing in Firefox (Talia's browser), with each visual effect switched off in turn, showed the street layer's CSS `grayscale` filter was the cause: about 17 frames a second during a glide with it, about 45 without. Firefox recomputes the filter on every frame of a zoom. Graying each tile once in a canvas looks the same (checked side by side) with no per-frame cost. Chrome was already smooth (60 fps).
+- **Decision:** in-between zoom levels only for the default view. **Why:** at in-between zooms beyond the illustration's sharpest level (18), faint tile seams appeared (seen at 19.5); none appeared at the default views (16.5 desktop, 15.75 phone), checked in Chrome and Firefox.
+
+### Verified
+- Chrome (desktop and iPhone 13 emulation): "Tap to continue" opacity rises 0.5 → 1.0 over the first second, then blinks; the landing page is mid-slide 300 ms after the tap and gone by 650 ms, with the map and header showing; default zoom 16.5 / 15.75; closing a site glides back to exactly that view; + goes to 17 / 16.
+- The pin's point sits on the circle's center at zoom 18 and 19.5.
+

@@ -154,8 +154,10 @@ button { font: inherit; color: inherit; }
   width: max-content; margin: 0 auto; padding: 12px 20px; min-height: var(--tap);
   border: 0; background: none; color: var(--fog); cursor: pointer;
   font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase;
-  animation: slow-blink 2.4s ease-in-out infinite;
+  /* Fades in over 1 s, then blinks slowly. */
+  animation: fade-in 1s ease-out both, slow-blink 2.4s ease-in-out 1s infinite;
 }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slow-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 body:not(.is-loading) .splash { opacity: 0; visibility: hidden; pointer-events: none; }
 
@@ -208,6 +210,9 @@ main { flex: 1; position: relative; min-height: 0; }
 
 /* Intro / home */
 .intro-view { overflow-y: auto; background: var(--navy); }
+/* "Explore the map": the landing page lifts up and away over the map (see leaveIntro in app.js). */
+.intro-view.is-leaving { position: fixed; inset: 0; z-index: 1500; transition: transform 0.65s cubic-bezier(0.65, 0, 0.25, 1); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); }
+.intro-view.is-gone { transform: translateY(-100%); }
 .intro-inner {
   min-height: 100%;
   max-width: 560px; margin: 0 auto;
@@ -240,13 +245,12 @@ main { flex: 1; position: relative; min-height: 0; }
 #map { position: absolute; inset: 0; background: var(--color-map-bg); }
 .leaflet-container { font-family: var(--font-body); font-size: var(--fs-small); }
 
-/* Faded streets under the illustration */
-.faded-streets { filter: grayscale(1) contrast(0.85) brightness(1.08); }
+/* Faded streets under the illustration: grayed as they load (GrayTileLayer in app.js) and faded with the layer's opacity. */
 /* Hide tile seams. Browsers soften each tile image's edges slightly, which leaves hairline
    lines where tiles meet. "plus-lighter" adds the two softened edges back up to a solid join;
    everywhere else (no overlap) it has no effect. Each layer is its own stacking context. */
 .leaflet-art-pane img.leaflet-tile,
-.faded-streets img.leaflet-tile { mix-blend-mode: plus-lighter; }
+.faded-streets .leaflet-tile { mix-blend-mode: plus-lighter; }
 .leaflet-art-pane, .faded-streets { isolation: isolate; }
 
 /* Leaflet controls in the brand style */
@@ -286,7 +290,13 @@ main { flex: 1; position: relative; min-height: 0; }
   transform-origin: 50% 54px;                       /* grow from the tip, which stays on the spot */
   transition: transform 0.15s ease;
   /* Two shadows: a tight one that outlines the pin and a soft one that lifts it off the map. */
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6)) drop-shadow(0 7px 9px rgba(0, 0, 0, 0.55));
+}
+/* A dark, blurred contact shadow on the ground beneath the pin's point. */
+.stop-pin::after {
+  content: ""; position: absolute; left: 50%; top: 50px; z-index: -1;
+  width: 24px; height: 8px; margin-left: -12px; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55); filter: blur(2px);
 }
 .stop-pin .pin {
   position: absolute; left: 3px; top: 3px;
@@ -593,5 +603,6 @@ body.panel-expanded .leaflet-bottom { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
-  .panel.show-swipe-hint .swipe-hint, .splash-continue { animation: none; }
+  .panel.show-swipe-hint .swipe-hint { animation: none; }
+  .splash-continue { animation: fade-in 1s ease-out both; }   /* fade in, but no blinking */
 }
