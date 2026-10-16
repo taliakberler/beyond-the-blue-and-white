@@ -541,6 +541,7 @@ main { flex: 1; position: relative; min-height: 0; }
 .nav-btn.primary { background: var(--coral); }
 .nav-btn.primary:hover { background: var(--coral-hover); }
 .nav-btn:disabled { opacity: 0.4; cursor: default; }
+.prev-next .nav-btn { text-transform: uppercase; letter-spacing: 0.04em; }   /* ‹ PREVIOUS / NEXT › */
 
 /* ---------- Toast ---------- */
 .toast {

@@ -21,6 +21,7 @@
     wide: { src: 'media/splash-wide.mp4', holdAt: 13.2 }
   };
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
+  var SPLASH_CONTINUE_DELAY_MS = 1000;   // "Tap to continue" appears this long after the animation pauses
   var SPLASH_VIDEO_MAX_MS = 20000;   // if the video stalls before the hold point, show "Tap to continue" anyway
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
   var ICON_DIR = 'images/icons/pins/';
@@ -1250,9 +1251,13 @@
       held = true;
       video.pause();
       clearTimeout(capTimer);
-      var cont = el('button', { type: 'button', 'class': 'splash-continue' }, 'Tap to continue');
-      els.splash.appendChild(cont);
-      moveFocus(cont);
+      // The invitation appears a moment after the animation settles (tapping works the whole time).
+      setTimeout(function () {
+        if (finished) return;
+        var cont = el('button', { type: 'button', 'class': 'splash-continue' }, 'Tap to continue');
+        els.splash.appendChild(cont);
+        moveFocus(cont);
+      }, SPLASH_CONTINUE_DELAY_MS);
     }
     video.addEventListener('timeupdate', function () { if (video.currentTime >= SPLASH_HOLD_AT) hold(); });
     video.addEventListener('ended', function () { video.currentTime = SPLASH_HOLD_AT; hold(); });

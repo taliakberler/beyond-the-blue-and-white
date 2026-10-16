@@ -1155,3 +1155,17 @@ The pasted images arrived without file names, so the originals were found in the
 - **All sites page:** the placeholder introduction replaced with the team's text. No placeholder text remains in the site's data.
 - **Name:** the team member listed as "Andie" is now "Anderson Day" everywhere (site, README, options page, and this log), as on the team slide.
 
+## 2026-10-16 — "Tap to continue" one second after the animation pauses
+
+**Directed by:** Talia Berler
+
+- "Tap to continue" now appears 1 s after the opening animation pauses on the logo and names (`SPLASH_CONTINUE_DELAY_MS` in `js/app.js`), then fades in and blinks as before. Tapping or a key press continues at any time, including during that second.
+
+## 2026-10-16 — Sources right after the text; PREVIOUS / NEXT in capitals
+
+**Directed by:** Talia Berler (asked why sources weren't on the site cards; asked for them right after the information)
+
+- **Sources** now come right after each site's text, before Key People.
+- **Why most sites show no Sources yet:** the team's copy-and-credit PDFs list sources for the photos (shown as each photo's credit), but only the Unsung Founders PDF lists sources for the written text ("Other Sources"). The other four sites need their text sources from the team; the section appears automatically once a site's `sources` list in `data/stops.json` has entries.
+- The ‹ PREVIOUS and NEXT › buttons are in capitals.
+
