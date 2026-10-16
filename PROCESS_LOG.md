@@ -711,7 +711,7 @@ The assets haven't been added to the repository yet. They'll be brought in as th
   - `images/logo/`: the six logo SVGs, unchanged
   - `images/icons/source/`: the eight icon SVGs, unchanged, renamed to lowercase (for example `Memorial Icon.svg` became `memorial.svg`)
   - `images/icons/pins/`: pin versions built by the new **`scripts/build-pin-icons.js` (`npm run pins`)**
-  - `images/person-placeholder.svg`: a coral duotone placeholder portrait
+  - `images/person-icon.svg`: a coral duotone placeholder portrait
 - **`data/stops.json`:**
   - each stop now has an `icon`
   - people have `image`, `imageAlt`, and `link` fields (set to the placeholder portrait for now)
@@ -1143,7 +1143,7 @@ The pasted images arrived without file names, so the originals were found in the
 
 **Directed by:** Talia Berler ("keep the placeholder person icon for the people cards without images")
 
-- The Unsung Founders and Oscar Diggs & James Slade cards show `images/person-placeholder.svg` again instead of being text-only. It's decorative there (empty alt text), since it isn't a portrait of them.
+- The Unsung Founders and Oscar Diggs & James Slade cards show `images/person-icon.svg` again instead of being text-only. It's decorative there (empty alt text), since it isn't a portrait of them.
 
 ## 2026-10-16 — Team roles, more contact links, cemetery text, All sites intro
 
@@ -1188,3 +1188,9 @@ The pasted images arrived without file names, so the originals were found in the
 **Directed by:** Talia Berler
 
 - Added Anderson Day's LinkedIn link to the About page.
+
+## 2026-10-16 — Person icon without the PLACEHOLDER banner
+
+**Directed by:** Talia Berler
+
+- The person icon (shown on Key People cards without an image) no longer has the "PLACEHOLDER" banner; the silhouette fills the space. Renamed from `person-placeholder.svg` to `images/person-icon.svg` (references updated, including earlier log entries), so browsers don't show a cached copy with the banner.
