@@ -1271,3 +1271,9 @@ The pasted images arrived without file names, so the originals were found in the
 
 - Re-measured both videos frame by frame, counting only pixels that visibly change: the motion ends at about 6.1 s (portrait) and 2.3 s (wide). The earlier hold points (8.6 s and 6.8 s) had been set by a faint shimmer in the names that isn't visible.
 - The animation now pauses at 6.2 s (portrait) and 2.4 s (wide), and "Tap to continue" starts fading in 1 s later (`SPLASH_CONTINUE_DELAY_MS`, was 0.4 s).
+
+## 2026-10-16 — Stacked logo: seam between the lower bars removed
+
+**Directed by:** Talia Berler ("there's a thin line between The Blue and & White sections")
+
+- In the three stacked logo SVGs, the "THE BLUE" and "& WHITE" bars met exactly edge to edge (at y = 112.91), so browsers drew a faint anti-aliased line where they join (the top two bars overlapped by only 0.27 units, which can also show at some sizes). Each narrower bar now reaches about 6 units under the wider "THE BLUE" bar ("BEYOND" bar height 56.59 → 62.59; "& WHITE" bar y 112.91 → 106.91, height 62.59), so the joins are solid at every size. The overlap is hidden, and the logo's outline and letters are unchanged. Checked by rendering at many sizes: no seam pixels (the old file had them at most sizes).
