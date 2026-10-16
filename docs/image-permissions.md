@@ -35,6 +35,8 @@
 | `images/people/marsha-tinnen-barbara-prear.jpg` | Lenoir Hall (Key People: Marsha Tinnen & Barbara Prear) | `2_5_Lenoir_MarshaTinnen and BarbaraPrear_UNC_HousekeepersAssociation_DuoTone.png` | Southern Historical Collection, Marsha Tinnen’s Housekeepers Association Collection, 1991–2003 | ☐ Pending | | Team's duotone of an archival photo |
 | `images/people/james-cates-duotone.jpg` | The Pit (Key People: James Lewis Cates) | `3_4_ThePitt_JamesCates_YearbookPhoto_Photo via the Town of Chapel Hill_DuoTone.jpg` | Photo via the Town of Chapel Hill | ☐ Pending | | Team's duotone of an archival photo |
 | `images/people/wilson-caldwell-duotone.jpg` | Old Chapel Hill Cemetery (Key People: Wilson Swain Caldwell) | `4_3_OCHCementery_CaldwellWilson_DuoTone(1).jpg` | North Carolina Collection Photographic Archives, The Wilson Library, University of North Carolina at Chapel Hill | ☐ Pending | | Team's duotone of an archival photo |
+| `images/people/zora-neale-hurston-duotone.jpg` | Unsung Founders Memorial (Key People: Zora Neale Hurston) | `File:Portrait of Zora Neale Hurston LCCN2004663047.jpg` (Wikimedia Commons) | Carl Van Vechten, 1938; Library of Congress | ✔ Public domain | | Duotone added; cropped |
+| `images/people/pauli-murray-duotone.jpg` | Unsung Founders Memorial (Key People: Pauli Murray) | `File:Portrait of Dr. Pauli Murray.jpg` (Wikimedia Commons) | FDR Presidential Library & Museum | ✔ CC BY 2.0 (credit required, given) | | Duotone added |
 
 ## How to confirm
 

@@ -2,7 +2,7 @@
 
 A public record of how *Beyond the White and Blue* is being built: what was decided, why, and what changed in the code. Entries are in chronological order, and new entries go at the bottom.
 
-**About this project's process.** The project team sets the goals, requirements, and all historical content. The code, scripts, and documentation have been drafted with **Claude Code**, an AI coding assistant made by Anthropic, working from the team's written instructions. Each entry notes who directed the work. AI is not used to research or write historical content. That boundary was written into the original requirements ("Do NOT invent real historical facts, people, or events") and is restated in [docs/content-guidelines.md](docs/content-guidelines.md).
+**About this project's process.** The project team sets the goals, requirements, and all historical content. The code, scripts, and documentation have been drafted with **Claude Code**, an AI coding assistant made by Anthropic, working from the team's written instructions. Each entry notes who directed the work. AI is not used to invent historical content. That boundary was written into the original requirements ("Do NOT invent real historical facts, people, or events") and is restated in [docs/content-guidelines.md](docs/content-guidelines.md). The one exception, at the team's request, is three Key People blurbs drafted by Claude Code from cited sources (2026-10-16 entries), each linked to its source on its card; Talia Berler is reviewing them.
 
 ### How to add an entry
 
@@ -1201,3 +1201,47 @@ The pasted images arrived without file names, so the originals were found in the
 
 - On the About page, "The Black and Carolina Blue Tour" in the first credit is now a link to the StoryMap; the separate link to it below was removed. Credits can now contain a link (`{ text, linkText, url }`).
 - README brought up to date: team roles and LinkedIn/portfolio links (a table matching the About page), the tagline as on the site, sources and photo-permission status, photo credits, `npm run photos`, and the `media/` and `tools/` folders.
+
+## 2026-10-16 — Draft Key People: Galloway, Hurston, Murray, Horton
+
+**Directed by:** Talia Berler (add George Moses Horton to Old Chapel Hill Cemetery because of the marker's inscription, though he isn't buried there; find how Abraham Galloway, Zora Neale Hurston, and Pauli Murray, named in the Unsung Founders text, relate to UNC-Chapel Hill and add short blurbs, with duotone portraits where possible)
+
+### What changed
+- **Unsung Founders Memorial, Key People:** Abraham Galloway, Zora Neale Hurston, Pauli Murray. **Old Chapel Hill Cemetery:** George Moses Horton.
+- **These four blurbs were drafted by Claude Code**, the first historical text on the site not written by the team. Each is marked **"Draft — to be verified"** (`"draft": true`) and links to its source, so the team can check it and then remove the flag.
+- **Portraits** (Wikimedia Commons, licenses checked): Galloway, the 1872 engraving in William Still's *The Underground Railroad* (public domain); Hurston, Carl Van Vechten's 1938 portrait (Library of Congress; public domain); Murray, a portrait from the FDR Presidential Library & Museum (CC BY 2.0, credited). Each was cropped square and given a duotone matching the team's (shadows rgb(45, 45, 84) to highlights rgb(232, 104, 104), measured from the team's images). No portrait of Horton was found, so his card uses the person icon.
+
+### Sources used (each blurb states only what these say)
+- **Horton:** UNC, "George Moses Horton" (unchistory.web.unc.edu/person/george-moses-horton/): enslaved poet; sold poems to UNC students while selling produce in Chapel Hill; *The Hope of Liberty* (1829), published while enslaved, hoping sales would buy his freedom. UNC's Horton Residence Hall page: dedicated 2007.
+- **Galloway:** NCpedia: born 1837 in Smithville (now Southport); escaped 1857; Union spy; delegate to the 1868 Constitutional Convention; state senator; died 1870. **No direct tie to UNC was found** in these sources, so his blurb says he appears because the Real Silent Sam Coalition named him (from the team's text).
+- **Hurston:** UNC Libraries exhibit "Hurston Hall": collaborated with Professor Paul Green in a UNC course taught at his home before integration; the 2015 campaign to rename Saunders Hall for her; trustees chose Carolina Hall. (A claim that she was a "secret student" at UNC is disputed, so it's left out.)
+- **Murray:** UNC Department of History, "Pauli Murray's powerful legacy", and UNC alumni news: rejected by UNC in 1938 (graduate sociology; state law admitted only white applicants); the 2020 request by four departments to rename Hamilton Hall as Pauli Murray Hall. **Whether that renaming was ever completed wasn't confirmed**, so the blurb says only that it was requested. Howard law school: WUNC.
+
+### For the team to check
+- The four blurbs' wording and facts, especially Galloway's (no UNC connection beyond the coalition's mention) and whether the Hamilton Hall renaming happened.
+
+## 2026-10-16 — Abraham Galloway removed; Key People sources added to Sources
+
+**Directed by:** Talia Berler ("remove Abraham Galloway mentions from the site, but keep the others and add the blurbs and sources")
+
+- **Removed** Abraham Galloway's Key People card and portrait, and his name from the Unsung Founders Memorial text, which now reads "…rather than specific individuals like Zora Neale Hurston or Pauli Murray." (The previous entry's Galloway notes are kept as a record of what was tried.)
+- **Kept** the Horton, Hurston, and Murray cards, still marked "Draft — to be verified".
+- **Sources added** to the sites' Sources lists: Unsung Founders Memorial — UNC Libraries' "Hurston Hall" exhibit, UNC Department of History's "Pauli Murray's Powerful Legacy", and UNC GAA's report on the Hamilton Hall renaming proposal; Old Chapel Hill Cemetery — UNC History's "George Moses Horton" and "George Moses Horton Residence Hall".
+
+## 2026-10-16 — November Caldwell, David Barham, and Henry Smith
+
+**Directed by:** Talia Berler
+
+- Added Key People cards at Old Chapel Hill Cemetery for November Caldwell, David Barham, and Henry Smith, the three men named alongside Wilson Caldwell on the rededicated obelisk. Each shows the person icon (no portraits exist) and has no description yet; the team will provide the text.
+- About page: the Credits list now also includes every site's sources, gathered automatically from `data/stops.json` (once each, in site order), so it always matches the sites.
+
+## 2026-10-16 — Obelisk biographies, Wilson Caldwell source, draft badges off
+
+**Directed by:** Talia Berler (provided the text and sources for Henry Smith, David Barham, and November Caldwell; a source for Wilson Caldwell; "remove the draft text, I'll review them")
+
+- **Descriptions added (the team's text, as written)** for Henry Smith, David Barham, and November Caldwell, each linking to its UNC Libraries *On These Grounds* record.
+- **Wilson Swain Caldwell's card** links to its source: Victor Lewis, "Celebrating the Life of Wilson Caldwell," Chapelboro, February 27, 2018 (title, author, and date from the article page).
+- **Old Chapel Hill Cemetery's Sources** (and so the About page's credits list) now include all four links.
+- **"Draft — to be verified" badges removed** from the Horton, Hurston, and Murray cards; Talia is reviewing them. (The `"draft": true` option still works if it's needed again.)
+- **For the team:** the *On These Grounds* page for Henry Smith is titled "Henry (1850–1916)", while the text says he was born about 1851; David Barham's record is titled "1907, David Barham, Mention", while the text gives 1904 for the memorial.
+

@@ -43,7 +43,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 |---|---|
 | `tagline`, `description` | The project's tagline and one-paragraph description, shown at the top |
 | `context`, `prompt` | Where the project was made, and the team's prompt |
-| `credits` | List of credit lines. Each is plain text, or `{ "text": "…", "linkText": "part of the text", "url": "https://…" }` to make part of it a link. |
+| `credits` | List of credit lines (every site's `sources` are added after them automatically, once each). Each is plain text, or `{ "text": "…", "linkText": "part of the text", "url": "https://…" }` to make part of it a link. |
 | `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…", "linkedin": "…", "portfolio": "…" }`. Each shows as a sky-blue name card. `role` appears under the name once filled in (leave it `""` until then). `linkedin` and `portfolio` are optional full web addresses (starting `https://`); each adds a "LinkedIn ↗" or "Portfolio ↗" link to the card, opening in a new tab. |
 | `advisors` | `description` (who they are and how they helped) and `people` (same format as `team`) |
 | `credits` | Short lines crediting the map, data, and software |
@@ -74,7 +74,8 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
       "imageCredit": "Archive, collection, item ID (shown under the description)",
       "imagePermission": "pending",
       "link": "https://… (optional)", "linkLabel": "Text for the link (optional; default 'Learn more')",
-      "sortName": "Smith (optional: what the People page sorts by; default is the name's last word)" }
+      "sortName": "Smith (optional: what the People page sorts by; default is the name's last word)",
+      "draft": true   // optional: shows a "Draft — to be verified" badge; remove once the team has checked the text }
   ],
   "images": [
     { "src": "images/example-site-1.jpg", "alt": "What the image shows, for screen readers",

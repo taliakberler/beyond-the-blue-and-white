@@ -165,7 +165,7 @@
       "summary": "",
       "history": [
         "The Unsung Founders Memorial at UNC-Chapel Hill features a five-foot black granite table supported by miniature bronze figures representing the university’s enslaved and free Black workers, surrounded by five stone stools modeled on Old Chapel Hill Cemetery headstones. A gift from the Class of 2002, the memorial has faced continuous controversy over its design, location, and everyday use.",
-        "Community members, and descendants have called its low, two-foot stature a symbol of belittlement and oppression. In 2012, the Real Silent Sam Coalition criticized the monument for honoring a mass of unnamed people rather than specific individuals like Abraham Galloway, Zora Neale Hurston, or Pauli Murray. Further criticism resurfaced in 2021 highlighting the lack of local community involvement in its creation.",
+        "Community members, and descendants have called its low, two-foot stature a symbol of belittlement and oppression. In 2012, the Real Silent Sam Coalition criticized the monument for honoring a mass of unnamed people rather than specific individuals like Zora Neale Hurston or Pauli Murray. Further criticism resurfaced in 2021 highlighting the lack of local community involvement in its creation.",
         "In 2019, the memorial was defaced with racist graffiti, and it continues to sink into the ground due to weight and drainage issues, with a recommended restoration yet to begin. Despite these challenges, students and activists have started a new tradition of decorating the monument with flowers to reinforce its intent as a place of remembrance."
       ],
       "people": [
@@ -178,6 +178,28 @@
           ],
           "link": "https://blogs.lib.unc.edu/uarms/2018/04/24/the-names-of-the-enslaved-people-who-built-the-university-of-north-carolina/",
           "linkLabel": "The Names of the Enslaved People who Built the University of North Carolina"
+        },
+        {
+          "name": "Zora Neale Hurston",
+          "role": "Author and anthropologist",
+          "description": "Hurston collaborated with UNC professor Paul Green in a course he taught at his home, before the University was integrated. In 2015, students and faculty campaigned to rename Saunders Hall, named for a Ku Klux Klan leader, in her honor; the Board of Trustees renamed it Carolina Hall instead.",
+          "image": "images/people/zora-neale-hurston-duotone.jpg",
+          "imageAlt": "Duotone portrait of Zora Neale Hurston in a hat and beaded necklace, against a zigzag backdrop.",
+          "imageCredit": "Carl Van Vechten, 1938. Library of Congress, Prints and Photographs Division; public domain, via Wikimedia Commons",
+          "imagePermission": "public domain",
+          "link": "https://exhibits.lib.unc.edu/exhibits/show/womenatunc/activism/hurstonhall",
+          "linkLabel": "Source: UNC Libraries, “Hurston Hall”"
+        },
+        {
+          "name": "Pauli Murray",
+          "role": "Civil rights lawyer and scholar",
+          "description": "Murray, who grew up in Durham, applied to UNC’s graduate program in sociology in 1938 and was rejected because state law then limited the University to white students. She went on to Howard University’s law school. In 2020, four UNC departments asked the University to rename Hamilton Hall, named for a white supremacist historian, as Pauli Murray Hall.",
+          "image": "images/people/pauli-murray-duotone.jpg",
+          "imageAlt": "Duotone portrait of Pauli Murray, smiling, in dark-rimmed glasses and a blazer.",
+          "imageCredit": "FDR Presidential Library & Museum (CC BY 2.0), via Wikimedia Commons; duotone added",
+          "imagePermission": "CC BY 2.0",
+          "link": "https://historian.web.unc.edu/pauli-murrays-powerful-legacy/",
+          "linkLabel": "Source: UNC Department of History"
         }
       ],
       "images": [
@@ -215,6 +237,18 @@
         {
           "title": "“The Names of the Enslaved People who Built the University of North Carolina.” For the Record, UNC University Archives and Records Management Services, April 24, 2018.",
           "url": "https://blogs.lib.unc.edu/uarms/2018/04/24/the-names-of-the-enslaved-people-who-built-the-university-of-north-carolina/"
+        },
+        {
+          "title": "“Hurston Hall.” Women at UNC exhibit, UNC Libraries.",
+          "url": "https://exhibits.lib.unc.edu/exhibits/show/womenatunc/activism/hurstonhall"
+        },
+        {
+          "title": "“Pauli Murray’s Powerful Legacy.” UNC Department of History.",
+          "url": "https://historian.web.unc.edu/pauli-murrays-powerful-legacy/"
+        },
+        {
+          "title": "“Four Academic Leaders Based in Hamilton Propose Renaming Building.” UNC General Alumni Association.",
+          "url": "https://alumni.unc.edu/news/faculty-chairs-in-hamilton-propose-renaming-building"
         }
       ]
     },
@@ -488,7 +522,34 @@
           "image": "images/people/wilson-caldwell-duotone.jpg",
           "imageAlt": "Duotone portrait of Wilson Caldwell, an older man with a gray beard, wearing a suit and bow tie.",
           "imageCredit": "North Carolina Collection Photographic Archives, The Wilson Library, University of North Carolina at Chapel Hill",
-          "imagePermission": "pending"
+          "imagePermission": "pending",
+          "link": "https://chapelboro.com/town-square/celebrating-life-wilson-caldwell",
+          "linkLabel": "Source: Chapelboro, “Celebrating the Life of Wilson Caldwell”"
+        },
+        {
+          "name": "November Caldwell",
+          "description": "November Caldwell was born around 1791 and lived in Chapel Hill, N.C., in the 1800s. He worked as a “college servant” on the campus of the historically white University of North Carolina. He was enslaved by Joseph Caldwell, the first president of UNC Chapel Hill. November Caldwell is memorialized on UNC-Chapel Hill’s campus with three other formerly enslaved men: David Barham, Henry Smith, and his son, Wilson Swain Caldwell.",
+          "link": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/472",
+          "linkLabel": "Source: On These Grounds, UNC Libraries"
+        },
+        {
+          "name": "David Barham",
+          "description": "In the 1850s, David worked as a “college servant” at Chapel Hill. In 1904, David Barham was memorialized with three other formerly enslaved men, Wilson Caldwell, November Caldwell, and Henry Smith.",
+          "link": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/414",
+          "linkLabel": "Source: On These Grounds, UNC Libraries"
+        },
+        {
+          "name": "Henry Smith",
+          "description": "Henry was born about 1851. He was a “college servant,” mail deliverer, and bell ringer. After Emancipation and the American Civil War, Henry continued to work at the University. In 1910, Henry was awarded an honorary degree. Henry Smith died on 6 July 1916.",
+          "link": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/1721",
+          "linkLabel": "Source: On These Grounds, UNC Libraries"
+        },
+        {
+          "name": "George Moses Horton",
+          "role": "Poet",
+          "description": "An enslaved poet from Chatham County, Horton often came to Chapel Hill to sell produce, and UNC students paid him to compose poems for them. In 1829, still enslaved, he published The Hope of Liberty, hoping its sales would buy his freedom. In 2007 the University dedicated George Moses Horton Residence Hall in his name. He is not buried here; he is honored at the cemetery through the 2016 marker, which is inscribed with his poem “The Rising Sun.”",
+          "link": "https://unchistory.web.unc.edu/person/george-moses-horton/",
+          "linkLabel": "Source: UNC, “George Moses Horton”"
         }
       ],
       "images": [
@@ -532,6 +593,30 @@
         {
           "title": "“The Black and Carolina Blue Tour: An Introduction to Black Life at the University of North Carolina at Chapel Hill.” UNC-Chapel Hill, ArcGIS StoryMaps.",
           "url": "https://storymaps.arcgis.com/stories/b84110ce4a204e779e6915e5786ffbe4"
+        },
+        {
+          "title": "“George Moses Horton.” UNC History (unchistory.web.unc.edu).",
+          "url": "https://unchistory.web.unc.edu/person/george-moses-horton/"
+        },
+        {
+          "title": "“George Moses Horton Residence Hall.” UNC History building narratives.",
+          "url": "https://unchistory.web.unc.edu/building-narratives/george-moses-horton-residence-hall/"
+        },
+        {
+          "title": "Victor Lewis, “Celebrating the Life of Wilson Caldwell.” Chapelboro, February 27, 2018.",
+          "url": "https://chapelboro.com/town-square/celebrating-life-wilson-caldwell"
+        },
+        {
+          "title": "“November Caldwell (1791–).” On These Grounds, UNC Libraries.",
+          "url": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/472"
+        },
+        {
+          "title": "“1907, David Barham, Mention.” On These Grounds, UNC Libraries.",
+          "url": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/414"
+        },
+        {
+          "title": "“Henry (1850–1916).” On These Grounds, UNC Libraries.",
+          "url": "https://onthesegrounds.lib.unc.edu/s/on-these-grounds/item/1721"
         }
       ]
     }

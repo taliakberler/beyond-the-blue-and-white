@@ -74,7 +74,7 @@ The page builds itself from the sites' `people` lists, so nothing extra needs ed
 **About** (in the ☰ menu on phones, or the address `…/#about`) opens the About page:
 - the project's tagline and description
 - where it was made (the Visual Discovery Conference 2026 at UNC Chapel Hill) and the team's prompt (highlight Black history at UNC Chapel Hill)
-- credits for the team, coaches, and community advisors, then the map and software credits and a link to the project's code and documentation
+- credits for the team, coaches, and community advisors, then the credits list: the main source, map and software credits, every site's sources (gathered automatically, once each), and a link to the project's code and documentation
 
 Everything on it comes from `tour.about` in `data/stops.json`.
 

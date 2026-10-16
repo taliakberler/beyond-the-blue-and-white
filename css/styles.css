@@ -490,6 +490,7 @@ main { flex: 1; position: relative; min-height: 0; }
 .person-name::after { content: ""; display: block; width: 44px; height: 3px; margin: 6px 0; background: var(--fog); }
 .person-desc { margin: 0; font-size: var(--fs-xs); line-height: 1.45; }
 .person-desc + .person-desc { margin-top: 8px; }
+.person-draft { margin: 0 0 8px; font-size: 0.7rem; }
 .person-role { margin: -2px 0 6px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.35; }
 
 .person-credit { margin: 6px 0 0; font-size: 0.75rem; line-height: 1.35; color: #24385c; }

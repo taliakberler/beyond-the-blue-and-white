@@ -631,6 +631,8 @@
     var body = el('div');
     body.appendChild(el('p', { 'class': 'person-name' }, p.name));
     if (p.role) body.appendChild(el('p', { 'class': 'person-role' }, p.role));
+    // "draft": text not yet checked by the team (shown as a small badge until it is).
+    if (p.draft) body.appendChild(el('span', { 'class': 'placeholder-flag person-draft' }, 'Draft — to be verified'));
     // "description" is one paragraph, or a list of paragraphs.
     [].concat(p.description || []).forEach(function (para) {
       if (para && String(para).trim()) body.appendChild(el('p', { 'class': 'person-desc' }, String(para).trim()));
@@ -743,6 +745,21 @@
           li.appendChild(document.createTextNode(text.slice(at + c.linkText.length)));
         }
         ul.appendChild(li);
+      });
+      // Every site's sources, once each (matched by link, or by title when there's no link),
+      // in site order, so this list always matches the sites.
+      var seen = {};
+      (a.credits || []).forEach(function (c) { if (c && c.url) seen[c.url] = true; });   // already linked above
+      state.stops.forEach(function (stop) {
+        (stop.sources || []).forEach(function (src) {
+          var key = src.url || src.title;
+          if (!key || seen[key]) return;
+          seen[key] = true;
+          var li = el('li');
+          if (src.url) li.appendChild(el('a', { href: src.url, target: '_blank', rel: 'noopener' }, src.title || src.url));
+          else li.textContent = src.title;
+          ul.appendChild(li);
+        });
       });
       (a.links || []).forEach(function (l) {
         var li = el('li');
