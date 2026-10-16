@@ -12,11 +12,16 @@
   var GLIDE_S = 1.0;                // seconds for the map's automatic zooms (opening and closing a site)
   var DEFAULT_ZOOM_OUT = 0.5;       // the starting view is this much further out than "just fits every site"
   var SPLASH_MIN_MS = 900;          // splash shows at least this long on the home page (not for deep links)
-  var SPLASH_VIDEO = 'media/splash.mp4';
+  // The team's opening animation: a portrait version for phones and a 16:9 version for wider
+  // screens. Each pauses at holdAt (seconds), with the logo and every name still on screen, and
+  // waits for "Tap to continue". (Measured: the names start fading at about 12.5 s in the portrait
+  // version and 13.5 s in the wide one.)
+  var SPLASH_VIDEOS = {
+    tall: { src: 'media/splash.mp4', holdAt: 12.2 },
+    wide: { src: 'media/splash-wide.mp4', holdAt: 13.2 }
+  };
   var SPLASH_VIDEO_START_MS = 2500;  // if the video hasn't started by then (autoplay blocked), show the still logo
   var SPLASH_VIDEO_MAX_MS = 20000;   // if the video stalls before the hold point, show "Tap to continue" anyway
-  var SPLASH_HOLD_AT = 12.2;         // seconds: pause here (logo and every name still on screen; the names
-                                     // start fading at about 12.5 s) and wait for "Tap to continue"
   var DEFAULT_ICON = 'buildings';   // pin icon when a stop has no "icon"
   var ICON_DIR = 'images/icons/pins/';
   var BUILDING_PAGE_LIMIT = 10;     // max pages fetched from the ArcGIS layer
@@ -687,20 +692,23 @@
       var sec = el('section', { 'class': 'about-group', 'aria-labelledby': id });
       sec.appendChild(el('h3', { id: id }, title));
       if (note) sec.appendChild(el('p', { 'class': 'about-note' }, note));
-      // Sky-blue name cards. With a "link" (LinkedIn or portfolio), the whole card is the link.
+      // Sky-blue name cards: name, role (once set), and any LinkedIn / portfolio links.
       var ul = el('ul', { 'class': 'credit-list' });
       people.forEach(function (person) {
         var name = person.name || String(person);
         var li = el('li');
-        var card = person.link
-          ? el('a', { 'class': 'credit-card', href: person.link, target: '_blank', rel: 'noopener' })
-          : el('div', { 'class': 'credit-card' });
+        var card = el('div', { 'class': 'credit-card' });
         card.appendChild(el('span', { 'class': 'credit-name' }, name));
         if (person.role) card.appendChild(el('span', { 'class': 'credit-role' }, person.role));
-        if (person.link) {
-          var where = /linkedin\.com/i.test(person.link) ? 'LinkedIn' : 'Portfolio';
-          card.appendChild(el('span', { 'class': 'credit-link' }, where + ' ↗'));
-          card.setAttribute('aria-label', name + (person.role ? ', ' + person.role : '') + ': ' + where + ' (opens in a new tab)');
+        var links = [['LinkedIn', person.linkedin], ['Portfolio', person.portfolio]].filter(function (l) { return l[1]; });
+        if (links.length) {
+          var row = el('span', { 'class': 'credit-links' });
+          links.forEach(function (l) {
+            var a = el('a', { 'class': 'credit-link', href: l[1], target: '_blank', rel: 'noopener' }, l[0] + ' ↗');
+            a.setAttribute('aria-label', name + ' — ' + l[0] + ' (opens in a new tab)');
+            row.appendChild(a);
+          });
+          card.appendChild(row);
         }
         li.appendChild(card);
         ul.appendChild(li);
@@ -1146,7 +1154,9 @@
     }
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var saveData = navigator.connection && navigator.connection.saveData;
-    if (reduce || saveData || !SPLASH_VIDEO) { finish(); return; }
+    var spec = window.innerWidth > window.innerHeight ? SPLASH_VIDEOS.wide : SPLASH_VIDEOS.tall;
+    if (reduce || saveData || !spec || !spec.src) { finish(); return; }
+    var SPLASH_HOLD_AT = spec.holdAt;
 
     // Safari decides whether a video may autoplay when its file is set, so it's muted (the
     // property and the attribute) BEFORE it gets its src, and only played once it's on the page.
@@ -1158,7 +1168,7 @@
       v.src = src;
       return v;
     }
-    var video = silentVideo('splash-video', SPLASH_VIDEO);
+    var video = silentVideo('splash-video', spec.src);
     els.splash.classList.add('has-video');
     els.splash.insertBefore(video, els.splash.firstChild);
 

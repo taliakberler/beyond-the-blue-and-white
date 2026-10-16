@@ -43,7 +43,7 @@ All of the map's content and settings live in **`data/stops.json`**. Keep the qu
 |---|---|
 | `tagline`, `description` | The project's tagline and one-paragraph description, shown at the top |
 | `context`, `prompt` | Where the project was made, and the team's prompt |
-| `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…", "link": "…" }`. Each shows as a sky-blue name card. `role` appears under the name once filled in (leave it `""` until then). `link` is optional: a LinkedIn or portfolio address makes the whole card a link, labeled "LinkedIn ↗" (for linkedin.com addresses) or "Portfolio ↗". |
+| `team`, `coaches` | Lists of people: `{ "name": "…", "role": "…", "linkedin": "…", "portfolio": "…" }`. Each shows as a sky-blue name card. `role` appears under the name once filled in (leave it `""` until then). `linkedin` and `portfolio` are optional full web addresses (starting `https://`); each adds a "LinkedIn ↗" or "Portfolio ↗" link to the card, opening in a new tab. |
 | `advisors` | `description` (who they are and how they helped) and `people` (same format as `team`) |
 | `credits` | Short lines crediting the map, data, and software |
 | `links` | `{ "title": "…", "url": "…" }`, shown at the end of the credits |
@@ -93,6 +93,19 @@ If any `id` changed, regenerate the QR codes.
 
 ## Add images
 
+### Site photos (the gallery at the top of each site)
+
+The site galleries are imported from the team's photo folder by a script. `scripts/site-photos.json` lists, for each site in order (the first is the hero), the original file name, the web file name, and its `alt`, `caption`, `credit`, and `permission`. To add, remove, reorder, or update photos:
+
+1. Put the originals in the photo folder (by default `~/Downloads/VDC Site Photos`), named `<site>_<order>_<description>`.
+2. Edit `scripts/site-photos.json` to match.
+3. Run `npm run photos` (or `npm run photos -- "/path/to/folder"`). It makes web-sized JPEGs (at most 1400px on the long side, metadata removed) in `images/<stop-id>/`, replaces those sites' `images` in `data/stops.json`, and deletes that site's old photo files.
+4. Update [image-permissions.md](image-permissions.md) and check the site in a browser. (No `npm run stamp` needed: only images and data change.)
+
+Edit the photo details in `scripts/site-photos.json`, not directly in `data/stops.json`, or they'll be overwritten the next time photos are imported.
+
+### Other images (and by hand)
+
 1. Put the files in `images/<stop-id>/` (for example `images/the-pit/hero.jpg`); photos of people go in `images/people/`. Resize to about 1200px on the long edge and save as JPEG (quality about 80) with metadata removed. Gallery images are always shown whole, never cropped, so any shape works. Key People photos are shown as squares, with the crop kept near the top so faces stay in frame. JPG or WebP for photos, at most about 1600px wide and ideally under 300 KB each, since visitors are on cellular data.
 2. Reference them in the site's `images` list as `"src": "images/your-file.jpg"`.
 3. Always fill in `alt`, `caption`, and `credit`. See [content-guidelines.md](content-guidelines.md#images-and-rights) for how to write alt text and confirm image rights.
@@ -101,7 +114,7 @@ If any `id` changed, regenerate the QR codes.
 
 If an image fails to load (for example, when offline), the app shows an "Image couldn't load" box instead.
 
-The placeholder SVGs (`images/stop-*-?.svg`) can be deleted once real images replace them. `npm run placeholders` recreates them.
+Every site now has real photos, so the placeholder gallery SVGs have been removed. (`npm run placeholders` can recreate placeholders for a new site.)
 
 ---
 
@@ -120,17 +133,21 @@ The current assignments (the Pit's memorial icon was chosen by the team): memori
 
 ## Replace the opening animation
 
-The home page's splash plays `media/splash.mp4`. To use a new version, export it from the design software as an MP4 (H.264, no audio), then make a web-sized copy, which keeps it at about 2 MB instead of 8+ MB. On a Mac:
+The home page's splash plays one of two versions: `media/splash.mp4` (portrait, for phones and other tall screens) or `media/splash-wide.mp4` (16:9, for desktops and other wide screens). To use a new version, export it from the design software as an MP4 (H.264, no audio), then make a web-sized copy. On a Mac:
 
 ```bash
-swift scripts/encode-video.swift "path/to/Splash.mp4" media/splash.mp4 720 1280 1400000
+swift scripts/encode-video.swift "path/to/Splash Screen2.mp4" media/splash.mp4 720 1280 1400000
 ```
 
-The numbers are the width, height (for a portrait 9:16 video), and bitrate (1.4 Mbps). Use the MP4 export as the source; the encoder can't read Apple Animation-format MOV files. Then run `npm run stamp` and check the splash in a browser.
+```bash
+swift scripts/encode-video.swift "path/to/Splash Screen 1920x1080.mp4" media/splash-wide.mp4 1920 1080 2200000
+```
+
+The numbers are the width, height, and bitrate (portrait: 720×1280 at 1.4 Mbps, about 2 MB; wide: 1920×1080 at 2.2 Mbps, about 2.5 MB; at 1280×720 the wide version's thin outlined names looked soft). Use the MP4 export as the source; the encoder can't read Apple Animation-format MOV files. Then run `npm run stamp` and check the splash in a browser.
 
 The space around the video is filled automatically with the video's own background color (see [design-and-styles.md](design-and-styles.md#motion)). That color is read from a thin strip along the top of the frame, so keep the top ~1.5% of a new video plain background.
 
-To turn the animation off, set `SPLASH_VIDEO` to `''` at the top of `js/app.js`.
+Each version pauses at a set time, with the logo and every name on screen, and waits for "Tap to continue". If a new export's timing changes, update `holdAt` (seconds) for that version in `SPLASH_VIDEOS` at the top of `js/app.js`: pick a moment just before the names start to fade. To turn the animation off, set both `src` values to `''`.
 
 ---
 

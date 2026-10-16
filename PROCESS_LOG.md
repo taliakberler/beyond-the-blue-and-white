@@ -1095,3 +1095,26 @@ The pasted images arrived without file names, so the originals were found in the
 - Chrome (desktop and iPhone 13 emulation): "Tap to continue" opacity rises 0.5 → 1.0 over the first second, then blinks; the landing page is mid-slide 300 ms after the tap and gone by 650 ms, with the map and header showing; default zoom 16.5 / 15.75; closing a site glides back to exactly that view; + goes to 17 / 16.
 - The pin's point sits on the circle's center at zoom 18 and 19.5.
 
+## 2026-10-16 — Opening screen to the mockup, desktop splash, contact links, all site photos
+
+**Directed by:** Talia Berler (mockup image for the opening screen; new welcome text; desktop splash video; team contact links; the "VDC Site Photos" folder)
+
+### What changed
+- **Opening screen:** the tagline now reads **Every Site Has a Story** and sits right under the logo in coral, in the heading font, as in the team's mockup; the logo is larger, with more space before the welcome text and below the button. The welcome text was already the new wording.
+- **Desktop splash:** wide screens play the team's new 16:9 animation (`media/splash-wide.mp4`, 1920×1080, 2.5 MB, from "Splash Screen 1920x1080.mp4"); tall screens keep the portrait one. The wide one pauses at 13.2 s (it's still from 12 to 13.5 s, then fades).
+- **Contact links:** name cards now show "LinkedIn ↗" and "Portfolio ↗" links (fields `linkedin` and `portfolio`). Added: Victor Morgan (both), Talia Berler (portfolio added), Jori Husted, Gwyneth Shoemaker, Andrea Perez (both).
+- **Site photos:** all 26 photos from "VDC Site Photos" replace every gallery image, in the order given by their file names (first = hero): Unsung Founders 3, Lenoir Hall 6, the Pit 7, Old Chapel Hill Cemetery 5 (replacing its placeholders), Steele Building 5. New `scripts/import-site-photos.js` (`npm run photos`) and `scripts/site-photos.json` make the web copies (≤1400px, metadata removed) and the `stops.json` entries. `docs/image-permissions.md` lists all 28 images.
+
+### Decisions and reasons
+- **Captions and credits come only from the file names** (e.g. "Nellie Crocker on the serving line in the dining hall, 2 April 1963"); where a file name gives no source, the credit says it needs confirmation. One credit comes from the image itself: the "Mid-Day Magic" clipping prints "Photo by Beatrice Taylor". Files marked "OurPhoto" are credited to the team with permission "team"; everything else is "pending".
+- **Alt text** was written by looking at each photo, describing what's visible (and reusing earlier alt text for photos that were already on the site).
+- **Decision:** wide video at full 1920×1080. **Why:** at 1280×720 its thin outlined names looked soft; 2.5 MB is acceptable on desktop connections.
+- **Decision:** separate LinkedIn and portfolio links inside each card, instead of the whole card being one link. **Why:** some people have both.
+- Gwyneth Shoemaker's LinkedIn address was given with `?isSelfProfile=true` (a setting from viewing her own profile); it's stored without it. Andrea Perez's portfolio was given without `https://`; it's added.
+- `5_5_Steele_Lee_Beech_and_other_litigants.png` is actually an Apple HEIF image despite its name; it converted normally.
+- Key People portraits (James Cates, Wilson Swain Caldwell) are unchanged; the James Cates yearbook photo now also appears in the Pit's gallery.
+
+### Verified
+- Phone (375px): opening screen matches the mockup's layout; About cards show 8 links with the right addresses and labels; the Pit's gallery shows 7 photos with the team's hero first.
+- Chrome, desktop 1440×900: plays `splash-wide.mp4`, fills the screen, pauses at 13.21 s with "Tap to continue"; phone: plays `splash.mp4`, pauses at 12.22 s. Canvas fill matches the video's navy in both.
+

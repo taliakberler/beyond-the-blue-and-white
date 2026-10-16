@@ -11,7 +11,8 @@
     "team-map": "node scripts/build-team-map-tiles.js",
     "stamp": "node scripts/stamp-assets.js",
     "pins": "node scripts/build-pin-icons.js",
-    "places": "node scripts/build-places.js"
+    "places": "node scripts/build-places.js",
+    "photos": "node scripts/import-site-photos.js"
   },
   "devDependencies": {
     "@turf/buffer": "7.4.0",
